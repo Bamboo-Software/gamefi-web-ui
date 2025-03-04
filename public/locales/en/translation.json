@@ -1,0 +1,242 @@
+{
+    "welcome": "Welcome to our application!",
+    "navbar": {
+        "missions": "Missions",
+        "games": "Games",
+        "airdrop": "Airdrop",
+        "friends": "Friends",
+        "profile": "Profile"
+    },
+    "loading": {
+        "title": "Lottery JuniperFox Game",
+        "description": "Please wait",
+        "loading": "Loading...",
+        "explore": "Explore more infomations on our channels"
+    },
+    "error": {
+        "title": "Page Not Found",
+        "description": "The page you're looking for doesn't exist or has been moved.",
+        "back": "Back to home",
+        "404": "Error Code: 404 | Not Found"
+    },
+    "airdrop":{
+        "avatar":{
+            "title": "Customize Your Profile",
+            "choose_avatar": "Choose Your Avatar",
+            "choose_frame": "Choose Frame Color",
+            "choose_archivement": "Choose an Archivement" 
+
+        },
+        "tree_coin": {
+            "title": "Earn coins daily",
+            "tree_level": "Level",
+            "watered": "Watered {{time}} times left today"
+        },
+        "contents":{
+            "passive":{
+                "title": "Passive Income",
+                "dialog":{
+                    "title": "Passive Income",
+                    "description": "Earn rewards effortlessly! With our passive income feature, you accumulate coins or points just by being an active user. The more you engage with our platform, the more you earn—no extra effort needed. Think of it as your steady stream of benefits!"
+                }
+            },
+            "task":{
+                "title": "Earn Tasks",
+                "dialog":{
+                    "title": "Earn Tasks",
+                    "description": "Boost your rewards by completing exciting tasks! Whether it's answering surveys, sharing posts, or engaging with content, these tasks are designed to be quick and rewarding. Check your dashboard for daily tasks and multiply your earnings with minimal effort."
+                }
+            },
+            "spinner":{
+                "title": "Lottery Spinner",
+                "dialog":{
+                    "title": "Lottery Spinner",
+                    "description": "Take a chance and spin the lottery wheel for exciting rewards! Each spin could win you coins, exclusive prizes, or special offers. The more you spin, the higher your chances to hit the jackpot. Don't miss out on the thrill!"
+                }
+            },
+            "friends":{
+                "title": "Invite Friends",
+                "dialog":{
+                    "title": "Invite Friends",
+                    "description": "Share the joy and earn rewards by inviting friends to join our platform! Each successful invite earns you a bonus, and your friends get a welcome gift too. It's a win-win situation that strengthens our community while boosting your earnings."
+                }
+            },
+            "achivements":{
+                "title": "Achievements",
+                "dialog":{
+                    "title": "Achievements",
+                    "description": "Celebrate milestones with our achievement system! Unlock badges and exclusive rewards as you complete specific goals or challenges. Show off your accomplishments to others and enjoy the perks that come with your progress."
+                }
+            }
+        },
+        "errors":{
+            "shake_failed": "Please wait before shaking again.",
+            "water_failed": "Please wait before feed again."
+        },
+        "success":{
+            "shake": "Shaked",
+            "water": "Thank for your meal"
+        }
+    },
+    "settings": {
+        "title": "Settings",
+        "terms": "Terms and Policy",
+        "sound": "Sound",
+        "language": {
+            "title": "Select your language",
+            "select_default": "Select a language",
+            "en": "English",
+            "fr": "French",
+            "de": "German",
+            "es": "Spanish",
+            "vi": "Vietnamese",
+            "ru": "Russian",
+            "zh": "Chinese",
+            "ja": "Japanese",
+            "ko": "Korean",
+            "ar": "Arabic"
+        },
+        "referral": {
+            "title": "Become a referral",
+            "description": "Add your friend’s referral link"
+        },
+        "delete": {
+            "title": "Delete account",
+            "popup": {
+                "title": "Are you sure you want to delete your account ?",
+                "description": "All your data including game progress, achivements, purchases will be permanently deleted",
+                "cancel": "Cancel",
+                "delete": "Delete account"
+            }
+        }
+    },
+    "missions": {
+        "title": "Missions daily",
+        "description": "Complete the missions to earn coins"
+
+    },
+    "friends": {
+        "title": "Friends",
+        "description": "You and your friend will receive bonuses",
+        "add": {
+            "title": "Invite a friend",
+            "description": "for you and your friend"
+        },
+        "add_premium": {
+            "title": "Invite a friend with Telegram Premium",
+            "description": "for you and your friend"
+        },
+        "become_referral_btn": "Become a referral",
+        "referral": {
+            "title": "Become a referral",
+            "description": "To become your friend’s referral, add their referral link. After that, you will be registered as their referral. It is important to note that this action is irreversible",
+            "add_btn": "Add"
+        },
+        "invite": {
+            "title": "Invite a friend",
+            "description": "By inviting your friends on our site,  earn incomes and increase your lottery chances",
+            "btn": "Invite a friend"
+        },
+        "list_friends": {
+            "title": "List of your friends",
+            "no_friends_invited": "You haven’t invited anyone yet"
+        },
+        "invite_btn": "Invite a friend",
+        "copy_btn":{
+            "success": "Copied",
+            "error": "Error"
+        }
+    },
+    "profile": {
+        "titles":{
+            "profile":"Profile details",
+            "wallets": "Connect to wallets"
+        },
+        "total_coin": {
+            "title": "Total coins",
+            "popup": {
+                "title": "Total coins",
+                "description": "This section displays the total number of coins you’ve earned through various activities. Coins can be used to unlock rewards, participate in events, or showcase your progress in the community."
+            }
+        },
+        "transactions": {
+            "title": "Transactions",
+            "popup": {
+                "title": "Transactions",
+                "description": "Here, you’ll find the total count of transactions you’ve completed. Transactions include sending coins, purchasing items, or redeeming rewards. Keep track of your activity to stay informed."
+            }
+        },
+        "friends": {
+            "title": "Friends",
+            "popup": {
+                "title": "Friends",
+                "description": "This shows the number of friends you’ve connected with on the platform. Having more friends enhances your experience by allowing collaboration, friendly competition, and social interactions."
+            }
+        },
+        "achivements": {
+            "title": "Achivements",
+            "popup": {
+                "title": "Achivements",
+                "description": "Your achievements are a visual representation of milestones you’ve reached. Collect badges by completing challenges, reaching goals, or being an active participant in the community. Display your achievements proudly to inspire others!"
+            }
+        },
+        "wallet" :{
+            "title": "Connect to {{wallet}}",
+            "alert": {
+                "success": "Successfully connected to {{wallet}}",
+                "failure": "Not connected to {{wallet}}"
+            }
+        }
+    },
+    "game": {
+        "our_game": {
+            "title":"Our Games",
+            "play_btn": "Play Now",
+            "coming_soon_btn": "Coming Soon",
+            "lottery_game": {
+                "history": {
+                    "title": "History"
+                },
+                "dialog":{
+                    "title": "Congratulations",
+                    "description": "You won",
+                    "claim_btn": "Claim"
+                },
+                "help":{
+                    "title": "Help",
+                    "step_1":{
+                        "title": "1. Spin the Wheel",
+                        "description_1": "Click on the \"Spin\" button to start the wheel.",
+                        "description_2": "Watch as the wheel spins and slowly comes to a stop."
+                    },
+                    "step_2":{
+                        "title": "2. Wait for the Result",
+                        "description_1": "Once the wheel stops, the segment pointed at by the arrow indicates your prize.",
+                        "description_2": "If you win a reward, congratulations! If not, try again and test your luck."
+                    },
+                    "step_3":{
+                        "title": "3. Claim Your Prize",
+                        "description_1": "If you land on a winning segment, follow the instructions to claim your prize.",
+                        "description_2": "Prizes may be added to your account, sent to your email, or redeemed on-site."
+                    },
+                    "step_4":{
+                        "title": "4. Play Responsibly:",
+                        "description_1": "Each spin may cost credits or tokens, depending on the game rules.",
+                        "description_2": "Enjoy the game responsibly and set a limit for yourself."
+                    },
+                    "got_it":"I Got It",
+                    "good_luck": "Good luck, and may the odds be ever in your favor!"
+                },
+                "top_player": "Top {{players}} players"
+            }
+        },
+        "other_game": {
+            "title": "Other Games",
+            "content": "Coming Soon"
+        },
+        "explore_btn":"Explore More",
+        "alerts": {
+            "coming_soon_alert": "Coming Soon"
+        }
+    }
+}

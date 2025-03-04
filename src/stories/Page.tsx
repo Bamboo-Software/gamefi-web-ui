@@ -21,13 +21,13 @@ export const Page: React.FC = () => {
 
       <section className="storybook-page">
         <h2>Pages in Storybook</h2>
-        <p>
+        <div>
           We recommend building UIs with a{' '}
           <a href="https://componentdriven.org" target="_blank" rel="noopener noreferrer">
             <strong>component-driven</strong>
           </a>{' '}
           process starting with atomic components and ending with pages.
-        </p>
+        </div>
         <p>
           Render pages with mock data. This makes it easy to build and review page states without
           needing to navigate to them in your app. Here are some handy patterns for managing page

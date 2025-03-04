@@ -4,7 +4,7 @@ const routes = {
     FRIENDS: '/friends',
     GAMES: '/games',
     PROFILE: '/profile',
-    SETTING: '/setting',
+    SETTINGS: '/settings',
     SELECT_LANGUAGE: '/select-language',
     REFERRAL: '/referral',
     AUTH: '/auth',

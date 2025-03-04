@@ -1,0 +1,227 @@
+{
+    "welcome": "欢迎来到我们的应用程序！",
+    "navbar": {
+        "missions": "任务",
+        "games": "游戏",
+        "airdrop": "空投",
+        "friends": "朋友",
+        "profile": "个人资料"
+    },
+    "loading": {
+        "title": "JuniperFox 彩票游戏",
+        "description": "请稍候",
+        "loading": "加载中...",
+        "explore": "在我们的频道上了解更多信息"
+    },
+    "error": {
+        "title": "页面未找到",
+        "description": "您正在寻找的页面不存在或已被移动。",
+        "back": "返回主页",
+        "404": "错误代码：404 | 未找到"
+    },
+    "airdrop": {
+        "avatar": {
+            "title": "自定义您的个人资料",
+            "choose_avatar": "选择您的头像",
+            "choose_frame": "选择框架颜色",
+            "choose_archivement": "选择一个成就"
+        },
+        "tree_coin": {
+            "title": "每日赚取硬币",
+            "tree_level": "树等级",
+            "watered": "今天剩余浇水 {{time}} 次"
+        },
+        "contents": {
+            "passive": {
+                "title": "被动收入",
+                "dialog": {
+                    "title": "被动收入",
+                    "description": "轻松赚取奖励！通过我们的被动收入功能，您只需成为活跃用户即可积累硬币或积分。您与我们的平台互动越多，赚取的就越多——无需额外努力。将其视为您稳定的收益流！"
+                }
+            },
+            "task": {
+                "title": "赚钱任务",
+                "dialog": {
+                    "title": "赚钱任务",
+                    "description": "通过完成有趣的任务来增加您的奖励！无论是回答调查、分享帖子还是与内容互动，这些任务都旨在快速且有回报。查看您的仪表板以获取每日任务，并以最小的努力倍增您的收入。"
+                }
+            },
+            "spinner": {
+                "title": "彩票轮盘",
+                "dialog": {
+                    "title": "彩票轮盘",
+                    "description": "试试运气，旋转彩票轮盘以获得激动人心的奖励！每次旋转都可能为您赢得硬币、独家奖品或特别优惠。您旋转的次数越多，赢得大奖的机会就越大。不要错过刺激！"
+                }
+            },
+            "friends": {
+                "title": "邀请朋友",
+                "dialog": {
+                    "title": "邀请朋友",
+                    "description": "分享快乐，通过邀请朋友加入我们的平台来赚取奖励！每次成功邀请都会为您赢得奖金，您的朋友也会收到欢迎礼物。这是一个双赢的局面，增强了我们的社区，同时增加了您的收入。"
+                }
+            },
+            "achivements": {
+                "title": "成就",
+                "dialog": {
+                    "title": "成就",
+                    "description": "通过我们的成就系统庆祝里程碑！通过完成特定目标或挑战来解锁徽章和独家奖励。向他人展示您的成就，并享受伴随您进步的好处。"
+                }
+            }
+        }
+    },
+    "settings": {
+        "title": "设置",
+        "terms": "条款和政策",
+        "sound": "声音",
+        "language": {
+            "title": "选择您的语言",
+            "select_default": "选择一种语言",
+            "en": "英语",
+            "fr": "法语",
+            "de": "德语",
+            "es": "西班牙语",
+            "vi": "越南语",
+            "ru": "俄语",
+            "zh": "中文",
+            "ja": "日语",
+            "ko": "韩语",
+            "ar": "阿拉伯语"
+        },
+        "referral": {
+            "title": "成为推荐人",
+            "description": "添加您朋友的推荐链接"
+        },
+        "delete": {
+            "title": "删除账户",
+            "popup": {
+                "title": "您确定要删除您的账户吗？",
+                "description": "您的所有数据，包括游戏进度、成就、购买将被永久删除",
+                "cancel": "取消",
+                "delete": "删除账户"
+            }
+        }
+    },
+    "missions": {
+        "title": "每日任务",
+        "description": "完成任务以赚取硬币"
+    },
+    "friends": {
+        "title": "邀请朋友",
+        "description": "您和您的朋友将获得奖金",
+        "add": {
+            "title": "邀请一个朋友",
+            "description": "为您和您的朋友"
+        },
+        "add_premium": {
+            "title": "邀请一个拥有 Telegram Premium 的朋友",
+            "description": "为您和您的朋友"
+        },
+        "become_referral_btn": "成为推荐人",
+        "referral": {
+            "title": "成为推荐人",
+            "description": "要成为您朋友的推荐人，请添加他们的推荐链接。之后，您将被注册为他们的推荐人。请注意，此操作不可逆",
+            "add_btn": "添加"
+        },
+        "list_friends": {
+            "title": "您的朋友列表",
+            "no_friends_invited": "您还没有邀请任何人"
+        },
+        "invite_btn": "邀请一个朋友",
+        "copy_btn": {
+            "success": "已复制",
+            "error": "错误"
+        }
+    },
+    "profile": {
+        "titles": {
+            "profile": "个人资料详情",
+            "wallets": "连接钱包"
+        },
+        "total_coin": {
+            "title": "硬币总数",
+            "popup": {
+                "title": "硬币总数",
+                "description": "此部分显示您通过各种活动赚取的硬币总数。硬币可以用来解锁奖励、参加活动或展示您在社区中的进步。"
+            }
+        },
+        "transactions": {
+            "title": "交易",
+            "popup": {
+                "title": "交易",
+                "description": "在这里，您将找到您完成的交易总数。交易包括发送硬币、购买物品或兑换奖励。跟踪您的活动以保持知情。"
+            }
+        },
+        "friends": {
+            "title": "朋友",
+            "popup": {
+                "title": "朋友",
+                "description": "这显示了您在平台上连接的朋友数量。拥有更多的朋友可以通过允许合作、友好的竞争和社交互动来改善您的体验。"
+            }
+        },
+        "achivements": {
+            "title": "成就",
+            "popup": {
+                "title": "成就",
+                "description": "您的成就是您所达到的里程碑的视觉表示。通过完成挑战、实现目标或成为社区的积极参与者来收集徽章。自豪地展示您的成就，以激励他人！"
+            }
+        },
+        "wallet": {
+            "title": "连接到 {{wallet}}",
+            "alert": {
+                "success": "成功连接到 {{wallet}}",
+                "failure": "未连接到 {{wallet}}"
+            }
+        }
+    },
+    "game": {
+        "our_game": {
+            "title": "我们的游戏",
+            "play_btn": "立即玩",
+            "coming_soon_btn": "即将推出",
+            "lottery_game": {
+                "history": {
+                    "title": "历史"
+                },
+                "dialog": {
+                    "title": "恭喜",
+                    "description": "您赢了",
+                    "claim_btn": "领取"
+                },
+                "help": {
+                    "title": "帮助",
+                    "step_1": {
+                        "title": "1. 转动轮盘",
+                        "description_1": "点击“转动”按钮以启动轮盘。",
+                        "description_2": "观看轮盘旋转并慢慢停止。"
+                    },
+                    "step_2": {
+                        "title": "2. 等待结果",
+                        "description_1": "当轮盘停止时，箭头指向的部分表示您的奖品。",
+                        "description_2": "如果您赢得了奖励，恭喜！如果没有，请再试一次并测试您的运气。"
+                    },
+                    "step_3": {
+                        "title": "3. 领取您的奖品",
+                        "description_1": "如果您落在获胜部分，请按照说明领取您的奖品。",
+                        "description_2": "奖品可以添加到您的账户中，发送到您的电子邮件或现场兑换。"
+                    },
+                    "step_4": {
+                        "title": "4. 负责任地玩：",
+                        "description_1": "每次旋转可能会花费积分或代币，具体取决于游戏规则。",
+                        "description_2": "负责任地享受游戏，并为自己设定一个限制。"
+                    },
+                    "got_it": "明白了",
+                    "good_luck": "祝好运，愿好运常伴您！"
+                },
+                "top_player": "前 {{players}} 名玩家"
+            }
+        },
+        "other_game": {
+            "title": "其他游戏",
+            "content": "即将推出"
+        },
+        "explore_btn": "探索更多",
+        "alerts": {
+            "coming_soon_alert": "即将推出"
+        }
+    }
+}

@@ -1,0 +1,227 @@
+{
+    "welcome": "우리 애플리케이션에 오신 것을 환영합니다!",
+    "navbar": {
+        "missions": "미션",
+        "games": "게임",
+        "airdrop": "에어드롭",
+        "friends": "친구",
+        "profile": "프로필"
+    },
+    "loading": {
+        "title": "로터리 주니퍼폭스 게임",
+        "description": "잠시만 기다려주세요",
+        "loading": "로딩 중...",
+        "explore": "채널에서 더 많은 정보를 탐색하세요"
+    },
+    "error": {
+        "title": "페이지를 찾을 수 없습니다",
+        "description": "찾고 있는 페이지가 존재하지 않거나 이동되었습니다.",
+        "back": "홈으로 돌아가기",
+        "404": "오류 코드: 404 | 찾을 수 없음"
+    },
+    "airdrop": {
+        "avatar": {
+            "title": "프로필 사용자 지정",
+            "choose_avatar": "아바타 선택",
+            "choose_frame": "프레임 색상 선택",
+            "choose_archivement": "업적 선택"
+        },
+        "tree_coin": {
+            "title": "매일 코인 획득",
+            "tree_level": "나무 레벨",
+            "watered": "오늘 {{time}}번 물을 줄 수 있음"
+        },
+        "contents": {
+            "passive": {
+                "title": "수동 수익",
+                "dialog": {
+                    "title": "수동 수익",
+                    "description": "노력 없이 보상을 받으세요! 수동 수익 기능으로, 활동적인 사용자로 있는 것만으로도 코인이나 포인트를 축적할 수 있습니다. 플랫폼과 더 많이 상호작용할수록 더 많은 수익을 얻을 수 있습니다. 꾸준한 혜택의 흐름이라고 생각하세요!"
+                }
+            },
+            "task": {
+                "title": "작업으로 수익 얻기",
+                "dialog": {
+                    "title": "작업으로 수익 얻기",
+                    "description": "흥미로운 작업을 완료하여 보상을 증대하세요! 설문 조사에 응답하거나, 게시물을 공유하거나, 콘텐츠에 참여하는 등, 이 작업들은 빠르고 보람 있게 설계되었습니다. 대시보드에서 일일 작업을 확인하고 최소한의 노력으로 수익을 늘리세요."
+                }
+            },
+            "spinner": {
+                "title": "로터리 스피너",
+                "dialog": {
+                    "title": "로터리 스피너",
+                    "description": "로터리 휠을 돌려 흥미로운 보상을 받으세요! 각 회전으로 코인, 독점 상품 또는 특별 제안을 받을 수 있는 기회가 있습니다. 더 많이 돌릴수록 잭팟을 얻을 가능성이 높아집니다. 이 스릴을 놓치지 마세요!"
+                }
+            },
+            "friends": {
+                "title": "친구 초대",
+                "dialog": {
+                    "title": "친구 초대",
+                    "description": "친구를 초대하고 보상을 받으세요! 성공적으로 초대할 때마다 보너스를 받을 수 있으며, 친구에게도 환영 선물이 제공됩니다. 이는 우리의 커뮤니티를 강화하면서 수익을 증가시키는 윈윈 상황입니다."
+                }
+            },
+            "achivements": {
+                "title": "업적",
+                "dialog": {
+                    "title": "업적",
+                    "description": "업적 시스템으로 마일스톤을 축하하세요! 특정 목표나 도전을 완료하여 배지와 독점 보상을 잠금 해제하세요. 다른 사람들에게 여러분의 성취를 자랑하고 진전에 따른 특전을 즐기세요."
+                }
+            }
+        }
+    },
+    "settings": {
+        "title": "설정",
+        "terms": "이용 약관 및 정책",
+        "sound": "소리",
+        "language": {
+            "title": "언어 선택",
+            "select_default": "언어를 선택하세요",
+            "en": "영어",
+            "fr": "프랑스어",
+            "de": "독일어",
+            "es": "스페인어",
+            "vi": "베트남어",
+            "ru": "러시아어",
+            "zh": "중국어",
+            "ja": "일본어",
+            "ko": "한국어",
+            "ar": "아랍어"
+        },
+        "referral": {
+            "title": "추천인 되기",
+            "description": "친구의 추천 링크를 추가하세요"
+        },
+        "delete": {
+            "title": "계정 삭제",
+            "popup": {
+                "title": "계정을 정말 삭제하시겠습니까?",
+                "description": "게임 진행 상황, 업적, 구매 내역을 포함한 모든 데이터가 영구적으로 삭제됩니다",
+                "cancel": "취소",
+                "delete": "계정 삭제"
+            }
+        }
+    },
+    "missions": {
+        "title": "일일 미션",
+        "description": "미션을 완료하여 코인을 획득하세요"
+    },
+    "friends": {
+        "title": "친구 초대",
+        "description": "당신과 친구가 보너스를 받습니다",
+        "add": {
+            "title": "친구 초대",
+            "description": "당신과 친구를 위해"
+        },
+        "add_premium": {
+            "title": "텔레그램 프리미엄으로 친구 초대",
+            "description": "당신과 친구를 위해"
+        },
+        "become_referral_btn": "추천인 되기",
+        "referral": {
+            "title": "추천인 되기",
+            "description": "친구의 추천 링크를 추가하여 추천인이 되세요. 이 작업은 되돌릴 수 없다는 점을 유의하세요.",
+            "add_btn": "추가"
+        },
+        "list_friends": {
+            "title": "친구 목록",
+            "no_friends_invited": "아직 누구도 초대하지 않았습니다"
+        },
+        "invite_btn": "친구 초대",
+        "copy_btn": {
+            "success": "복사됨",
+            "error": "오류"
+        }
+    },
+    "profile": {
+        "titles": {
+            "profile": "프로필 세부 정보",
+            "wallets": "지갑 연결"
+        },
+        "total_coin": {
+            "title": "총 코인",
+            "popup": {
+                "title": "총 코인",
+                "description": "여기에서는 다양한 활동을 통해 획득한 코인의 총 수를 확인할 수 있습니다. 코인은 보상을 잠금 해제하거나, 이벤트에 참여하거나, 커뮤니티 내에서의 진전을 표시하는 데 사용할 수 있습니다."
+            }
+        },
+        "transactions": {
+            "title": "거래 내역",
+            "popup": {
+                "title": "거래 내역",
+                "description": "여기에서 완료한 총 거래 수를 확인할 수 있습니다. 거래에는 코인 송금, 아이템 구매 또는 보상 교환이 포함됩니다. 활동을 추적하여 정보를 유지하세요."
+            }
+        },
+        "friends": {
+            "title": "친구",
+            "popup": {
+                "title": "친구",
+                "description": "플랫폼에서 연결된 친구 수를 표시합니다. 더 많은 친구를 사귀면 협력, 친근한 경쟁 및 사회적 상호작용을 즐길 수 있습니다."
+            }
+        },
+        "achivements": {
+            "title": "업적",
+            "popup": {
+                "title": "업적",
+                "description": "업적은 도달한 마일스톤의 시각적 표현입니다. 도전과제를 완료하고 목표를 달성하여 배지를 수집하세요. 다른 사람들에게 성과를 과시하고 진전에 따른 특전을 즐기세요!"
+            }
+        },
+        "wallet": {
+            "title": "{{wallet}}에 연결",
+            "alert": {
+                "success": "{{wallet}}에 성공적으로 연결되었습니다",
+                "failure": "{{wallet}}에 연결되지 않았습니다"
+            }
+        }
+    },
+    "game": {
+        "our_game": {
+            "title": "우리의 게임",
+            "play_btn": "지금 플레이",
+            "coming_soon_btn": "곧 출시",
+            "lottery_game": {
+                "history": {
+                    "title": "기록"
+                },
+                "dialog": {
+                    "title": "축하합니다",
+                    "description": "당신이 이겼습니다",
+                    "claim_btn": "수령"
+                },
+                "help": {
+                    "title": "도움말",
+                    "step_1": {
+                        "title": "1. 휠 돌리기",
+                        "description_1": "\"스핀\" 버튼을 클릭하여 휠을 시작하세요.",
+                        "description_2": "휠이 회전하고 천천히 멈추는 것을 지켜보세요."
+                    },
+                    "step_2": {
+                        "title": "2. 결과 기다리기",
+                        "description_1": "휠이 멈추면 화살표가 가리키는 세그먼트가 당신의 상을 나타냅니다.",
+                        "description_2": "보상을 받았다면 축하합니다! 그렇지 않다면 다시 시도하여 운을 시험해보세요."
+                    },
+                    "step_3": {
+                        "title": "3. 상 수령하기",
+                        "description_1": "승리 세그먼트에 도착하면 지침에 따라 상을 수령하세요.",
+                        "description_2": "상은 계정에 추가되거나 이메일로 전송되거나 현장에서 교환될 수 있습니다."
+                    },
+                    "step_4": {
+                        "title": "4. 책임감 있게 플레이하기",
+                        "description_1": "각 스핀은 게임 규칙에 따라 크레딧 또는 토큰이 필요할 수 있습니다.",
+                        "description_2": "책임감 있게 게임을 즐기고 자신만의 한계를 설정하세요."
+                    },
+                    "got_it": "알겠습니다",
+                    "good_luck": "행운을 빕니다!"
+                },
+                "top_player": "상위 {{players}} 플레이어"
+            }
+        },
+        "other_game": {
+            "title": "기타 게임",
+            "content": "곧 출시"
+        },
+        "explore_btn": "더 탐색하기",
+        "alerts": {
+            "coming_soon_alert": "곧 출시"
+        }
+    }
+}

@@ -1,8 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import routesPath from '@/constants/routes';
-import { IoIosSettings } from "react-icons/io";
-
 
 export interface INavbar {
   title: string | React.ReactNode;
@@ -14,8 +11,6 @@ interface SidebarProps {
   isCollapsed: boolean;
   navbars: INavbar[];
 }
-
-const { SETTING } = routesPath;
 
 const Sidebar = ({ isCollapsed, navbars }: SidebarProps) => {
   const sidebarClasses = `
@@ -32,12 +27,14 @@ const Sidebar = ({ isCollapsed, navbars }: SidebarProps) => {
     justify-between
     overflow-hidden 
     z-50 
-    ${isCollapsed ? "w-16" : "w-52"}
+    ${isCollapsed ? "w-18" : "w-50"}
   `;
 
   const linkClasses = `
     block 
+    flex flex-row
     rounded-md 
+    ml-2
     hover:bg-gray-700/50 
     active:bg-blue-600/70 
     transition-all duration-200 
@@ -52,8 +49,7 @@ const Sidebar = ({ isCollapsed, navbars }: SidebarProps) => {
           <li key={index}>
             <Link
               to={item.path}
-              className={`${linkClasses} ${isCollapsed ? "my-2 flex justify-center" : "p-2"
-                }`}
+              className={`${linkClasses} ${isCollapsed ? "my-2 flex justify-center" : "p-2"}`}
             >
               <div className={isCollapsed ? "" : "flex flex-row items-center gap-3"}>
                 <img src={item.icon} className="size-8 my-2" alt="" />
@@ -65,20 +61,6 @@ const Sidebar = ({ isCollapsed, navbars }: SidebarProps) => {
           </li>
         ))}
       </ul>
-      <div className="">
-        <Link
-          to={SETTING}
-          className={`p-2 ${linkClasses} ${isCollapsed ? "my-3 flex justify-center" : "p-3"
-            }`}
-        >
-          <div className={isCollapsed ? "" : "flex flex-row items-center gap-3"}>
-            <IoIosSettings className="size-8" />
-            {!isCollapsed && (
-              <span className="text-gray-300 font-semibold text-sm">{"Setting"}</span>
-            )}
-          </div>
-        </Link>
-      </div>
     </div>
   );
 };
