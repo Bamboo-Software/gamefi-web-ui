@@ -31,9 +31,8 @@ export const authApi = createApi({
     prepareHeaders: (headers, { endpoint }) => {
       if (endpoint === "getMe") {
         const storedToken = localStorage.getItem('auth-token');
-        const token = storedToken ? JSON.parse(storedToken) : null;
-        if (token) {
-          headers.set("Authorization", `Bearer ${token}`);
+        if (storedToken) {
+          headers.set("Authorization", `Bearer ${storedToken}`);
         }
       }
       return headers;
@@ -65,10 +64,17 @@ export const authApi = createApi({
     getMe: builder.query({
       query: () => ({
         url: `${endpoint}/me`,
+        // headers: { Authorization: `Bearer ${token}` },
       }),
       providesTags: [InvalidatesTagsEnum.AUTH],
+    }),
+    checkMe: builder.query({
+      query: () => ({
+        url: `${endpoint}/me`,
+        // headers: { Authorization: `Bearer ${token}` },
+      }),
     }),
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation, useGetMeQuery } = authApi;
+export const { useCheckMeQuery, useLoginMutation, useLogoutMutation, useGetMeQuery } = authApi;

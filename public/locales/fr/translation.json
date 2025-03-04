@@ -1,0 +1,227 @@
+{
+    "welcome": "Bienvenue dans notre application!",
+    "navbar": {
+        "missions": "Missions",
+        "games": "Jeux",
+        "airdrop": "Airdrop",
+        "friends": "Amis",
+        "profile": "Profil"
+    },
+    "loading": {
+        "title": "Jeu de Loterie JuniperFox",
+        "description": "Veuillez patienter",
+        "loading": "Chargement...",
+        "explore": "Explorez plus d'informations sur nos chaînes"
+    },
+    "error": {
+        "title": "Page Non Trouvée",
+        "description": "La page que vous recherchez n'existe pas ou a été déplacée.",
+        "back": "Retour à l'accueil",
+        "404": "Code d'erreur : 404 | Non Trouvé"
+    },
+    "airdrop": {
+        "avatar": {
+            "title": "Personnalisez Votre Profil",
+            "choose_avatar": "Choisissez Votre Avatar",
+            "choose_frame": "Choisissez la Couleur du Cadre",
+            "choose_archivement": "Choisissez un Succès"
+        },
+        "tree_coin": {
+            "title": "Gagnez des pièces quotidiennement",
+            "tree_level": "Niveau de l'Arbre",
+            "watered": "Arrosé {{time}} fois restantes aujourd'hui"
+        },
+        "contents": {
+            "passive": {
+                "title": "Revenu Passif",
+                "dialog": {
+                    "title": "Revenu Passif",
+                    "description": "Gagnez des récompenses sans effort ! Avec notre fonctionnalité de revenu passif, vous accumulez des pièces ou des points simplement en étant un utilisateur actif. Plus vous interagissez avec notre plateforme, plus vous gagnez—aucun effort supplémentaire n'est nécessaire. Pensez-y comme votre flux constant de bénéfices !"
+                }
+            },
+            "task": {
+                "title": "Tâches à Gagner",
+                "dialog": {
+                    "title": "Tâches à Gagner",
+                    "description": "Augmentez vos récompenses en complétant des tâches passionnantes ! Que ce soit répondre à des sondages, partager des publications ou interagir avec du contenu, ces tâches sont conçues pour être rapides et gratifiantes. Consultez votre tableau de bord pour les tâches quotidiennes et multipliez vos gains avec un effort minimal."
+                }
+            },
+            "spinner": {
+                "title": "Roulette de Loterie",
+                "dialog": {
+                    "title": "Roulette de Loterie",
+                    "description": "Tentez votre chance et faites tourner la roue de la loterie pour obtenir des récompenses passionnantes ! Chaque tour peut vous faire gagner des pièces, des prix exclusifs ou des offres spéciales. Plus vous tournez, plus vos chances de décrocher le jackpot augmentent. Ne manquez pas le frisson !"
+                }
+            },
+            "friends": {
+                "title": "Inviter des Amis",
+                "dialog": {
+                    "title": "Inviter des Amis",
+                    "description": "Partagez la joie et gagnez des récompenses en invitant des amis à rejoindre notre plateforme ! Chaque invitation réussie vous rapporte un bonus, et vos amis reçoivent également un cadeau de bienvenue. C'est une situation gagnant-gagnant qui renforce notre communauté tout en augmentant vos gains."
+                }
+            },
+            "achivements": {
+                "title": "Succès",
+                "dialog": {
+                    "title": "Succès",
+                    "description": "Célébrez les étapes importantes avec notre système de succès ! Débloquez des badges et des récompenses exclusives en atteignant des objectifs ou des défis spécifiques. Montrez vos réalisations aux autres et profitez des avantages qui accompagnent votre progression."
+                }
+            }
+        }
+    },
+    "settings": {
+        "title": "Paramètres",
+        "terms": "Conditions et Politique",
+        "sound": "Son",
+        "language": {
+            "title": "Sélectionnez votre langue",
+            "select_default": "Sélectionnez une langue",
+            "en": "Anglais",
+            "fr": "Français",
+            "de": "Allemand",
+            "es": "Espagnol",
+            "vi": "Vietnamien",
+            "ru": "Russe",
+            "zh": "Chinois",
+            "ja": "Japonais",
+            "ko": "Coréen",
+            "ar": "Arabe"
+        },
+        "referral": {
+            "title": "Devenir un parrain",
+            "description": "Ajoutez le lien de parrainage de votre ami"
+        },
+        "delete": {
+            "title": "Supprimer le compte",
+            "popup": {
+                "title": "Êtes-vous sûr de vouloir supprimer votre compte ?",
+                "description": "Toutes vos données, y compris la progression du jeu, les succès, les achats seront définitivement supprimés",
+                "cancel": "Annuler",
+                "delete": "Supprimer le compte"
+            }
+        }
+    },
+    "missions": {
+        "title": "Missions quotidiennes",
+        "description": "Complétez les missions pour gagner des pièces"
+    },
+    "friends": {
+        "title": "Inviter des amis",
+        "description": "Vous et votre ami recevrez des bonus",
+        "add": {
+            "title": "Inviter un ami",
+            "description": "pour vous et votre ami"
+        },
+        "add_premium": {
+            "title": "Inviter un ami avec Telegram Premium",
+            "description": "pour vous et votre ami"
+        },
+        "become_referral_btn": "Devenir un parrain",
+        "referral": {
+            "title": "Devenir un parrain",
+            "description": "Pour devenir le parrain de votre ami, ajoutez leur lien de parrainage. Après cela, vous serez enregistré comme leur parrain. Il est important de noter que cette action est irréversible",
+            "add_btn": "Ajouter"
+        },
+        "list_friends": {
+            "title": "Liste de vos amis",
+            "no_friends_invited": "Vous n'avez encore invité personne"
+        },
+        "invite_btn": "Inviter un ami",
+        "copy_btn": {
+            "success": "Copié",
+            "error": "Erreur"
+        }
+    },
+    "profile": {
+        "titles": {
+            "profile": "Détails du profil",
+            "wallets": "Se connecter aux portefeuilles"
+        },
+        "total_coin": {
+            "title": "Total des pièces",
+            "popup": {
+                "title": "Total des pièces",
+                "description": "Cette section affiche le nombre total de pièces que vous avez gagnées grâce à diverses activités. Les pièces peuvent être utilisées pour débloquer des récompenses, participer à des événements ou montrer vos progrès dans la communauté."
+            }
+        },
+        "transactions": {
+            "title": "Transactions",
+            "popup": {
+                "title": "Transactions",
+                "description": "Ici, vous trouverez le nombre total de transactions que vous avez effectuées. Les transactions incluent l'envoi de pièces, l'achat d'articles ou l'échange de récompenses. Suivez votre activité pour rester informé."
+            }
+        },
+        "friends": {
+            "title": "Amis",
+            "popup": {
+                "title": "Amis",
+                "description": "Cela montre le nombre d'amis avec lesquels vous vous êtes connecté sur la plateforme. Avoir plus d'amis améliore votre expérience en permettant la collaboration, la compétition amicale et les interactions sociales."
+            }
+        },
+        "achivements": {
+            "title": "Succès",
+            "popup": {
+                "title": "Succès",
+                "description": "Vos succès sont une représentation visuelle des étapes que vous avez atteintes. Collectez des badges en complétant des défis, en atteignant des objectifs ou en étant un participant actif dans la communauté. Affichez vos succès fièrement pour inspirer les autres !"
+            }
+        },
+        "wallet": {
+            "title": "Se connecter à {{wallet}}",
+            "alert": {
+                "success": "Connecté avec succès à {{wallet}}",
+                "failure": "Non connecté à {{wallet}}"
+            }
+        }
+    },
+    "game": {
+        "our_game": {
+            "title": "Nos Jeux",
+            "play_btn": "Jouer Maintenant",
+            "coming_soon_btn": "Bientôt Disponible",
+            "lottery_game": {
+                "history": {
+                    "title": "Historique"
+                },
+                "dialog": {
+                    "title": "Félicitations",
+                    "description": "Vous avez gagné",
+                    "claim_btn": "Réclamer"
+                },
+                "help": {
+                    "title": "Aide",
+                    "step_1": {
+                        "title": "1. Tournez la Roue",
+                        "description_1": "Cliquez sur le bouton \"Tourner\" pour démarrer la roue.",
+                        "description_2": "Regardez la roue tourner et s'arrêter lentement."
+                    },
+                    "step_2": {
+                        "title": "2. Attendez le Résultat",
+                        "description_1": "Une fois que la roue s'arrête, le segment pointé par la flèche indique votre prix.",
+                        "description_2": "Si vous gagnez une récompense, félicitations ! Sinon, réessayez et testez votre chance."
+                    },
+                    "step_3": {
+                        "title": "3. Réclamez Votre Prix",
+                        "description_1": "Si vous tombez sur un segment gagnant, suivez les instructions pour réclamer votre prix.",
+                        "description_2": "Les prix peuvent être ajoutés à votre compte, envoyés à votre email ou échangés sur place."
+                    },
+                    "step_4": {
+                        "title": "4. Jouez de Manière Responsable :",
+                        "description_1": "Chaque tour peut coûter des crédits ou des jetons, selon les règles du jeu.",
+                        "description_2": "Profitez du jeu de manière responsable et fixez-vous une limite."
+                    },
+                    "got_it": "J'ai Compris",
+                    "good_luck": "Bonne chance, et que la chance soit toujours avec vous !"
+                },
+                "top_player": "Top {{players}} joueurs"
+            }
+        },
+        "other_game": {
+            "title": "Autres Jeux",
+            "content": "Bientôt Disponible"
+        },
+        "explore_btn": "Explorer Plus",
+        "alerts": {
+            "coming_soon_alert": "Bientôt Disponible"
+        }
+    }
+}

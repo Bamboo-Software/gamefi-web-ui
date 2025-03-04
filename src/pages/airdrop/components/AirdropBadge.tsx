@@ -50,14 +50,13 @@ const AirdropBadge = ({
   variants={imageVariants}
   initial="initial"
   whileHover="hover">
-      <div className=" relative flex justify-center items-center">
         <motion.img
           src={imageUrl}
           alt={title}
           className="size-full object-contain"
           initial="initial"
         />
-      </div>
+
       <CardContent className="p-4">
         <div className="flex flex-row justify-between items-center mb-2 text-[#FFC800] font-semibold">
             <h3 className="text-lg text-gray-200">{title}</h3>

@@ -20,11 +20,17 @@ import tiktok from "@/assets/icons/tiktok.svg"
 import { FaRegBell } from "react-icons/fa";
 import Dropdown from "@/components/dropdown";
 import UserAvatarDropdownProps from "@/components/avatar";
+import { useGetMeQuery } from "@/services/auth";
+import LoadingComponent from "@/components/loading-component";
 
 const { MISSIONS, GAMES, FRIENDS, ROOT, PROFILE } = routes
 const PageLayout = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const { data, error, isLoading } = useGetMeQuery({})
 
+  if (isLoading) return <LoadingComponent />;
+  if (error) return <p>Error loading user info</p>;
+  const { avatar, name, pointsBalance } = data.data;
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -98,8 +104,8 @@ const PageLayout = () => {
               {isCollapsed ? <TbLayoutSidebarRightCollapse className="text-gray-200 size-5" /> : <TbLayoutSidebarLeftCollapse className="text-gray-200 size-5" />}
             </Button>
             <div className="flex flex-row items-center gap-8 ml-5">
-              <Link to={ROOT} className="text-gray-200 font-semibold text-sm">About Us</Link>
-              <Link to={ROOT} className="text-gray-200 font-semibold text-sm">Introduction</Link>
+              <Link to={ROOT} className="text-gray-200! font-semibold text-sm">About Us</Link>
+              <Link to={ROOT} className="text-gray-200! font-semibold text-sm">Introduction</Link>
               <Dropdown triggers={
                 <>
                   <span className="text-gray-200 font-semibold text-sm transition-colors">Follow Us</span>
@@ -113,7 +119,7 @@ const PageLayout = () => {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-row items-center justify-start space-x-2 font-semibold px-4 py-2 mx-2 my-1 text-sm text-gray-200 hover:bg-gray-700/50 rounded-sm transition-colors"
+                      className="flex flex-row items-center justify-start space-x-2 font-semibold px-4 py-2 mx-2 my-1 text-sm text-gray-200! hover:bg-gray-700/50 rounded-sm transition-colors"
                     >
                       <img src={link.icon} className="size-8 mr-2" alt="" />
                       {link.name}
@@ -124,14 +130,12 @@ const PageLayout = () => {
             </div>
           </div>
 
-          <div className="text-gray-200 mr-4 flex flex-row-reverse justify-center items-center">
-            <UserAvatarDropdownProps userName="Hoang" fallback="HN" />
+          <div className="text-gray-200 mr-6 flex flex-row-reverse justify-center items-center">
+            <UserAvatarDropdownProps imageUrl={avatar} userName={name} pointsBalance={pointsBalance} fallback="LT" />
             <FaRegBell className="size-5 mx-8" />
           </div>
         </div>
-
-
-        <div className="flex-1 p-6">
+      <div className="flex-1 p-6">
           <Outlet />
         </div>
       </div>

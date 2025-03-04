@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { store } from "./stores/store";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "./providers/theme/ThemeProvider";
+import LoadingPage from "./pages/LoadingPage";
 
 const App = lazy(() => import("./App"));
 import './index.css'
@@ -16,13 +17,13 @@ createRoot(document.getElementById('root')!).render(
       <I18nProvider>
         <Provider store={store}>
           <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-            <Suspense fallback={<div>Loading</div>}>
+            <Suspense fallback={<LoadingPage/>}>
               <App />
-              <Toaster />
+              <Toaster theme="dark" />
             </Suspense>
           </ThemeProvider>
         </Provider>
       </I18nProvider>
     </ErrorBoundary>
-  </StrictMode>
+   </StrictMode>
 )

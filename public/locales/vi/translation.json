@@ -1,0 +1,227 @@
+{
+    "welcome": "Chào mừng đến với ứng dụng của chúng tôi!",
+    "navbar": {
+        "missions": "Nhiệm vụ",
+        "games": "Trò chơi",
+        "airdrop": "Airdrop",
+        "friends": "Bạn bè",
+        "profile": "Hồ sơ"
+    },
+    "loading": {
+        "title": "Trò chơi Xổ số JuniperFox",
+        "description": "Vui lòng đợi",
+        "loading": "Đang tải...",
+        "explore": "Khám phá thêm thông tin trên các kênh của chúng tôi"
+    },
+    "error": {
+        "title": "Không tìm thấy trang",
+        "description": "Trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.",
+        "back": "Quay lại trang chủ",
+        "404": "Mã lỗi: 404 | Không tìm thấy"
+    },
+    "airdrop": {
+        "avatar": {
+            "title": "Tùy chỉnh Hồ sơ của bạn",
+            "choose_avatar": "Chọn Hình đại diện của bạn",
+            "choose_frame": "Chọn Màu khung",
+            "choose_archivement": "Chọn một Thành tựu"
+        },
+        "tree_coin": {
+            "title": "Kiếm xu hàng ngày",
+            "tree_level": "Cấp độ Cây",
+            "watered": "Đã tưới {{time}} lần còn lại hôm nay"
+        },
+        "contents": {
+            "passive": {
+                "title": "Thu nhập thụ động",
+                "dialog": {
+                    "title": "Thu nhập thụ động",
+                    "description": "Kiếm phần thưởng một cách dễ dàng! Với tính năng thu nhập thụ động của chúng tôi, bạn tích lũy xu hoặc điểm chỉ bằng cách là người dùng tích cực. Càng tham gia nhiều vào nền tảng của chúng tôi, bạn càng kiếm được nhiều—không cần nỗ lực thêm. Hãy nghĩ về nó như dòng lợi ích ổn định của bạn!"
+                }
+            },
+            "task": {
+                "title": "Nhiệm vụ kiếm tiền",
+                "dialog": {
+                    "title": "Nhiệm vụ kiếm tiền",
+                    "description": "Tăng phần thưởng của bạn bằng cách hoàn thành các nhiệm vụ thú vị! Cho dù đó là trả lời khảo sát, chia sẻ bài viết hay tham gia nội dung, các nhiệm vụ này được thiết kế để nhanh chóng và có thưởng. Kiểm tra bảng điều khiển của bạn để biết các nhiệm vụ hàng ngày và nhân đôi thu nhập của bạn với nỗ lực tối thiểu."
+                }
+            },
+            "spinner": {
+                "title": "Vòng quay xổ số",
+                "dialog": {
+                    "title": "Vòng quay xổ số",
+                    "description": "Hãy thử vận may và quay vòng quay xổ số để nhận phần thưởng thú vị! Mỗi lần quay có thể giúp bạn giành được xu, giải thưởng độc quyền hoặc ưu đãi đặc biệt. Càng quay nhiều, cơ hội trúng giải độc đắc của bạn càng cao. Đừng bỏ lỡ sự hồi hộp!"
+                }
+            },
+            "friends": {
+                "title": "Mời bạn bè",
+                "dialog": {
+                    "title": "Mời bạn bè",
+                    "description": "Chia sẻ niềm vui và kiếm phần thưởng bằng cách mời bạn bè tham gia nền tảng của chúng tôi! Mỗi lời mời thành công sẽ giúp bạn nhận được một phần thưởng, và bạn bè của bạn cũng nhận được một món quà chào mừng. Đó là một tình huống đôi bên cùng có lợi, củng cố cộng đồng của chúng tôi trong khi tăng thu nhập của bạn."
+                }
+            },
+            "achivements": {
+                "title": "Thành tựu",
+                "dialog": {
+                    "title": "Thành tựu",
+                    "description": "Kỷ niệm các cột mốc với hệ thống thành tựu của chúng tôi! Mở khóa huy hiệu và phần thưởng độc quyền khi bạn hoàn thành các mục tiêu hoặc thử thách cụ thể. Khoe thành tích của bạn với người khác và tận hưởng những lợi ích đi kèm với tiến bộ của bạn."
+                }
+            }
+        }
+    },
+    "settings": {
+        "title": "Cài đặt",
+        "terms": "Điều khoản và Chính sách",
+        "sound": "Âm thanh",
+        "language": {
+            "title": "Chọn ngôn ngữ của bạn",
+            "select_default": "Chọn một ngôn ngữ",
+            "en": "Tiếng Anh",
+            "fr": "Tiếng Pháp",
+            "de": "Tiếng Đức",
+            "es": "Tiếng Tây Ban Nha",
+            "vi": "Tiếng Việt",
+            "ru": "Tiếng Nga",
+            "zh": "Tiếng Trung",
+            "ja": "Tiếng Nhật",
+            "ko": "Tiếng Hàn",
+            "ar": "Tiếng Ả Rập"
+        },
+        "referral": {
+            "title": "Trở thành người giới thiệu",
+            "description": "Thêm liên kết giới thiệu của bạn bè bạn"
+        },
+        "delete": {
+            "title": "Xóa tài khoản",
+            "popup": {
+                "title": "Bạn có chắc chắn muốn xóa tài khoản của mình không?",
+                "description": "Tất cả dữ liệu của bạn bao gồm tiến trình trò chơi, thành tựu, mua hàng sẽ bị xóa vĩnh viễn",
+                "cancel": "Hủy",
+                "delete": "Xóa tài khoản"
+            }
+        }
+    },
+    "missions": {
+        "title": "Nhiệm vụ hàng ngày",
+        "description": "Hoàn thành các nhiệm vụ để kiếm xu"
+    },
+    "friends": {
+        "title": "Mời bạn bè",
+        "description": "Bạn và bạn của bạn sẽ nhận được tiền thưởng",
+        "add": {
+            "title": "Mời một người bạn",
+            "description": "cho bạn và bạn của bạn"
+        },
+        "add_premium": {
+            "title": "Mời một người bạn với Telegram Premium",
+            "description": "cho bạn và bạn của bạn"
+        },
+        "become_referral_btn": "Trở thành người giới thiệu",
+        "referral": {
+            "title": "Trở thành người giới thiệu",
+            "description": "Để trở thành người giới thiệu của bạn bè bạn, hãy thêm liên kết giới thiệu của họ. Sau đó, bạn sẽ được đăng ký làm người giới thiệu của họ. Lưu ý rằng hành động này không thể đảo ngược",
+            "add_btn": "Thêm"
+        },
+        "list_friends": {
+            "title": "Danh sách bạn bè của bạn",
+            "no_friends_invited": "Bạn chưa mời ai"
+        },
+        "invite_btn": "Mời một người bạn",
+        "copy_btn": {
+            "success": "Đã sao chép",
+            "error": "Lỗi"
+        }
+    },
+    "profile": {
+        "titles": {
+            "profile": "Chi tiết hồ sơ",
+            "wallets": "Kết nối ví"
+        },
+        "total_coin": {
+            "title": "Tổng số xu",
+            "popup": {
+                "title": "Tổng số xu",
+                "description": "Phần này hiển thị tổng số xu bạn đã kiếm được thông qua các hoạt động khác nhau. Xu có thể được sử dụng để mở khóa phần thưởng, tham gia sự kiện hoặc thể hiện tiến trình của bạn trong cộng đồng."
+            }
+        },
+        "transactions": {
+            "title": "Giao dịch",
+            "popup": {
+                "title": "Giao dịch",
+                "description": "Tại đây, bạn sẽ tìm thấy tổng số giao dịch bạn đã hoàn thành. Giao dịch bao gồm gửi xu, mua hàng hoặc đổi phần thưởng. Theo dõi hoạt động của bạn để luôn được thông báo."
+            }
+        },
+        "friends": {
+            "title": "Bạn bè",
+            "popup": {
+                "title": "Bạn bè",
+                "description": "Điều này cho thấy số lượng bạn bè bạn đã kết nối trên nền tảng. Có nhiều bạn bè hơn sẽ cải thiện trải nghiệm của bạn bằng cách cho phép hợp tác, cạnh tranh thân thiện và tương tác xã hội."
+            }
+        },
+        "achivements": {
+            "title": "Thành tựu",
+            "popup": {
+                "title": "Thành tựu",
+                "description": "Thành tựu của bạn là một biểu tượng trực quan của các cột mốc bạn đã đạt được. Thu thập huy hiệu bằng cách hoàn thành các thử thách, đạt được mục tiêu hoặc là một người tham gia tích cực trong cộng đồng. Hiển thị thành tựu của bạn một cách tự hào để truyền cảm hứng cho người khác!"
+            }
+        },
+        "wallet": {
+            "title": "Kết nối với {{wallet}}",
+            "alert": {
+                "success": "Đã kết nối thành công với {{wallet}}",
+                "failure": "Không kết nối được với {{wallet}}"
+            }
+        }
+    },
+    "game": {
+        "our_game": {
+            "title": "Trò chơi của chúng tôi",
+            "play_btn": "Chơi ngay",
+            "coming_soon_btn": "Sắp ra mắt",
+            "lottery_game": {
+                "history": {
+                    "title": "Lịch sử"
+                },
+                "dialog": {
+                    "title": "Chúc mừng",
+                    "description": "Bạn đã thắng",
+                    "claim_btn": "Nhận"
+                },
+                "help": {
+                    "title": "Trợ giúp",
+                    "step_1": {
+                        "title": "1. Quay Vòng",
+                        "description_1": "Nhấp vào nút \"Quay\" để bắt đầu vòng quay.",
+                        "description_2": "Xem khi vòng quay quay và từ từ dừng lại."
+                    },
+                    "step_2": {
+                        "title": "2. Chờ Kết Quả",
+                        "description_1": "Khi vòng quay dừng lại, đoạn chỉ bởi mũi tên chỉ ra phần thưởng của bạn.",
+                        "description_2": "Nếu bạn thắng phần thưởng, chúc mừng! Nếu không, hãy thử lại và thử vận may của bạn."
+                    },
+                    "step_3": {
+                        "title": "3. Nhận Phần Thưởng",
+                        "description_1": "Nếu bạn rơi vào đoạn thắng, hãy làm theo hướng dẫn để nhận phần thưởng của bạn.",
+                        "description_2": "Phần thưởng có thể được thêm vào tài khoản của bạn, gửi đến email của bạn hoặc đổi tại chỗ."
+                    },
+                    "step_4": {
+                        "title": "4. Chơi Có Trách Nhiệm:",
+                        "description_1": "Mỗi lần quay có thể tốn tín dụng hoặc token, tùy thuộc vào quy tắc trò chơi.",
+                        "description_2": "Thưởng thức trò chơi một cách có trách nhiệm và đặt giới hạn cho bản thân."
+                    },
+                    "got_it": "Tôi đã hiểu",
+                    "good_luck": "Chúc may mắn, và mong rằng vận may luôn ở bên bạn!"
+                },
+                "top_player": "Top {{players}} người chơi"
+            }
+        },
+        "other_game": {
+            "title": "Trò chơi khác",
+            "content": "Sắp ra mắt"
+        },
+        "explore_btn": "Khám phá thêm",
+        "alerts": {
+            "coming_soon_alert": "Sắp ra mắt"
+        }
+    }
+}

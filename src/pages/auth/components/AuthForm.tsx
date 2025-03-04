@@ -22,12 +22,12 @@ const AuthForm = () => {
             </p>
             <img src={logo} alt="logo" srcSet="" />
             <Tabs defaultValue="login" value={selectedTab} onValueChange={setSelectedTab} className="w-full flex flex-col items-center justify-center">
-                <TabsList className="flex bg-gray-700 flex-row w-[90%] h-auto items-center rounded-full justify-between border-2 border-gray-600 my-4">
+                <TabsList className="flex bg-gray-700  flex-row w-[90%] h-auto items-center rounded-full justify-between border-2 border-gray-600 my-4">
                 <TabsTrigger
-                    className={`w-full p-1 text-sm font-medium rounded-full ${
+                    className={`w-full p-1 text-sm font-medium rounded-full  ${
                         selectedTab === "login" 
-                            ? "text-white" 
-                            : "text-gray-300"
+                            ? " text-white" 
+                            : "text-gray-300 "
                     }`} 
                     value="login"
                 >

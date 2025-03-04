@@ -1,0 +1,227 @@
+{
+    "welcome": "Willkommen in unserer Anwendung!",
+    "navbar": {
+        "missions": "Missionen",
+        "games": "Spiele",
+        "airdrop": "Airdrop",
+        "friends": "Freunde",
+        "profile": "Profil"
+    },
+    "loading": {
+        "title": "JuniperFox Lotteriespiel",
+        "description": "Bitte warten",
+        "loading": "Laden...",
+        "explore": "Erkunden Sie weitere Informationen auf unseren Kanälen"
+    },
+    "error": {
+        "title": "Seite Nicht Gefunden",
+        "description": "Die Seite, die Sie suchen, existiert nicht oder wurde verschoben.",
+        "back": "Zurück zur Startseite",
+        "404": "Fehlercode: 404 | Nicht Gefunden"
+    },
+    "airdrop": {
+        "avatar": {
+            "title": "Passen Sie Ihr Profil an",
+            "choose_avatar": "Wählen Sie Ihr Avatar",
+            "choose_frame": "Wählen Sie die Rahmenfarbe",
+            "choose_archivement": "Wählen Sie eine Errungenschaft"
+        },
+        "tree_coin": {
+            "title": "Verdienen Sie täglich Münzen",
+            "tree_level": "Baumstufe",
+            "watered": "{{time}} Mal heute noch gießen"
+        },
+        "contents": {
+            "passive": {
+                "title": "Passives Einkommen",
+                "dialog": {
+                    "title": "Passives Einkommen",
+                    "description": "Verdienen Sie Belohnungen mühelos! Mit unserer Funktion für passives Einkommen sammeln Sie Münzen oder Punkte, indem Sie einfach ein aktiver Benutzer sind. Je mehr Sie mit unserer Plattform interagieren, desto mehr verdienen Sie - ohne zusätzlichen Aufwand. Denken Sie daran als Ihren stetigen Strom von Vorteilen!"
+                }
+            },
+            "task": {
+                "title": "Aufgaben zum Verdienen",
+                "dialog": {
+                    "title": "Aufgaben zum Verdienen",
+                    "description": "Steigern Sie Ihre Belohnungen, indem Sie spannende Aufgaben erledigen! Ob es darum geht, Umfragen zu beantworten, Beiträge zu teilen oder mit Inhalten zu interagieren, diese Aufgaben sind darauf ausgelegt, schnell und lohnend zu sein. Überprüfen Sie Ihr Dashboard für tägliche Aufgaben und vervielfachen Sie Ihre Einnahmen mit minimalem Aufwand."
+                }
+            },
+            "spinner": {
+                "title": "Lotterie-Rad",
+                "dialog": {
+                    "title": "Lotterie-Rad",
+                    "description": "Versuchen Sie Ihr Glück und drehen Sie das Lotterierad, um spannende Belohnungen zu erhalten! Jeder Dreh kann Ihnen Münzen, exklusive Preise oder spezielle Angebote einbringen. Je mehr Sie drehen, desto höher sind Ihre Chancen, den Jackpot zu knacken. Verpassen Sie nicht den Nervenkitzel!"
+                }
+            },
+            "friends": {
+                "title": "Freunde einladen",
+                "dialog": {
+                    "title": "Freunde einladen",
+                    "description": "Teilen Sie die Freude und verdienen Sie Belohnungen, indem Sie Freunde einladen, unserer Plattform beizutreten! Jede erfolgreiche Einladung bringt Ihnen einen Bonus, und Ihre Freunde erhalten ebenfalls ein Willkommensgeschenk. Es ist eine Win-Win-Situation, die unsere Gemeinschaft stärkt und gleichzeitig Ihre Einnahmen erhöht."
+                }
+            },
+            "achivements": {
+                "title": "Errungenschaften",
+                "dialog": {
+                    "title": "Errungenschaften",
+                    "description": "Feiern Sie Meilensteine mit unserem Errungenschaftssystem! Schalten Sie Abzeichen und exklusive Belohnungen frei, indem Sie bestimmte Ziele oder Herausforderungen erreichen. Zeigen Sie Ihre Errungenschaften anderen und genießen Sie die Vorteile, die mit Ihrem Fortschritt einhergehen."
+                }
+            }
+        }
+    },
+    "settings": {
+        "title": "Einstellungen",
+        "terms": "Bedingungen und Richtlinien",
+        "sound": "Ton",
+        "language": {
+            "title": "Wählen Sie Ihre Sprache",
+            "select_default": "Wählen Sie eine Sprache",
+            "en": "Englisch",
+            "fr": "Französisch",
+            "de": "Deutsch",
+            "es": "Spanisch",
+            "vi": "Vietnamesisch",
+            "ru": "Russisch",
+            "zh": "Chinesisch",
+            "ja": "Japanisch",
+            "ko": "Koreanisch",
+            "ar": "Arabisch"
+        },
+        "referral": {
+            "title": "Werden Sie ein Empfehlungsgeber",
+            "description": "Fügen Sie den Empfehlungslink Ihres Freundes hinzu"
+        },
+        "delete": {
+            "title": "Konto löschen",
+            "popup": {
+                "title": "Sind Sie sicher, dass Sie Ihr Konto löschen möchten?",
+                "description": "Alle Ihre Daten, einschließlich Spielfortschritt, Errungenschaften, Einkäufe werden dauerhaft gelöscht",
+                "cancel": "Abbrechen",
+                "delete": "Konto löschen"
+            }
+        }
+    },
+    "missions": {
+        "title": "Tägliche Missionen",
+        "description": "Erledigen Sie die Missionen, um Münzen zu verdienen"
+    },
+    "friends": {
+        "title": "Freunde einladen",
+        "description": "Sie und Ihr Freund erhalten Boni",
+        "add": {
+            "title": "Einen Freund einladen",
+            "description": "für Sie und Ihren Freund"
+        },
+        "add_premium": {
+            "title": "Einen Freund mit Telegram Premium einladen",
+            "description": "für Sie und Ihren Freund"
+        },
+        "become_referral_btn": "Werden Sie ein Empfehlungsgeber",
+        "referral": {
+            "title": "Werden Sie ein Empfehlungsgeber",
+            "description": "Um der Empfehlungsgeber Ihres Freundes zu werden, fügen Sie seinen Empfehlungslink hinzu. Danach werden Sie als sein Empfehlungsgeber registriert. Bitte beachten Sie, dass diese Aktion nicht rückgängig gemacht werden kann",
+            "add_btn": "Hinzufügen"
+        },
+        "list_friends": {
+            "title": "Liste Ihrer Freunde",
+            "no_friends_invited": "Sie haben noch niemanden eingeladen"
+        },
+        "invite_btn": "Einen Freund einladen",
+        "copy_btn": {
+            "success": "Kopiert",
+            "error": "Fehler"
+        }
+    },
+    "profile": {
+        "titles": {
+            "profile": "Profil-Details",
+            "wallets": "Mit Wallets verbinden"
+        },
+        "total_coin": {
+            "title": "Gesamtanzahl der Münzen",
+            "popup": {
+                "title": "Gesamtanzahl der Münzen",
+                "description": "Dieser Abschnitt zeigt die Gesamtanzahl der Münzen, die Sie durch verschiedene Aktivitäten verdient haben. Münzen können verwendet werden, um Belohnungen freizuschalten, an Veranstaltungen teilzunehmen oder Ihren Fortschritt in der Gemeinschaft zu zeigen."
+            }
+        },
+        "transactions": {
+            "title": "Transaktionen",
+            "popup": {
+                "title": "Transaktionen",
+                "description": "Hier finden Sie die Gesamtanzahl der Transaktionen, die Sie abgeschlossen haben. Transaktionen umfassen das Senden von Münzen, den Kauf von Artikeln oder das Einlösen von Belohnungen. Verfolgen Sie Ihre Aktivitäten, um informiert zu bleiben."
+            }
+        },
+        "friends": {
+            "title": "Freunde",
+            "popup": {
+                "title": "Freunde",
+                "description": "Dies zeigt die Anzahl der Freunde, mit denen Sie sich auf der Plattform verbunden haben. Mehr Freunde zu haben, verbessert Ihr Erlebnis, indem es Zusammenarbeit, freundlichen Wettbewerb und soziale Interaktionen ermöglicht."
+            }
+        },
+        "achivements": {
+            "title": "Errungenschaften",
+            "popup": {
+                "title": "Errungenschaften",
+                "description": "Ihre Errungenschaften sind eine visuelle Darstellung der Meilensteine, die Sie erreicht haben. Sammeln Sie Abzeichen, indem Sie Herausforderungen abschließen, Ziele erreichen oder ein aktiver Teilnehmer in der Gemeinschaft sind. Zeigen Sie Ihre Errungenschaften stolz, um andere zu inspirieren!"
+            }
+        },
+        "wallet": {
+            "title": "Mit {{wallet}} verbinden",
+            "alert": {
+                "success": "Erfolgreich mit {{wallet}} verbunden",
+                "failure": "Nicht mit {{wallet}} verbunden"
+            }
+        }
+    },
+    "game": {
+        "our_game": {
+            "title": "Unsere Spiele",
+            "play_btn": "Jetzt spielen",
+            "coming_soon_btn": "Demnächst",
+            "lottery_game": {
+                "history": {
+                    "title": "Verlauf"
+                },
+                "dialog": {
+                    "title": "Herzlichen Glückwunsch",
+                    "description": "Sie haben gewonnen",
+                    "claim_btn": "Einlösen"
+                },
+                "help": {
+                    "title": "Hilfe",
+                    "step_1": {
+                        "title": "1. Drehen Sie das Rad",
+                        "description_1": "Klicken Sie auf die Schaltfläche \"Drehen\", um das Rad zu starten.",
+                        "description_2": "Beobachten Sie, wie sich das Rad dreht und langsam stoppt."
+                    },
+                    "step_2": {
+                        "title": "2. Warten Sie auf das Ergebnis",
+                        "description_1": "Sobald das Rad stoppt, zeigt das von dem Pfeil angezeigte Segment Ihren Preis an.",
+                        "description_2": "Wenn Sie eine Belohnung gewinnen, herzlichen Glückwunsch! Wenn nicht, versuchen Sie es erneut und testen Sie Ihr Glück."
+                    },
+                    "step_3": {
+                        "title": "3. Fordern Sie Ihren Preis an",
+                        "description_1": "Wenn Sie auf einem Gewinnsegment landen, folgen Sie den Anweisungen, um Ihren Preis einzulösen.",
+                        "description_2": "Preise können Ihrem Konto hinzugefügt, an Ihre E-Mail gesendet oder vor Ort eingelöst werden."
+                    },
+                    "step_4": {
+                        "title": "4. Spielen Sie verantwortungsbewusst:",
+                        "description_1": "Jeder Dreh kann Credits oder Tokens kosten, abhängig von den Spielregeln.",
+                        "description_2": "Genießen Sie das Spiel verantwortungsbewusst und setzen Sie sich ein Limit."
+                    },
+                    "got_it": "Verstanden",
+                    "good_luck": "Viel Glück, und möge das Glück immer auf Ihrer Seite sein!"
+                },
+                "top_player": "Top {{players}} Spieler"
+            }
+        },
+        "other_game": {
+            "title": "Andere Spiele",
+            "content": "Demnächst"
+        },
+        "explore_btn": "Mehr erkunden",
+        "alerts": {
+            "coming_soon_alert": "Demnächst"
+        }
+    }
+}

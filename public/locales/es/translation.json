@@ -1,0 +1,228 @@
+{
+    "welcome": "¡Bienvenido a nuestra aplicación!",
+    "navbar": {
+        "missions": "Misiones",
+        "games": "Juegos",
+        "airdrop": "Airdrop",
+        "friends": "Amigos",
+        "profile": "Perfil"
+    },
+    "loading": {
+        "title": "Juego de Lotería JuniperFox",
+        "description": "Por favor espera",
+        "loading": "Cargando...",
+        "explore": "Explora más información en nuestros canales"
+    },
+    "error": {
+        "title": "Página No Encontrada",
+        "description": "La página que buscas no existe o ha sido movida.",
+        "back": "Volver a inicio",
+        "404": "Código de Error: 404 | No Encontrado"
+    },
+    "airdrop": {
+        "avatar": {
+            "title": "Personaliza Tu Perfil",
+            "choose_avatar": "Elige Tu Avatar",
+            "choose_frame": "Elige el Color del Marco",
+            "choose_archivement": "Elige un Logro"
+        },
+        "tree_coin": {
+            "title": "Gana monedas diariamente",
+            "tree_level": "Nivel del Árbol",
+            "watered": "Regado {{time}} veces restantes hoy"
+        },
+        "contents": {
+            "passive": {
+                "title": "Ingreso Pasivo",
+                "dialog": {
+                    "title": "Ingreso Pasivo",
+                    "description": "¡Gana recompensas sin esfuerzo! Con nuestra función de ingreso pasivo, acumulas monedas o puntos solo por ser un usuario activo. Cuanto más interactúes con nuestra plataforma, más ganas, sin esfuerzo adicional. ¡Piénsalo como tu flujo constante de beneficios!"
+                }
+            },
+            "task": {
+                "title": "Tareas para Ganar",
+                "dialog": {
+                    "title": "Tareas para Ganar",
+                    "description": "Aumenta tus recompensas completando tareas emocionantes. Ya sea respondiendo encuestas, compartiendo publicaciones o interactuando con contenido, estas tareas están diseñadas para ser rápidas y gratificantes. Revisa tu panel de control para tareas diarias y multiplica tus ganancias con un esfuerzo mínimo."
+                }
+            },
+            "spinner": {
+                "title": "Ruleta de Lotería",
+                "dialog": {
+                    "title": "Ruleta de Lotería",
+                    "description": "¡Toma una oportunidad y gira la ruleta de la lotería para obtener recompensas emocionantes! Cada giro podría ganarte monedas, premios exclusivos u ofertas especiales. Cuanto más gires, mayores serán tus posibilidades de ganar el premio mayor. ¡No te pierdas la emoción!"
+                }
+            },
+            "friends": {
+                "title": "Invitar Amigos",
+                "dialog": {
+                    "title": "Invitar Amigos",
+                    "description": "Comparte la alegría y gana recompensas invitando a amigos a unirse a nuestra plataforma. Cada invitación exitosa te gana un bono, y tus amigos también reciben un regalo de bienvenida. Es una situación en la que todos ganan, fortaleciendo nuestra comunidad mientras aumentas tus ganancias."
+                }
+            },
+            "achivements": {
+                "title": "Logros",
+                "dialog": {
+                    "title": "Logros",
+                    "description": "¡Celebra hitos con nuestro sistema de logros! Desbloquea insignias y recompensas exclusivas a medida que completas objetivos o desafíos específicos. Muestra tus logros a otros y disfruta de las ventajas que vienen con tu progreso."
+                }
+            }
+        }
+    },
+    "settings": {
+        "title": "Configuraciones",
+        "terms": "Términos y Política",
+        "sound": "Sonido",
+        "language": {
+            "title": "Selecciona tu idioma",
+            "select_default": "Selecciona un idioma",
+            "en": "Inglés",
+            "fr": "Francés",
+            "de": "Alemán",
+            "es": "Español",
+            "vi": "Vietnamita",
+            "ru": "Ruso",
+            "zh": "Chino",
+            "ja": "Japonés",
+            "ko": "Coreano",
+            "ar": "Árabe"
+        },
+        "referral": {
+            "title": "Conviértete en un referente",
+            "description": "Agrega el enlace de referencia de tu amigo"
+        },
+        "delete": {
+            "title": "Eliminar cuenta",
+            "popup": {
+                "title": "¿Estás seguro de que deseas eliminar tu cuenta?",
+                "description": "Todos tus datos, incluyendo el progreso del juego, logros y compras, serán eliminados permanentemente",
+                "cancel": "Cancelar",
+                "delete": "Eliminar cuenta"
+            }
+        }
+    },
+    "missions": {
+        "title": "Misiones diarias",
+        "description": "Completa las misiones para ganar monedas"
+    },
+    "friends": {
+        "title": "Invitar amigos",
+        "description": "Tú y tu amigo recibirán bonificaciones",
+        "add": {
+            "title": "Invitar a un amigo",
+            "description": "para ti y tu amigo"
+        },
+        "add_premium": {
+            "title": "Invitar a un amigo con Telegram Premium",
+            "description": "para ti y tu amigo"
+        },
+        "become_referral_btn": "Conviértete en un referente",
+        "referral": {
+            "title": "Conviértete en un referente",
+            "description": "Para convertirte en el referente de tu amigo, agrega su enlace de referencia. Después de eso, estarás registrado como su referente. Es importante notar que esta acción es irreversible",
+            "add_btn": "Agregar"
+        },
+        "list_friends": {
+            "title": "Lista de tus amigos",
+            "no_friends_invited": "Aún no has invitado a nadie"
+        },
+        "invite_btn": "Invitar a un amigo",
+        "copy_btn": {
+            "success": "Copiado",
+            "error": "Error"
+        }
+    },
+    "profile": {
+        "titles": {
+            "profile": "Detalles del perfil",
+            "wallets": "Conectar a carteras"
+        },
+        "total_coin": {
+            "title": "Total de monedas",
+            "popup": {
+                "title": "Total de monedas",
+                "description": "Esta sección muestra el número total de monedas que has ganado a través de varias actividades. Las monedas se pueden usar para desbloquear recompensas, participar en eventos o mostrar tu progreso en la comunidad."
+            }
+        },
+        "transactions": {
+            "title": "Transacciones",
+            "popup": {
+                "title": "Transacciones",
+                "description": "Aquí encontrarás el conteo total de transacciones que has completado. Las transacciones incluyen enviar monedas, comprar artículos o canjear recompensas. Mantén un seguimiento de tu actividad para estar informado."
+            }
+        },
+        "friends": {
+            "title": "Amigos",
+            "popup": {
+                "title": "Amigos",
+                "description": "Esto muestra el número de amigos con los que te has conectado en la plataforma. Tener más amigos mejora tu experiencia al permitir colaboración, competencia amistosa e interacciones sociales."
+            }
+        },
+        "achivements": {
+            "title": "Logros",
+            "popup": {
+                "title": "Logros",
+                "description": "Tus logros son una representación visual de los hitos que has alcanzado. Colecciona insignias completando desafíos, alcanzando objetivos o siendo un participante activo en la comunidad. ¡Muestra tus logros con orgullo para inspirar a otros!"
+            }
+        },
+
+        "wallet": {
+            "title": "Conectar a {{wallet}}",
+            "alert": {
+                "success": "Conectado exitosamente a {{wallet}}",
+                "failure": "No conectado a {{wallet}}"
+            }
+        }
+    },
+    "game": {
+        "our_game": {
+            "title": "Nuestros Juegos",
+            "play_btn": "Jugar Ahora",
+            "coming_soon_btn": "Próximamente",
+            "lottery_game": {
+                "history": {
+                    "title": "Historial"
+                },
+                "dialog": {
+                    "title": "Felicidades",
+                    "description": "Ganaste",
+                    "claim_btn": "Reclamar"
+                },
+                "help": {
+                    "title": "Ayuda",
+                    "step_1": {
+                        "title": "1. Gira la Rueda",
+                        "description_1": "Haz clic en el botón \"Girar\" para iniciar la rueda.",
+                        "description_2": "Observa cómo la rueda gira y se detiene lentamente."
+                    },
+                    "step_2": {
+                        "title": "2. Espera el Resultado",
+                        "description_1": "Una vez que la rueda se detiene, el segmento señalado por la flecha indica tu premio.",
+                        "description_2": "Si ganas una recompensa, ¡felicidades! Si no, inténtalo de nuevo y prueba tu suerte."
+                    },
+                    "step_3": {
+                        "title": "3. Reclama Tu Premio",
+                        "description_1": "Si caes en un segmento ganador, sigue las instrucciones para reclamar tu premio.",
+                        "description_2": "Los premios pueden ser añadidos a tu cuenta, enviados a tu correo electrónico o canjeados en el sitio."
+                    },
+                    "step_4": {
+                        "title": "4. Juega Responsablemente:",
+                        "description_1": "Cada giro puede costar créditos o tokens, dependiendo de las reglas del juego.",
+                        "description_2": "Disfruta del juego de manera responsable y establece un límite para ti mismo."
+                    },
+                    "got_it": "Lo Entiendo",
+                    "good_luck": "¡Buena suerte, y que la suerte esté siempre a tu favor!"
+                },
+                "top_player": "Top {{players}} jugadores"
+            }
+        },
+        "other_game": {
+            "title": "Otros Juegos",
+            "content": "Próximamente"
+        },
+        "explore_btn": "Explorar Más",
+        "alerts": {
+            "coming_soon_alert": "Próximamente"
+        }
+    }
+}

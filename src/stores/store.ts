@@ -4,7 +4,12 @@ import { authApi } from '@/services/auth';
 
 import authReducer ,{ namespace as authNamespace } from './auth/authSlice';
 import themeReducer, { namespace as themeNamespace } from './theme/themeSlice';
-
+import { referralApi } from '@/services/referral';
+import { userApi } from '@/services/user';
+import { tasksApi } from '@/services/tasks';
+import { lotteryApi } from '@/services/lottery';
+import { rewardTreeApi } from '@/services/reward-tree';
+import { airdropApi } from '@/services/airdrop';
 
 export const listenerMiddleware = createListenerMiddleware({
   onError: () => console.error('An error listener middleware occurred'),
@@ -16,7 +21,12 @@ const reducer = {
   [themeNamespace]: themeReducer,
   
   [authApi.reducerPath]: authApi.reducer,
-
+  [referralApi.reducerPath]: referralApi.reducer,
+  [userApi.reducerPath]: userApi.reducer,
+  [tasksApi.reducerPath]: tasksApi.reducer,
+  [lotteryApi.reducerPath]: lotteryApi.reducer,
+  [rewardTreeApi.reducerPath]: rewardTreeApi.reducer,
+  [airdropApi.reducerPath]: airdropApi.reducer,
 };
 
 export const store = configureStore({
@@ -25,6 +35,12 @@ export const store = configureStore({
     getDefaultMiddleware()
     .concat(
       authApi.middleware,
+      referralApi.middleware,
+      userApi.middleware,
+      tasksApi.middleware,
+      lotteryApi.middleware,
+      rewardTreeApi.middleware,
+      airdropApi.middleware
     )
     .prepend(listenerMiddleware.middleware)
 });
