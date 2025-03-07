@@ -14,6 +14,7 @@ import ProfilePage from './pages/profile/ProfilePage';
 import { useGetMeQuery } from './services/auth';
 import LotterySpinnerGame from './pages/games/ourgame/lottery-spinner-game';
 import LoadingPage from './pages/LoadingPage';
+import AuthCallback from './pages/auth/components/AuthCallback';
 const {
   ROOT,
   AUTH,
@@ -44,10 +45,13 @@ const PrivateRoute = ({ children }: {children: React.ReactNode}) => {
 
 
 const routes = createBrowserRouter([
-
   {
     path: ROOT,
-    element: <PrivateRoute><PageLayout/></PrivateRoute>,
+    element: (
+      <PrivateRoute>
+        <PageLayout />
+      </PrivateRoute>
+    ),
     children: [
       { index: true, element: <AirdropPage /> },
       { path: MISSIONS, element: <MissionsPage /> },
@@ -60,12 +64,13 @@ const routes = createBrowserRouter([
   },
   {
     path: AUTH,
-    element: <AuthLayout/>,
+    element: <AuthLayout />,
     children: [
       { index: true, element: <AuthPage /> },
+      { path: "callback", element: <AuthCallback /> },
     ],
   },
-  { path: '*', element: <ErrorPage /> },
+  { path: "*", element: <ErrorPage /> },
 ]);
 
 

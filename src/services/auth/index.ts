@@ -1,9 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { baseUrl } from "@/configs/config";
 import { InvalidatesTagsEnum } from "@/constants/invalidates-tags";
+import { CreateLoginSocialUrlRequest } from "@/interfaces/ILogin";
 
 const reducerPath = "authApi";
-const endpoint = 'auth';
+const endpoint = "auth";
 
 export interface User {
   first_name: string;
@@ -23,16 +24,16 @@ export interface LoginRequest {
 }
 
 export interface RegisterRequest {
-  firstName: string,
-  lastName: string,
-  email: string,
-  password: string,
-  timezone: string,
-  ref?: string
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  timezone: string;
+  ref?: string;
 }
 
 export interface ResendAccountActivationRequest {
-  email: string,
+  email: string;
 }
 
 export interface RegisterResponse {
@@ -54,7 +55,6 @@ export interface VerifyAccountRequest {
 
 // Custom hook for managing auth token
 
-
 export const authApi = createApi({
   reducerPath,
   tagTypes: [InvalidatesTagsEnum.AUTH],
@@ -62,9 +62,12 @@ export const authApi = createApi({
     baseUrl,
     prepareHeaders: (headers, { endpoint }) => {
       if (endpoint === "getMe") {
-        const storedToken = localStorage.getItem('auth-token');
+        const storedToken = localStorage.getItem("auth-token");
         if (storedToken) {
-          headers.set("Authorization", `Bearer ${JSON.parse(storedToken).replace(/^"|"$/g, "")}`);
+          headers.set(
+            "Authorization",
+            `Bearer ${JSON.parse(storedToken).replace(/^"|"$/g, "")}`
+          );
         }
       }
       return headers;
@@ -92,7 +95,7 @@ export const authApi = createApi({
         url: `${endpoint}/register`,
         method: "POST",
         body,
-      })
+      }),
     }),
     logout: builder.mutation<void, void>({
       queryFn: () => {
@@ -106,7 +109,7 @@ export const authApi = createApi({
         url: `${endpoint}/resend-account-activation`,
         method: "POST",
         body,
-      })
+      }),
     }),
     verifyAccount: builder.mutation({
       query: (body) => ({
@@ -117,24 +120,25 @@ export const authApi = createApi({
       async onQueryStarted(_arg, { queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          
+
           localStorage.setItem("auth-token", JSON.parse(data.data.token));
         } catch (error) {
           console.error("Login error:", error);
         }
-      }
+      },
     }),
     loginSocial: builder.mutation({
       query: (body) => ({
         url: `${endpoint}/login-social`,
         method: "POST",
         body,
-      })
+      }),
     }),
     loginX: builder.query({
-      query: () => ({
-        url: `${endpoint}/login/x`,
-      }),
+      query: (payload: CreateLoginSocialUrlRequest) => {
+        const params = new URLSearchParams(payload as Record<string, string>);
+        return { url: `${endpoint}/login/x?${params.toString()}` };
+      },
     }),
     loginGoogle: builder.query({
       query: () => ({
@@ -160,9 +164,9 @@ export const authApi = createApi({
   }),
 });
 
-export const { 
-  useLoginMutation, 
-  useLogoutMutation, 
+export const {
+  useLoginMutation,
+  useLogoutMutation,
   useRegisterMutation,
   useResendAccountActivationMutation,
   useVerifyAccountMutation,
@@ -171,5 +175,5 @@ export const {
   useLoginFacebookQuery,
   useLoginGoogleQuery,
   useLoginInstagramQuery,
-  useGetMeQuery 
+  useGetMeQuery,
 } = authApi;

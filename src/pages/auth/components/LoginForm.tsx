@@ -1,19 +1,18 @@
 import google from "@/assets/icons/google.svg";
 import x from "@/assets/icons/x.svg";
+import facebook from "@/assets/icons/socials/fb_icon.svg";
+import instagram from "@/assets/icons/socials/ig_icon.svg";
 import metamask from "@/assets/icons/metamask.svg";
 import phantom from "@/assets/icons/phantom.svg";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
-    Card,
-    CardContent,
-} from "@/components/ui/card";
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
@@ -28,30 +27,47 @@ import routes from "@/constants/routes";
 import { toast } from "sonner";
 import { LoadingSpinner } from "@/components/spinner";
 import { useAuthToken } from "@/hooks/useAuthToken";
+import { LoginSocialActionTypeEnum, SocialTypeEnum } from "@/enums/social-type.enum";
 
-const {ROOT} = routes;
-const loginTypes = [{
-    key: "google",
+const { ROOT } = routes;
+const loginTypes = [
+  {
+    key: SocialTypeEnum.Google,
     name: "Google",
     icon: google,
     type: "social",
-}, {
-    key: "x",
+  },
+  {
+    key: SocialTypeEnum.X,
     name: "X",
     icon: x,
     type: "social",
-}, {
-    key: "metamask",
+  },
+  {
+    key: SocialTypeEnum.Facebook,
+    name: "Facebook",
+    icon: facebook,
+    type: "social",
+  },
+  {
+    key: SocialTypeEnum.Instagram,
+    name: "Instagram",
+    icon: instagram,
+    type: "social",
+  },
+  {
+    key: SocialTypeEnum.Metamask,
     name: "Metamask",
     icon: metamask,
     type: "wallet",
-}, {
-    key: "phantom",
+  },
+  {
+    key: SocialTypeEnum.Phantom,
     name: "Phantom",
     icon: phantom,
     type: "wallet",
-}
-]
+  },
+];
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
@@ -67,6 +83,7 @@ const LoginForm = () => {
         resolver: zodResolver(loginSchema),
         defaultValues: defaultLoginFormValues
     });
+    const searchParams = new URLSearchParams(location.search);
 
     const onLoginSubmit = async (data: LoginFormValues) => {
         try {
@@ -79,18 +96,24 @@ const LoginForm = () => {
             }
         } catch (error) {
             console.error(error);
-            toast.error("Login Failured!")
-
         }
     };
 
-    const handleSocialLogin = async (provider: string) => {
-        try {
-            console.log(`Logging in with ${provider}`);
-            // Add your social login logic here
-        } catch (error) {
-            console.error(error);
-        }
+    const redirectToLoginSocial = (provider: SocialTypeEnum) => {
+        const appUrl = window.location.origin;
+        const ref = searchParams.get("ref");
+
+        const params = new URLSearchParams({
+            state: `${appUrl}${routes.AUTH_CALLBACK}`,
+            ...(ref ? { ref } : {}),
+            action: LoginSocialActionTypeEnum.Login,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        });
+        window.location.href = `${appUrl}/api/auth/login/${provider}?${params.toString()}`;
+    };
+
+    const handleSocialLogin = async (provider: SocialTypeEnum) => {
+        redirectToLoginSocial(provider)
     };
 
     const handleWalletLogin = async (wallet: string) => {
@@ -130,7 +153,7 @@ const LoginForm = () => {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel className="text-gray-20 flex flex-row justify-between"><span>Password</span> <ForgotPasswordDialog/>
-                                    </FormLabel>
+                                    </FormLabel>    
                                     <FormControl>
                                         <Input
                                             {...field}
@@ -164,10 +187,10 @@ const LoginForm = () => {
                         <Button
                             key={loginType.key}
                             variant="outline"
-                            className="border-gray-600 bg-[#222936] text-gray-200"
+                            className="border-gray-600 bg-[#222936] text-gray-200 cursor-pointer"
                             onClick={() => loginType.type == "social" ? handleSocialLogin(loginType.key) : handleWalletLogin(loginType.key)}
                         >
-                            <img src={loginType.icon} alt={loginType.name} srcSet="" />
+                            <img className="size-6" src={loginType.icon} alt={loginType.name} srcSet="" />
                             {loginType.name}
                         </Button>
                     ))}

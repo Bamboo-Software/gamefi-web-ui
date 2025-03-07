@@ -8,6 +8,7 @@ const routes = {
     SELECT_LANGUAGE: '/select-language',
     REFERRAL: '/referral',
     AUTH: '/auth',
+    AUTH_CALLBACK: '/auth/callback',
 
     GAMES_LOTTERY_SPINNER: '/games/lottery-spinner-game',
     GAMES_LOTTERY_SPINNER_HISTORY: '/games/lottery-spinner/history',
