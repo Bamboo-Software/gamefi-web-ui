@@ -18,9 +18,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {loginSchema} from "@/schemas/auth";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { loginSchema } from "@/schemas/auth";
 import { z } from "zod";
+import { ForgotPasswordDialog } from "./ForgotPassword";
+import { useLoginMutation } from "@/services/auth";
+import { useNavigate } from "react-router-dom";
+import routes from "@/constants/routes";
+import { toast } from "sonner";
+import { LoadingSpinner } from "@/components/spinner";
+import { useAuthToken } from "@/hooks/useAuthToken";
 
+const {ROOT} = routes;
 const loginTypes = [{
     key: "google",
     name: "Google",
@@ -46,23 +55,32 @@ const loginTypes = [{
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-const defaultValues = {
+const defaultLoginFormValues = {
     email: "",
     password: "",
 }
 const LoginForm = () => {
-
-    const form = useForm<LoginFormValues>({
+    const navigate = useNavigate();
+    const { setToken} = useAuthToken()
+    const [login, {isLoading: isLoginLoading}] = useLoginMutation()
+    const loginForm = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
-        defaultValues
+        defaultValues: defaultLoginFormValues
     });
 
-    const onSubmit = async (data: LoginFormValues) => {
+    const onLoginSubmit = async (data: LoginFormValues) => {
         try {
-            console.log(data);
-            // Add your login logic here
+            const response = await login(data).unwrap();
+            if(response.success){
+                setToken(JSON.stringify(response.data.token))
+                navigate(ROOT)
+            }else{
+                toast.error("Login Failured!")
+            }
         } catch (error) {
             console.error(error);
+            toast.error("Login Failured!")
+
         }
     };
 
@@ -86,11 +104,10 @@ const LoginForm = () => {
     return (
         <Card className="border-none bg-[#222936]">
             <CardContent className="space-y-4">
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-
+                <Form {...loginForm}>
+                    <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-6">
                         <FormField
-                            control={form.control}
+                            control={loginForm.control}
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
@@ -108,11 +125,12 @@ const LoginForm = () => {
                             )}
                         />
                         <FormField
-                            control={form.control}
+                            control={loginForm.control}
                             name="password"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className="text-gray-200">Password</FormLabel>
+                                    <FormLabel className="text-gray-20 flex flex-row justify-between"><span>Password</span> <ForgotPasswordDialog/>
+                                    </FormLabel>
                                     <FormControl>
                                         <Input
                                             {...field}
@@ -125,8 +143,8 @@ const LoginForm = () => {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit" className="w-full text-gray-200 bg-[#E77C1B] hover:bg-[#cca785] cursor-pointer border-2 my-1 h-10 text-sm border-[#FFB571]">
-                            Sign In
+                        <Button type="submit" className="w-full text-gray-200 bg-[#E77C1B] hover:bg-[#cca785] cursor-pointer border-2 h-10 text-sm border-[#FFB571]">
+                            {isLoginLoading ? <LoadingSpinner/> : "Sign In"}
                         </Button>
                     </form>
                 </Form>
