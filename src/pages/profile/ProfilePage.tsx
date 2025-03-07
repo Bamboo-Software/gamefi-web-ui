@@ -45,13 +45,13 @@ const ProfilePage = () => {
 
   if (isLoading) return <LoadingComponent />;
   if (error) return <p>Error loading user info</p>;
-  const { avatar, name, pointsBalance, transactionCount, referralCount, achievementCount } = data.data;
+  const { avatar, firstName, lastName, pointsBalance, transactionCount, referralCount, achievementCount } = data.data;
   const profileContents = [
     {
       imgContent: totalCoins.imgContent,
       title: totalCoins.title,
       content: <div className='flex flex-row justify-center items-center text-[#FFC800] font-semibold'>
-        <img src={totalCoins.imgContent} />{pointsBalance}
+        <img className='size-6' src={totalCoins.imgContent} />{typeof pointsBalance == 'number' ? pointsBalance.toFixed(3) : pointsBalance}
       </div>,
       dialog: <AirdropDialog
         title={totalCoins.dialog.title}
@@ -171,10 +171,10 @@ const ProfilePage = () => {
             <div className="flex pt-10 flex-col justify-center items-center text-center px-4">
               <Avatar className="size-24">
                 <AvatarImage src={avatar} alt="Username" />
-                <AvatarFallback>No</AvatarFallback>
+                <AvatarFallback className="">{String(firstName).charAt(0)+String(lastName).charAt(0)}</AvatarFallback>
               </Avatar>
               <div className="mt-2 text-xl font-semibold text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] [-webkit-text-stroke:0.5px_#000]">
-                {name}
+                {firstName + " " + lastName }
               </div>
             </div>
           </div>

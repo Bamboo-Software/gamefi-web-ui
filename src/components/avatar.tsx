@@ -16,9 +16,9 @@ interface UserAvatarDropdownProps {
 const { PROFILE, AUTH } = routes
 
 const UserAvatarDropdown = ({
-  imageUrl = "https://github.com/shadcn.png",
-  userName = "Hoang Nguyen",
-  fallback = "HN",
+  imageUrl,
+  userName,
+  fallback,
   pointsBalance = 0,
 
 }: UserAvatarDropdownProps) => {

@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export type Theme = "dark" | "light" | "system";
+export type Theme = "dark" | "light" ;
 
 export interface ThemeState {
   theme: Theme;
 }
 
 const initialState: ThemeState = {
-  theme: (localStorage.getItem("vite-ui-theme") as Theme) || "system", // Lấy từ localStorage
+  theme: (localStorage.getItem("vite-ui-theme") as Theme) || "dark", // Lấy từ localStorage
 };
 
 export const namespace = "theme";

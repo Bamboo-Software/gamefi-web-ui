@@ -37,7 +37,7 @@ const OurGames = () => {
       title: "Flappy JFOX",
       color: "#d75b35",
       route: GAMES_FLAPPY_JFOX,
-      active: true
+      active: false
     },
     {
       img: thumb_coin_clicker,

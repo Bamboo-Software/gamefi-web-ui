@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as z from "zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -79,7 +80,7 @@ const RegisterForm = () => {
       }
       const response = await register(formData).unwrap();
       if (response.success) {
-        setToken(response.data.token);
+        setToken(response.token);
         setShowOtpDialog(true);
 
         toast.success("Please check your email for the verification code.");
@@ -87,9 +88,13 @@ const RegisterForm = () => {
         throw new Error("Registration failed");
       }
 
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      toast.error("Registration failed. Please try again -" + error.data.message[0].error);
+      if (error.data && Array.isArray(error.data.message)) {
+        toast.error("Registration failed. Please try again -" + error.data.message[0].error);
+      } else {
+        toast.error("Registration failed. Please try again.");
+      }
     }
   };
 

@@ -11,8 +11,10 @@ export interface User {
 }
 
 export interface UserResponse {
-  user: User;
-  token: string;
+  data: {
+    user: User;
+    token: string;
+  }
 }
 
 export interface LoginRequest {
@@ -36,6 +38,13 @@ export interface ResendAccountActivationRequest {
 export interface RegisterResponse {
   message: string;
   token: string;
+  success:boolean
+}
+
+export interface LoginResponse {
+  message: string;
+  token: string;
+  success:boolean
 }
 
 export interface VerifyAccountRequest {
@@ -68,15 +77,15 @@ export const authApi = createApi({
         method: "POST",
         body,
       }),
-      async onQueryStarted(_arg, { queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
+      // async onQueryStarted(_arg, { queryFulfilled }) {
+      //   try {
+      //     const { data } = await queryFulfilled;
          
-          localStorage.setItem("auth-token", JSON.parse(data.data.token));
-        } catch (error) {
-          console.error("Login error:", error);
-        }
-      },
+      //     localStorage.setItem("auth-token", JSON.parse(data.token));
+      //   } catch (error) {
+      //     console.error("Login error:", error);
+      //   }
+      // },
     }),
     register: builder.mutation<RegisterResponse, RegisterRequest>({
       query: (body) => ({
