@@ -71,11 +71,11 @@ const LoginForm = () => {
     const onLoginSubmit = async (data: LoginFormValues) => {
         try {
             const response = await login(data).unwrap();
-            if(response.success){
-                setToken(JSON.stringify(response.data.token))
-                navigate(ROOT)
-            }else{
-                toast.error("Login Failured!")
+            if (response && response.data.token) {
+                setToken(JSON.stringify(response.data.token));
+                navigate(ROOT);
+            } else {
+                toast.error("Login Failed!");
             }
         } catch (error) {
             console.error(error);

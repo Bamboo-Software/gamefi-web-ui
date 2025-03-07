@@ -30,7 +30,7 @@ const PageLayout = () => {
 
   if (isLoading) return <LoadingComponent />;
   if (error) return <p>Error loading user info</p>;
-  const { avatar, name, pointsBalance } = data.data;
+  const { avatar, firstName,  lastName, pointsBalance } = data.data;
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -131,7 +131,7 @@ const PageLayout = () => {
           </div>
 
           <div className="text-gray-200 mr-6 flex flex-row-reverse justify-center items-center">
-            <UserAvatarDropdownProps imageUrl={avatar} userName={name} pointsBalance={pointsBalance} fallback="LT" />
+            <UserAvatarDropdownProps imageUrl={avatar} userName={firstName+ " "+ lastName} pointsBalance={pointsBalance} fallback={String(firstName).charAt(0)+String(lastName).charAt(0)} />
             <FaRegBell className="size-5 mx-8" />
           </div>
         </div>
