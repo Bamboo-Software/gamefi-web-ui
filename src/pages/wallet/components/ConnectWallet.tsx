@@ -1,5 +1,4 @@
 import { ActionButtonList } from "./ActionButtonList";
-import { InfoList } from "./InfoList";
 import { createAppKit } from "@reown/appkit/react";
 import {
   generalConfig,
