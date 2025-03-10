@@ -31,6 +31,7 @@
     "@reown/appkit": "1.6.8",
     "@reown/appkit-adapter-solana": "1.6.8",
     "@reown/appkit-adapter-wagmi": "1.6.8",
+    "@reown/appkit-siwx": "^1.6.9",
     "@solana/wallet-adapter-wallets": "^0.19.32",
     "@solana/web3.js": "^1.98.0",
     "@tailwindcss/vite": "^4.0.9",

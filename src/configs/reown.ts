@@ -55,16 +55,3 @@ export const wagmiAdapter = new WagmiAdapter({
 export const solanaWeb3JsAdapter = new SolanaAdapter({
   wallets: [new PhantomWalletAdapter(), new SolflareWalletAdapter()],
 });
-
-export const generalConfig = {
-  projectId,
-  metadata,
-  networks,
-  themeMode: "dark" as const,
-  features: {
-    analytics: true, // Optional - defaults to your Cloud configuration
-  },
-  themeVariables: {
-    "--w3m-accent": "#000000",
-  },
-};

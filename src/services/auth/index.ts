@@ -80,15 +80,6 @@ export const authApi = createApi({
         method: "POST",
         body,
       }),
-      // async onQueryStarted(_arg, { queryFulfilled }) {
-      //   try {
-      //     const { data } = await queryFulfilled;
-         
-      //     localStorage.setItem("auth-token", JSON.parse(data.token));
-      //   } catch (error) {
-      //     console.error("Login error:", error);
-      //   }
-      // },
     }),
     register: builder.mutation<RegisterResponse, RegisterRequest>({
       query: (body) => ({
