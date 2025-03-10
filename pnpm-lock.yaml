@@ -26,6 +26,9 @@ importers:
       '@radix-ui/react-dropdown-menu':
         specifier: ^2.1.6
         version: 2.1.6(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/react-icons':
+        specifier: ^1.3.2
+        version: 1.3.2(react@19.0.0)
       '@radix-ui/react-label':
         specifier: ^2.1.2
         version: 2.1.2(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -115,7 +118,7 @@ importers:
         version: 1.4.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       lottery:
         specifier: 'file:'
-        version: file:(@babel/runtime@7.26.9)(@tanstack/query-core@5.67.2)(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(bs58@6.0.0)(bufferutil@4.0.9)(embla-carousel@8.5.2)(fastestsmallesttextencoderdecoder@1.0.22)(immer@10.1.1)(redux@5.0.1)(tslib@2.8.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))(utf-8-validate@5.0.10)(vite@6.2.0(@types/node@22.13.9)(jiti@2.4.2)(lightningcss@1.29.2))(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
+        version: file:(@babel/runtime@7.26.9)(@tanstack/query-core@5.67.2)(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(bs58@6.0.0)(bufferutil@4.0.9)(embla-carousel@8.5.2)(fastestsmallesttextencoderdecoder@1.0.22)(immer@10.1.1)(redux@5.0.1)(tslib@2.8.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@19.0.10)(react@19.0.0))(vite@6.2.0(@types/node@22.13.9)(jiti@2.4.2)(lightningcss@1.29.2))(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       lucide-react:
         specifier: ^0.476.0
         version: 0.476.0(react@19.0.0)
@@ -221,7 +224,7 @@ importers:
         version: 8.6.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.2(bufferutil@4.0.9)(utf-8-validate@5.0.10))
       '@storybook/experimental-addon-test':
         specifier: 8.6.2
-        version: 8.6.2(@vitest/browser@3.0.8)(@vitest/runner@3.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.2(bufferutil@4.0.9)(utf-8-validate@5.0.10))(vitest@3.0.8)
+        version: 8.6.2(@vitest/browser@3.0.8(@testing-library/dom@10.4.0)(@types/node@22.13.9)(bufferutil@4.0.9)(playwright@1.51.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(vite@6.2.0(@types/node@22.13.9)(jiti@2.4.2)(lightningcss@1.29.2))(vitest@3.0.8))(@vitest/runner@3.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.2(bufferutil@4.0.9)(utf-8-validate@5.0.10))(vitest@3.0.8(@types/debug@4.1.12)(@types/node@22.13.9)(@vitest/browser@3.0.8)(jiti@2.4.2)(lightningcss@1.29.2)(msw@2.7.3(@types/node@22.13.9)(typescript@5.7.3)))
       '@storybook/react':
         specifier: 8.6.2
         version: 8.6.2(@storybook/test@8.6.2(storybook@8.6.2(bufferutil@4.0.9)(utf-8-validate@5.0.10)))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.2(bufferutil@4.0.9)(utf-8-validate@5.0.10))(typescript@5.7.3)
@@ -248,7 +251,7 @@ importers:
         version: 3.0.8(@testing-library/dom@10.4.0)(@types/node@22.13.9)(bufferutil@4.0.9)(playwright@1.51.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(vite@6.2.0(@types/node@22.13.9)(jiti@2.4.2)(lightningcss@1.29.2))(vitest@3.0.8)
       '@vitest/coverage-v8':
         specifier: ^3.0.7
-        version: 3.0.8(@vitest/browser@3.0.8)(vitest@3.0.8)
+        version: 3.0.8(@vitest/browser@3.0.8(@testing-library/dom@10.4.0)(@types/node@22.13.9)(bufferutil@4.0.9)(playwright@1.51.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(vite@6.2.0(@types/node@22.13.9)(jiti@2.4.2)(lightningcss@1.29.2))(vitest@3.0.8))(vitest@3.0.8(@types/debug@4.1.12)(@types/node@22.13.9)(@vitest/browser@3.0.8)(jiti@2.4.2)(lightningcss@1.29.2)(msw@2.7.3(@types/node@22.13.9)(typescript@5.7.3)))
       eslint:
         specifier: ^9.21.0
         version: 9.21.0(jiti@2.4.2)
@@ -1370,6 +1373,11 @@ packages:
         optional: true
       '@types/react-dom':
         optional: true
+
+  '@radix-ui/react-icons@1.3.2':
+    resolution: {integrity: sha512-fyQIhGDhzfc9pK2kH6Pl9c4BDJGfMkPqkyIgYDthyNYoNg3wVhoJMMh19WS4Up/1KMPFVpNsT2q3WmXn2N1m6g==}
+    peerDependencies:
+      react: ^16.x || ^17.x || ^18.x || ^19.0.0 || ^19.0.0-rc
 
   '@radix-ui/react-id@1.1.0':
     resolution: {integrity: sha512-EJUrI8yYh7WOjNOqpoJaf1jlFIH2LvtgAl+YcFqNCa+4hj64ZXmPkAKOFs/ukjz3byN6bdb/AVUqHkI8/uWWMA==}
@@ -8137,6 +8145,10 @@ snapshots:
       '@types/react': 19.0.10
       '@types/react-dom': 19.0.4(@types/react@19.0.10)
 
+  '@radix-ui/react-icons@1.3.2(react@19.0.0)':
+    dependencies:
+      react: 19.0.0
+
   '@radix-ui/react-id@1.1.0(@types/react@19.0.10)(react@19.0.0)':
     dependencies:
       '@radix-ui/react-use-layout-effect': 1.1.0(@types/react@19.0.10)(react@19.0.0)
@@ -10125,7 +10137,7 @@ snapshots:
     dependencies:
       type-fest: 2.19.0
 
-  '@storybook/experimental-addon-test@8.6.2(@vitest/browser@3.0.8)(@vitest/runner@3.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.2(bufferutil@4.0.9)(utf-8-validate@5.0.10))(vitest@3.0.8)':
+  '@storybook/experimental-addon-test@8.6.2(@vitest/browser@3.0.8(@testing-library/dom@10.4.0)(@types/node@22.13.9)(bufferutil@4.0.9)(playwright@1.51.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(vite@6.2.0(@types/node@22.13.9)(jiti@2.4.2)(lightningcss@1.29.2))(vitest@3.0.8))(@vitest/runner@3.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(storybook@8.6.2(bufferutil@4.0.9)(utf-8-validate@5.0.10))(vitest@3.0.8(@types/debug@4.1.12)(@types/node@22.13.9)(@vitest/browser@3.0.8)(jiti@2.4.2)(lightningcss@1.29.2)(msw@2.7.3(@types/node@22.13.9)(typescript@5.7.3)))':
     dependencies:
       '@storybook/global': 5.0.0
       '@storybook/icons': 1.3.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -10919,7 +10931,7 @@ snapshots:
       - utf-8-validate
       - vite
 
-  '@vitest/coverage-v8@3.0.8(@vitest/browser@3.0.8)(vitest@3.0.8)':
+  '@vitest/coverage-v8@3.0.8(@vitest/browser@3.0.8(@testing-library/dom@10.4.0)(@types/node@22.13.9)(bufferutil@4.0.9)(playwright@1.51.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(vite@6.2.0(@types/node@22.13.9)(jiti@2.4.2)(lightningcss@1.29.2))(vitest@3.0.8))(vitest@3.0.8(@types/debug@4.1.12)(@types/node@22.13.9)(@vitest/browser@3.0.8)(jiti@2.4.2)(lightningcss@1.29.2)(msw@2.7.3(@types/node@22.13.9)(typescript@5.7.3)))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 1.0.2
@@ -13511,7 +13523,7 @@ snapshots:
     dependencies:
       js-tokens: 4.0.0
 
-  lottery@file:(@babel/runtime@7.26.9)(@tanstack/query-core@5.67.2)(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(bs58@6.0.0)(bufferutil@4.0.9)(embla-carousel@8.5.2)(fastestsmallesttextencoderdecoder@1.0.22)(immer@10.1.1)(redux@5.0.1)(tslib@2.8.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))(utf-8-validate@5.0.10)(vite@6.2.0(@types/node@22.13.9)(jiti@2.4.2)(lightningcss@1.29.2))(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)):
+  lottery@file:(@babel/runtime@7.26.9)(@tanstack/query-core@5.67.2)(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(bs58@6.0.0)(bufferutil@4.0.9)(embla-carousel@8.5.2)(fastestsmallesttextencoderdecoder@1.0.22)(immer@10.1.1)(redux@5.0.1)(tslib@2.8.1)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@19.0.10)(react@19.0.0))(vite@6.2.0(@types/node@22.13.9)(jiti@2.4.2)(lightningcss@1.29.2))(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)):
     dependencies:
       '@hookform/resolvers': 4.1.3(react-hook-form@7.54.2(react@19.0.0))
       '@radix-ui/react-avatar': 1.1.3(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -13531,6 +13543,7 @@ snapshots:
       '@reown/appkit': 1.6.8(@types/react@19.0.10)(bufferutil@4.0.9)(react@19.0.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.2)
       '@reown/appkit-adapter-solana': 1.6.8(@types/react@19.0.10)(bufferutil@4.0.9)(react@19.0.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.2)
       '@reown/appkit-adapter-wagmi': 1.6.8(@types/react@19.0.10)(@wagmi/core@2.16.5(@tanstack/query-core@5.67.2)(@types/react@19.0.10)(immer@10.1.1)(react@19.0.0)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))(viem@2.23.8(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.2)))(bufferutil@4.0.9)(react@19.0.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.23.8(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.2))(wagmi@2.14.12(@tanstack/query-core@5.67.2)(@tanstack/react-query@5.67.2(react@19.0.0))(@types/react@19.0.10)(bufferutil@4.0.9)(immer@10.1.1)(react@19.0.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.23.8(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.2))(zod@3.24.2))(zod@3.24.2)
+      '@reown/appkit-siwx': 1.6.9(@types/react@19.0.10)(bufferutil@4.0.9)(react@19.0.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(valtio@1.13.2(@types/react@19.0.10)(react@19.0.0))(zod@3.24.2)
       '@solana/wallet-adapter-wallets': 0.19.32(@babel/runtime@7.26.9)(@solana/web3.js@1.98.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(bs58@6.0.0)(bufferutil@4.0.9)(fastestsmallesttextencoderdecoder@1.0.22)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(tslib@2.8.1)(typescript@5.7.3)(utf-8-validate@5.0.10)(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@3.24.2)
       '@solana/web3.js': 1.98.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@tailwindcss/vite': 4.0.11(vite@6.2.0(@types/node@22.13.9)(jiti@2.4.2)(lightningcss@1.29.2))
@@ -13613,6 +13626,7 @@ snapshots:
       - uploadthing
       - use-sync-external-store
       - utf-8-validate
+      - valtio
       - vite
       - ws
 

@@ -24,6 +24,7 @@ export class EIP155Verifier extends SIWXVerifier {
         signature: session.signature,
         message: session.message.toString(),
       });
+      
       return result.success;
     } catch {
       return false;

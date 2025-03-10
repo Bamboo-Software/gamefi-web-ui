@@ -9,7 +9,7 @@ import {
 } from "@/configs/reown";
 import { DefaultSIWX } from "@reown/appkit-siwx";
 import { EIP155Verifier } from "@/services/wallet/EIP155Verifier";
-import { useLoginSocialMutation } from "@/services/auth";
+import { useLoginSocialMutation, useSyncSocialMutation } from "@/services/auth";
 import { LoginSocialRequest } from "@/interfaces/ILogin";
 import { SolanaVerifier } from "@/services/wallet/SolanaVerifier";
 import routes from "@/constants/routes";
@@ -18,25 +18,32 @@ import { useNavigate } from "react-router-dom";
 
 const ConnectWallet = () => {
   const [loginSocial] = useLoginSocialMutation();
+  const [syncSocial] = useSyncSocialMutation();
   const { setToken, token } = useAuthToken();
   const navigate = useNavigate();
   const { ROOT } = routes;
 
-  // Tạo một hàm wrapper để gọi `loginSocial`
   const loginSocialWrapper = async (data: LoginSocialRequest) => {
-    const result = await loginSocial({
-      ...data,
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    }).unwrap();
-    if (result.success) {
-      if (!token) {
-        setToken(result.data.token);
-        navigate(ROOT);
+    let result;
+    if (!token) {
+      result = await loginSocial({
+        ...data,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      }).unwrap();
+      if (result?.success) {
+        if (!token) {
+          setToken(result.data.token);
+          navigate(ROOT);
+        }
       }
+    } else {
+      result = await syncSocial({
+        ...data,
+      }).unwrap();
     }
+
     return result;
   };
-
   // Create modal
   createAppKit({
     adapters: [wagmiAdapter, solanaWeb3JsAdapter],
