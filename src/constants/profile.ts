@@ -6,6 +6,8 @@ import metamask from "@/assets/icons/metamask.svg"
 import phantom from "@/assets/icons/phantom.svg"
 import x from "@/assets/icons/x.svg";
 import google from "@/assets/icons/google.svg";
+import facebook from "@/assets/icons/facebook.svg";
+import instagram from "@/assets/icons/instagram.svg";
 import { useTranslation } from "react-i18next";
 
 interface IContentDialog {
@@ -118,6 +120,22 @@ export const SocialContentDialog = (): Record<
         success: t("profile.wallet.alert.success", {wallet: "X (Twitter)"}),
         failure: t("profile.wallet.alert.failure", {wallet: "X (Twitter)"}),
       }
+    },
+    facebook: {
+      imgContent: facebook,
+      title: t("profile.wallet.title", { wallet: "Facebook" }),
+      alert: {
+        success: t("profile.wallet.alert.success", { wallet: "Facebook" }),
+        failure: t("profile.wallet.alert.failure", { wallet: "Facebook" }),
+      },
+    },
+    instagram: {
+      imgContent: instagram,
+      title: t("profile.wallet.title", { wallet: "Instagram" }),
+      alert: {
+        success: t("profile.wallet.alert.success", { wallet: "Instagram" }),
+        failure: t("profile.wallet.alert.failure", { wallet: "Instagram" }),
+      },
     },
   }
 }

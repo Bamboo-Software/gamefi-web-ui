@@ -1,20 +1,18 @@
-// import { networks } from "@/configs/reown";
 import {
   useDisconnect,
   useAppKit,
-  // useAppKitNetwork,
 } from "@reown/appkit/react";
+import { toast } from "sonner";
 
 export const ActionButtonList = () => {
   const { disconnect } = useDisconnect();
   const { open } = useAppKit();
-  // const { switchNetwork } = useAppKitNetwork();
 
   const handleDisconnect = async () => {
     try {
       await disconnect();
     } catch (error) {
-      console.error("Failed to disconnect:", error);
+      toast.error(`Failed to disconnect: ${error}`);
     }
   };
   return (

@@ -1,4 +1,5 @@
 import routes from "@/constants/routes";
+import { LoginSocialActionTypeEnum } from "@/enums/social-type.enum";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -14,19 +15,38 @@ const AuthCallback = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const status = searchParams.get("status");
-    const action = searchParams.get("action");
+    const action = searchParams.get("action") as LoginSocialActionTypeEnum;
     const token = searchParams.get("token");
     const errorMessage = searchParams.get("error_message");
 
-    if (status === "succeeded" && action === "login" && token) {
-      setToken(token);
-      setIsSuccess(true);
-      setMessage("Login succeeded!");
-      navigate(routes.ROOT);
-    } else if (status === "failed") {
-      setIsSuccess(false);
-      setMessage(errorMessage || "Login failed!");
-      navigate(routes.AUTH);
+    const handleLoginOrSync = (actionType: LoginSocialActionTypeEnum) => {
+      if (actionType === LoginSocialActionTypeEnum.Login) {
+        if (status === "succeeded" && token) {
+          setToken(token);
+          setIsSuccess(true);
+          setMessage("Login succeeded!");
+          navigate(routes.ROOT);
+        } else {
+          setIsSuccess(false);
+          setMessage(errorMessage || "Login failed!");
+          navigate(routes.AUTH);
+        }
+      }
+
+      if (actionType === LoginSocialActionTypeEnum.Sync) {
+        if (status === "succeeded") {
+          setIsSuccess(true);
+          setMessage("Sync social succeeded!");
+        } else {
+          setIsSuccess(false);
+          setMessage(errorMessage || "Sync social failed!");
+        }
+        navigate(routes.PROFILE);
+      }
+    };
+
+    if (action) {
+      handleLoginOrSync(action);
     }
   }, [location, navigate, setToken]);
 

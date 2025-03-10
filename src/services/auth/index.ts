@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { baseUrl } from "@/configs/config";
 import { InvalidatesTagsEnum } from "@/constants/invalidates-tags";
 import { CreateLoginSocialUrlRequest } from "@/interfaces/ILogin";
+import { SocialTypeEnum } from "@/enums/social-type.enum";
 
 const reducerPath = "authApi";
 const endpoint = "auth";
@@ -53,6 +54,11 @@ export interface VerifyAccountRequest {
   token: string;
 }
 
+export interface UnsyncSocialRequest {
+  socialType: SocialTypeEnum;
+  socialId: string;
+}
+
 // Custom hook for managing auth token
 
 export const authApi = createApi({
@@ -61,7 +67,7 @@ export const authApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl,
     prepareHeaders: (headers, { endpoint }) => {
-      if (endpoint === "getMe") {
+      if (endpoint === "getMe" || endpoint === "unsyncSocial") {
         const storedToken = localStorage.getItem("auth-token");
         if (storedToken) {
           headers.set(
@@ -152,6 +158,13 @@ export const authApi = createApi({
       }),
       providesTags: [InvalidatesTagsEnum.AUTH],
     }),
+    unsyncSocial: builder.mutation<boolean, UnsyncSocialRequest>({
+      query: (body) => ({
+        url: `${endpoint}/unsync-social`,
+        method: "POST",
+        body,
+      }),
+    })
   }),
 });
 
@@ -167,4 +180,5 @@ export const {
   useLoginGoogleQuery,
   useLoginInstagramQuery,
   useGetMeQuery,
+  useUnsyncSocialMutation,
 } = authApi;

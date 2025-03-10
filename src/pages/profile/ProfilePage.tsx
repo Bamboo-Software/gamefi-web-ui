@@ -4,13 +4,21 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { IWalletContentDialog, SocialContentDialog } from "@/constants/profile";
 import { TbPlugConnectedX } from "react-icons/tb";
 import { PiPlugsConnectedFill } from "react-icons/pi";
-import { useGetMeQuery } from "@/services/auth";
+import { useGetMeQuery, useUnsyncSocialMutation } from "@/services/auth";
 import LoadingComponent from "@/components/loading-component";
-import { Input } from "@/components/ui/input"
-import { ProfileContentDialog, WalletContentDialog } from "@/constants/profile";
+import { ProfileContentDialog, 
+  // WalletContentDialog 
+} from "@/constants/profile";
 import AirdropDialog from "../airdrop/components/AirdropDialog";
-import { Button } from "@/components/ui/button";
 import BadgeModal from "@/components/badge";
+import ConnectWallet from "../wallet/components/ConnectWallet";
+import { useAppSelector } from "@/stores/store";
+import { IUser } from "@/interfaces/IUser";
+import { LoginSocialActionTypeEnum, SocialTypeEnum } from "@/enums/social-type.enum";
+import routes from "@/constants/routes";
+import { useAuthToken } from "@/hooks/useAuthToken";
+import { toast } from "sonner";
+import { handleApiError } from "@/utils/apiUtils";
 
 interface IConnectedButtonProps {
   walletContent: IWalletContentDialog,
@@ -36,12 +44,17 @@ const ConnectedButton = ({ isConnected }: IConnectedButtonProps) => {
 };
 const ProfilePage = () => {
   const { totalCoins, transactions, friends, achivements } = ProfileContentDialog();
-  const { metamask, phantom } = WalletContentDialog();
-  const { google, x } = SocialContentDialog();
+  const { google, x, facebook, instagram } = SocialContentDialog();
   const { data, error, isLoading } = useGetMeQuery({})
-  const metamaskBool: boolean = true;
-  const phantomBool: boolean = false;
+  const userInfo = useAppSelector(
+    (state) => (state.authApi.queries["getMe({})"] as { data?: { data: IUser } })?.data?.data
+  );
+  const { token } = useAuthToken();
+  const [unsyncSocial, { error: unsyncSocialError }] = useUnsyncSocialMutation();
 
+  const isSocialConnected = (socialType: SocialTypeEnum): boolean => {
+    return !!userInfo?.socials?.some((s) => s.socialType === socialType);
+  };
 
   if (isLoading) return <LoadingComponent />;
   if (error) return <p>Error loading user info</p>;
@@ -92,67 +105,101 @@ const ProfilePage = () => {
 
   ];
 
-  const walletsContents = [
-    {
-      imgContent: metamask.imgContent,
-      title: metamask.title,
-      dialog: <AirdropDialog
-        icon={<ConnectedButton walletContent={metamask} isConnected={metamaskBool} />}
-        title={metamask.title}
-        description={
-          <div className="flex flex-row justify-between w-full max-w-sm items-center space-x-2 mt-4">
-            <Input type="text" placeholder="Wallet Address" />
-            <Button type="submit">Save</Button>
-          </div>
-        }
-      />
-    },
-    {
-      imgContent: phantom.imgContent,
-      title: phantom.title,
-      dialog: <AirdropDialog
-        icon={<ConnectedButton walletContent={phantom} isConnected={phantomBool} />}
-        title={phantom.title}
-        description={
-          <div className="flex flex-row justify-between w-full max-w-sm items-center space-x-2 mt-4">
-            <Input type="text" placeholder="Wallet Address" />
-            <Button type="submit">Save</Button>
-          </div>
-        }
-      />
-    }
-  ];
+  // const walletsContents = [
+  //   {
+  //     imgContent: metamask.imgContent,
+  //     title: metamask.title,
+  //     dialog: <AirdropDialog
+  //       icon={<ConnectedButton walletContent={metamask} isConnected={metamaskBool} />}
+  //       title={metamask.title}
+  //       description={
+  //         <div className="flex flex-row justify-between w-full max-w-sm items-center space-x-2 mt-4">
+  //           <Input type="text" placeholder="Wallet Address" />
+  //           <Button type="submit">Save</Button>
+  //         </div>
+  //       }
+  //     />
+  //   },
+  //   {
+  //     imgContent: phantom.imgContent,
+  //     title: phantom.title,
+  //     dialog: <AirdropDialog
+  //       icon={<ConnectedButton walletContent={phantom} isConnected={phantomBool} />}
+  //       title={phantom.title}
+  //       description={
+  //         <div className="flex flex-row justify-between w-full max-w-sm items-center space-x-2 mt-4">
+  //           <Input type="text" placeholder="Wallet Address" />
+  //           <Button type="submit">Save</Button>
+  //         </div>
+  //       }
+  //     />
+  //   }
+  // ];
 
   const socialsContents = [
     {
+      type: SocialTypeEnum.Google,
       imgContent: google.imgContent,
       title: google.title,
-      dialog: <AirdropDialog
-        icon={<ConnectedButton walletContent={google} isConnected={metamaskBool} />}
-        title={google.title}
-        description={
-          <div className="flex flex-row justify-between w-full max-w-sm items-center space-x-2 mt-4">
-            <Input type="text" placeholder="Wallet Address" />
-            <Button type="submit">Save</Button>
-          </div>
-        }
-      />
+      dialog: (
+        <ConnectedButton walletContent={google} isConnected={isSocialConnected(SocialTypeEnum.Google)} />
+      )
     },
     {
+      type: SocialTypeEnum.X,
       imgContent: x.imgContent,
       title: x.title,
-      dialog: <AirdropDialog
-        icon={<ConnectedButton walletContent={x} isConnected={metamaskBool} />}
-        title={x.title}
-        description={
-          <div className="flex flex-row justify-between w-full max-w-sm items-center space-x-2 mt-4">
-            <Input type="text" placeholder="Wallet Address" />
-            <Button type="submit">Save</Button>
-          </div>
-        }
-      />
+      dialog: (
+        <ConnectedButton walletContent={x} isConnected={isSocialConnected(SocialTypeEnum.X)} />
+      )
+    },
+    {
+      type: SocialTypeEnum.Facebook,
+      imgContent: facebook.imgContent,
+      title: facebook.title,
+      dialog: (
+        <ConnectedButton walletContent={facebook} isConnected={isSocialConnected(SocialTypeEnum.Facebook)} />
+      )
+    },
+    {
+      type: SocialTypeEnum.Instagram,
+      imgContent: instagram.imgContent,
+      title: instagram.title,
+      dialog: (
+        <ConnectedButton walletContent={instagram} isConnected={isSocialConnected(SocialTypeEnum.Instagram)} />
+      )
     },
   ]
+
+  const redirectToSyncSocial = (provider: SocialTypeEnum) => {
+    // const appUrl = window.location.origin;
+    const appUrl = 'https://lottery-jfox.bamboosoft.io';
+
+    const params = new URLSearchParams({
+      // state: `${appUrl}${routes.AUTH_CALLBACK}`,
+      state: `http://localhost:5173${routes.AUTH_CALLBACK}`,
+      action: LoginSocialActionTypeEnum.Sync,
+      token: token || '',
+    });
+    window.location.href = `${appUrl}/api/auth/login/${provider}?${params.toString()}`;
+  };
+
+  const handleSyncSocial = (provider: SocialTypeEnum) => {
+    redirectToSyncSocial(provider)
+  }
+
+  const handleUnsyncSocial = async (provider: SocialTypeEnum) => {
+      const social = userInfo?.socials?.find((social) => social.socialType === provider);
+      const response = await unsyncSocial({
+        socialType: provider,
+        socialId: social.socialId,
+      });
+      if (response.data) {
+        toast.success(`Unsync ${provider} succeeded`);
+      }
+      if (unsyncSocialError) handleApiError(unsyncSocialError);
+  }
+
   return (
     <motion.div
       className="w-full flex flex-col"
@@ -198,25 +245,28 @@ const ProfilePage = () => {
             <div className="flex w-full md:w-1/2 flex-col">
               <p className="border-l-4 border-[#E77C1B] text-gray-50 font-semibold text-md pl-5">Connect to wallets</p>
               <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
-                {walletsContents.map((wallet, index) => (
+                {/* {walletsContents.map((wallet, index) => (
                   <BadgeModal
                     key={index}
                     imgContent={wallet.imgContent}
                     title={wallet.title}
                     dialog={wallet.dialog}
                   />
-                ))}
+                ))} */}
+                <ConnectWallet />
               </div>
             </div>
             <div className="flex w-full md:w-1/2 flex-col">
               <p className="border-l-4 border-[#E77C1B] text-gray-50 font-semibold text-md pl-5">Link to social</p>
               <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
-                {socialsContents.map((wallet, index) => (
+                {socialsContents.map((social, index) => (
                   <BadgeModal
                     key={index}
-                    imgContent={wallet.imgContent}
-                    title={wallet.title}
-                    dialog={wallet.dialog}
+                    imgContent={social.imgContent}
+                    title={social.title}
+                    dialog={social.dialog}
+                    onClick={() => isSocialConnected(social.type) ? handleUnsyncSocial(social.type) : handleSyncSocial(social.type)}
+                    className="cursor-pointer"
                   />
                 ))}
               </div>

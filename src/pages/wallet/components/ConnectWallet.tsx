@@ -18,7 +18,7 @@ import { useNavigate } from "react-router-dom";
 
 const ConnectWallet = () => {
   const [loginSocial] = useLoginSocialMutation();
-  const { setToken } = useAuthToken();
+  const { setToken, token } = useAuthToken();
   const navigate = useNavigate();
   const { ROOT } = routes;
 
@@ -29,8 +29,10 @@ const ConnectWallet = () => {
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     }).unwrap();
     if (result.success) {
-      setToken(result.data.token);
-      navigate(ROOT);
+      if (!token) {
+        setToken(result.data.token);
+        navigate(ROOT);
+      }
     }
     return result;
   };
@@ -60,6 +62,7 @@ const ConnectWallet = () => {
 
   return (
     <div className="flex flex-col justify-center items-center">
+      {/* @ts-expect-error Add this line while our team fix the upgrade to react 19 for global components */}
       <appkit-button />
       <ActionButtonList />
     </div>
