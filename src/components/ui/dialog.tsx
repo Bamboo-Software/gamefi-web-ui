@@ -1,8 +1,8 @@
 import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
-
 import { cn } from "@/lib/utils"
+import { Cross2Icon } from "@radix-ui/react-icons";
 
 const Dialog = DialogPrimitive.Root
 
@@ -105,6 +105,63 @@ const DialogDescription = React.forwardRef<
   />
 ))
 DialogDescription.displayName = DialogPrimitive.Description.displayName
+interface ConfirmDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: string;
+  description: string;
+}
+
+const ConfirmDialog = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  title,
+  description,
+}: ConfirmDialogProps) => {
+  return (
+    <DialogPrimitive.Root open={isOpen}>
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Overlay className="fixed inset-0 bg-black/30 backdrop-blur-sm" />
+        
+        <DialogPrimitive.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-gray-900 rounded-lg p-6 w-[90%] max-w-md">
+          <DialogPrimitive.Title className="font-semibold text-lg text-gray-900 dark:text-gray-100">
+            {title}
+          </DialogPrimitive.Title>
+
+          <DialogPrimitive.Description className="mt-2 text-gray-600 dark:text-gray-300">
+            {description}
+          </DialogPrimitive.Description>
+
+          <div className="mt-6 flex justify-end space-x-4">
+            <button
+              onClick={onClose}
+              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={onConfirm}
+              className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700"
+            >
+              Confirm
+            </button>
+          </div>
+
+          <DialogPrimitive.Close asChild>
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+            >
+              <Cross2Icon />
+            </button>
+          </DialogPrimitive.Close>
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
+  );
+};
 
 export {
   Dialog,
@@ -117,4 +174,5 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
+  ConfirmDialog
 }
