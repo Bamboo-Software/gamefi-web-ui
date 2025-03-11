@@ -18,6 +18,7 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ErrorBoundary>
+    <Suspense fallback={<LoadingPage/>}>
       <I18nProvider>
         <Provider store={store}>
           <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -32,6 +33,7 @@ createRoot(document.getElementById("root")!).render(
           </ThemeProvider>
         </Provider>
       </I18nProvider>
+      </Suspense>
     </ErrorBoundary>
   </StrictMode>
 );

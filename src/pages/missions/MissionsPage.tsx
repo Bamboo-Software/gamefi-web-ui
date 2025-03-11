@@ -137,7 +137,7 @@ const MissionsPage = () => {
         title: mission.title,
         content: (
           <div className='flex flex-row justify-center items-center text-[#FFC800] font-semibold'>
-            <img src={coin} alt="coin" />+{mission.pointsReward}
+            <img className="size-6 mt-1" src={coin} alt="coin" />+{mission.pointsReward}
           </div>
         ),
         dialog: (

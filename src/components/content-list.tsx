@@ -17,7 +17,7 @@ interface ContentListProps {
 
 const ContentList: React.FC<ContentListProps> = ({ contents, variant = 'default' }) => (
 <motion.div
-            className={`grid grid-cols-1 md:grid-cols-2 gap-4 w-full my-6  ${
+            className={`grid grid-cols-1 md:grid-cols-3 gap-4 w-full my-6  ${
                 variant === 'mission' ? 'justify-start' : 'justify-between'
             } p-4`}
             initial="hidden"

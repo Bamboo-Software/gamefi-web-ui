@@ -12,7 +12,9 @@ const routes = {
 
     GAMES_LOTTERY_SPINNER: '/games/lottery-spinner-game',
     GAMES_LOTTERY_SPINNER_HISTORY: '/games/lottery-spinner/history',
-    GAMES_FLAPPY_JFOX: '/games/flappy-jfox-game'
+    GAMES_FLAPPY_JFOX: '/games/flappy-jfox-game',
+    LEADERS_BOARD: '/leaders-board',
+
 };
 
 export default routes;

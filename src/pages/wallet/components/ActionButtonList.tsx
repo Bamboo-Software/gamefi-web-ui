@@ -3,6 +3,10 @@ import {
   useAppKit,
 } from "@reown/appkit/react";
 import { toast } from "sonner";
+import { PiPlugsConnected } from "react-icons/pi";
+import { TbPlugConnectedX } from "react-icons/tb";
+
+
 
 export const ActionButtonList = () => {
   const { disconnect } = useDisconnect();
@@ -16,18 +20,18 @@ export const ActionButtonList = () => {
     }
   };
   return (
-    <div>
+    <div className="flex flex-row mt-2 space-x-2">
       <button
-        className="px-[15px] py-[10px] bg-white text-black border-2 border-black rounded-[6px] text-base font-semibold cursor-pointer transition-all duration-300 ease-in-out m-[15px] hover:bg-black hover:text-white active:bg-gray-800 active:text-white"
+        className="bg-green-500 py-1.5 space-x-2 px-4 text-white flex flex-row justify-center items-center  border-1 border-green-300 rounded-full text-base font-medium cursor-pointer transition-all duration-300 ease-in-out hover:bg-green-400 hover:text-white active:bg-gray-800 active:text-white"
         onClick={() => open()}
       >
-        Open
+        <PiPlugsConnected className="text-lg"/><span>Open</span>
       </button>
       <button
-        className="px-[15px] py-[10px] bg-white text-black border-2 border-black rounded-[6px] text-base font-semibold cursor-pointer transition-all duration-300 ease-in-out m-[15px] hover:bg-black hover:text-white active:bg-gray-800 active:text-white"
+        className="bg-red-500 py-1.5 space-x-2 px-4 text-white flex flex-row justify-center items-center border-1 border-red-300 rounded-full text-base font-medium cursor-pointer transition-all duration-300 ease-in-out hover:bg-red-400 hover:text-white active:bg-gray-800 active:text-white"
         onClick={handleDisconnect}
       >
-        Disconnect
+       <TbPlugConnectedX className="text-lg"/><span>Disconnect</span>
       </button>
     </div>
   );

@@ -269,14 +269,6 @@ const ProfilePage = () => {
                 Connect to wallets
               </p>
               <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
-                {/* {walletsContents.map((wallet, index) => (
-                  <BadgeModal
-                    key={index}
-                    imgContent={wallet.imgContent}
-                    title={wallet.title}
-                    dialog={wallet.dialog}
-                  />
-                ))} */}
                 <ConnectWallet />
               </div>
             </div>
@@ -285,7 +277,7 @@ const ProfilePage = () => {
                 Link to social
               </p>
               <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
-                <motion.div className="w-full flex flex-col">
+                <motion.div className="w-full flex flex-col space-y-2">
                   {socialsContents.map((social, index) => (
                     <BadgeModal
                       key={index}

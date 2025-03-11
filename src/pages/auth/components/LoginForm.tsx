@@ -91,6 +91,7 @@ const LoginForm = () => {
             if (response && response.data.token) {
                 setToken(JSON.stringify(response.data.token));
                 navigate(ROOT);
+                location.reload();
             } else {
                 toast.error("Login Failed!");
             }
