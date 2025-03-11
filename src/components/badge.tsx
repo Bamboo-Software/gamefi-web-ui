@@ -12,6 +12,7 @@ interface BadgeModalProps {
   titleClassName?: string;
   dialogClassName?: string;
   containerClassName?: string;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
 const BadgeModal: React.FC<BadgeModalProps> = ({
@@ -25,9 +26,10 @@ const BadgeModal: React.FC<BadgeModalProps> = ({
   titleClassName = "",
   dialogClassName = "",
   containerClassName = "",
+  onClick, 
 }) => {
   return (
-    <div className={`flex flex-row w-full items-center justify-between py-4 px-6 bg-[#41434E] shadow-2xl rounded-md ${className}`}>
+    <div onClick={onClick} className={`flex flex-row w-full items-center justify-between py-4 px-6 bg-[#41434E] shadow-2xl rounded-md ${className}`}>
       <div className={`flex flex-row items-center justify-start ${containerClassName}`}>
         <div className="relative inline-block">
             <img 

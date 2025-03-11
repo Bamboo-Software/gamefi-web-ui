@@ -4,13 +4,23 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { IWalletContentDialog, SocialContentDialog } from "@/constants/profile";
 import { TbPlugConnectedX } from "react-icons/tb";
 import { PiPlugsConnectedFill } from "react-icons/pi";
-import { useGetMeQuery } from "@/services/auth";
+import { useGetMeQuery, useUnsyncSocialMutation } from "@/services/auth";
 import LoadingComponent from "@/components/loading-component";
-import { Input } from "@/components/ui/input"
-import { ProfileContentDialog, WalletContentDialog } from "@/constants/profile";
+import { ProfileContentDialog, 
+  // WalletContentDialog 
+} from "@/constants/profile";
 import AirdropDialog from "../airdrop/components/AirdropDialog";
-import { Button } from "@/components/ui/button";
 import BadgeModal from "@/components/badge";
+import { useAppSelector } from "@/stores/store";
+import { IUser } from "@/interfaces/IUser";
+import { LoginSocialActionTypeEnum, SocialTypeEnum } from "@/enums/social-type.enum";
+import routes from "@/constants/routes";
+import { useAuthToken } from "@/hooks/useAuthToken";
+import { toast } from "sonner";
+import { handleApiError } from "@/utils/apiUtils";
+import { useState } from "react";
+import { ConfirmDialog } from "@/components/ui/dialog";
+import ConnectWallet from "../wallet/components/ConnectWallet";
 
 interface IConnectedButtonProps {
   walletContent: IWalletContentDialog,
@@ -36,12 +46,19 @@ const ConnectedButton = ({ isConnected }: IConnectedButtonProps) => {
 };
 const ProfilePage = () => {
   const { totalCoins, transactions, friends, achivements } = ProfileContentDialog();
-  const { metamask, phantom } = WalletContentDialog();
-  const { google, x } = SocialContentDialog();
+  const { google, x, facebook, instagram } = SocialContentDialog();
   const { data, error, isLoading } = useGetMeQuery({})
-  const metamaskBool: boolean = true;
-  const phantomBool: boolean = false;
+  const userInfo = useAppSelector(
+    (state) => (state.authApi.queries["getMe({})"] as { data?: { data: IUser } })?.data?.data
+  );
+  const { token } = useAuthToken();
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [selectedProvider, setSelectedProvider] = useState<SocialTypeEnum | null>(null);
+  const [unsyncSocial, { error: unsyncSocialError }] = useUnsyncSocialMutation();
 
+  const isSocialConnected = (socialType: SocialTypeEnum): boolean => {
+    return !!userInfo?.socials?.some((s) => s.socialType === socialType);
+  };
 
   if (isLoading) return <LoadingComponent />;
   if (error) return <p>Error loading user info</p>;
@@ -92,67 +109,114 @@ const ProfilePage = () => {
 
   ];
 
-  const walletsContents = [
-    {
-      imgContent: metamask.imgContent,
-      title: metamask.title,
-      dialog: <AirdropDialog
-        icon={<ConnectedButton walletContent={metamask} isConnected={metamaskBool} />}
-        title={metamask.title}
-        description={
-          <div className="flex flex-row justify-between w-full max-w-sm items-center space-x-2 mt-4">
-            <Input type="text" placeholder="Wallet Address" />
-            <Button type="submit">Save</Button>
-          </div>
-        }
-      />
-    },
-    {
-      imgContent: phantom.imgContent,
-      title: phantom.title,
-      dialog: <AirdropDialog
-        icon={<ConnectedButton walletContent={phantom} isConnected={phantomBool} />}
-        title={phantom.title}
-        description={
-          <div className="flex flex-row justify-between w-full max-w-sm items-center space-x-2 mt-4">
-            <Input type="text" placeholder="Wallet Address" />
-            <Button type="submit">Save</Button>
-          </div>
-        }
-      />
-    }
-  ];
+  // const walletsContents = [
+  //   {
+  //     imgContent: metamask.imgContent,
+  //     title: metamask.title,
+  //     dialog: <AirdropDialog
+  //       icon={<ConnectedButton walletContent={metamask} isConnected={metamaskBool} />}
+  //       title={metamask.title}
+  //       description={
+  //         <div className="flex flex-row justify-between w-full max-w-sm items-center space-x-2 mt-4">
+  //           <Input type="text" placeholder="Wallet Address" />
+  //           <Button type="submit">Save</Button>
+  //         </div>
+  //       }
+  //     />
+  //   },
+  //   {
+  //     imgContent: phantom.imgContent,
+  //     title: phantom.title,
+  //     dialog: <AirdropDialog
+  //       icon={<ConnectedButton walletContent={phantom} isConnected={phantomBool} />}
+  //       title={phantom.title}
+  //       description={
+  //         <div className="flex flex-row justify-between w-full max-w-sm items-center space-x-2 mt-4">
+  //           <Input type="text" placeholder="Wallet Address" />
+  //           <Button type="submit">Save</Button>
+  //         </div>
+  //       }
+  //     />
+  //   }
+  // ];
 
   const socialsContents = [
     {
+      type: SocialTypeEnum.Google,
       imgContent: google.imgContent,
       title: google.title,
-      dialog: <AirdropDialog
-        icon={<ConnectedButton walletContent={google} isConnected={metamaskBool} />}
-        title={google.title}
-        description={
-          <div className="flex flex-row justify-between w-full max-w-sm items-center space-x-2 mt-4">
-            <Input type="text" placeholder="Wallet Address" />
-            <Button type="submit">Save</Button>
-          </div>
-        }
-      />
+      dialog: (
+        <ConnectedButton walletContent={google} isConnected={isSocialConnected(SocialTypeEnum.Google)} />
+      )
     },
     {
+      type: SocialTypeEnum.X,
       imgContent: x.imgContent,
       title: x.title,
-      dialog: <AirdropDialog
-        icon={<ConnectedButton walletContent={x} isConnected={metamaskBool} />}
-        title={x.title}
-        description={
-          <div className="flex flex-row justify-between w-full max-w-sm items-center space-x-2 mt-4">
-            <Input type="text" placeholder="Wallet Address" />
-            <Button type="submit">Save</Button>
-          </div>
-        }
-      />
+      dialog: (
+        <ConnectedButton walletContent={x} isConnected={isSocialConnected(SocialTypeEnum.X)} />
+      )
+    },
+    {
+      type: SocialTypeEnum.Facebook,
+      imgContent: facebook.imgContent,
+      title: facebook.title,
+      dialog: (
+        <ConnectedButton walletContent={facebook} isConnected={isSocialConnected(SocialTypeEnum.Facebook)} />
+      )
+    },
+    {
+      type: SocialTypeEnum.Instagram,
+      imgContent: instagram.imgContent,
+      title: instagram.title,
+      dialog: (
+        <ConnectedButton walletContent={instagram} isConnected={isSocialConnected(SocialTypeEnum.Instagram)} />
+      )
     },
   ]
+
+  const redirectToSyncSocial = (provider: SocialTypeEnum) => {
+    const appUrl = window.location.origin;
+
+    const params = new URLSearchParams({
+      state: `${appUrl}${routes.AUTH_CALLBACK}`,
+      action: LoginSocialActionTypeEnum.Sync,
+      token: token || '',
+    });
+    window.location.href = `${appUrl}/api/auth/login/${provider}?${params.toString()}`;
+  };
+
+  const handleSyncSocial = (provider: SocialTypeEnum) => {
+    redirectToSyncSocial(provider)
+  }
+
+  const handleUnsyncSocial = async (provider: SocialTypeEnum) => {
+    const social = userInfo?.socials?.find((social) => social.socialType === provider);
+    
+    if (!social || !social.socialId) {
+      toast.error(`No linked ${provider} account found.`);
+      return;
+    }
+  
+    const response = await unsyncSocial({
+      socialType: provider,
+      socialId: social.socialId,
+    });
+  
+    if (unsyncSocialError) handleApiError(unsyncSocialError);
+    if (response.data) {
+      toast.success(`Unsync ${provider} succeeded`);
+      window.location.reload();
+    }
+  };
+
+  const handleConfirmUnsync = () => {
+    if (selectedProvider) {
+      handleUnsyncSocial(selectedProvider);
+    }
+    setIsConfirmDialogOpen(false);
+  };
+
   return (
     <motion.div
       className="w-full flex flex-col"
@@ -161,7 +225,9 @@ const ProfilePage = () => {
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <div className="px-8">
-        <p className="border-l-4 border-[#E77C1B] text-gray-50 font-semibold text-xl pl-5">Profile</p>
+        <p className="border-l-4 border-[#E77C1B] text-gray-50 font-semibold text-xl pl-5">
+          Profile
+        </p>
 
         <div className="w-full relative mt-6 bg-[#2F3543] rounded-2xl">
           <div
@@ -171,16 +237,20 @@ const ProfilePage = () => {
             <div className="flex pt-10 flex-col justify-center items-center text-center px-4">
               <Avatar className="size-24">
                 <AvatarImage src={avatar} alt="Username" />
-                <AvatarFallback className="">{String(firstName).charAt(0)+String(lastName).charAt(0)}</AvatarFallback>
+                <AvatarFallback className="">
+                  {String(firstName).charAt(0) + String(lastName).charAt(0)}
+                </AvatarFallback>
               </Avatar>
               <div className="mt-2 text-xl font-semibold text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] [-webkit-text-stroke:0.5px_#000]">
-                {firstName + " " + lastName }
+                {firstName + " " + lastName}
               </div>
             </div>
           </div>
 
           <div className="flex flex-col p-6">
-            <p className="border-l-4 border-[#E77C1B]  text-gray-50 font-semibold text-md pl-5">Details</p>
+            <p className="border-l-4 border-[#E77C1B]  text-gray-50 font-semibold text-md pl-5">
+              Details
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               {profileContents.map((profile, index) => (
                 <BadgeModal
@@ -192,42 +262,62 @@ const ProfilePage = () => {
                 />
               ))}
             </div>
-
           </div>
           <div className="flex flex-col space-y-4 md:flex-row w-full space-x-4 p-6">
             <div className="flex w-full md:w-1/2 flex-col">
-              <p className="border-l-4 border-[#E77C1B] text-gray-50 font-semibold text-md pl-5">Connect to wallets</p>
+              <p className="border-l-4 border-[#E77C1B] text-gray-50 font-semibold text-md pl-5">
+                Connect to wallets
+              </p>
               <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
-                {walletsContents.map((wallet, index) => (
+                {/* {walletsContents.map((wallet, index) => (
                   <BadgeModal
                     key={index}
                     imgContent={wallet.imgContent}
                     title={wallet.title}
                     dialog={wallet.dialog}
                   />
-                ))}
+                ))} */}
+                <ConnectWallet />
               </div>
             </div>
             <div className="flex w-full md:w-1/2 flex-col">
-              <p className="border-l-4 border-[#E77C1B] text-gray-50 font-semibold text-md pl-5">Link to social</p>
+              <p className="border-l-4 border-[#E77C1B] text-gray-50 font-semibold text-md pl-5">
+                Link to social
+              </p>
               <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
-                {socialsContents.map((wallet, index) => (
-                  <BadgeModal
-                    key={index}
-                    imgContent={wallet.imgContent}
-                    title={wallet.title}
-                    dialog={wallet.dialog}
+                <motion.div className="w-full flex flex-col">
+                  {socialsContents.map((social, index) => (
+                    <BadgeModal
+                      key={index}
+                      imgContent={social.imgContent}
+                      title={social.title}
+                      dialog={social.dialog}
+                      onClick={() => {
+                        if (isSocialConnected(social.type)) {
+                          setSelectedProvider(social.type);
+                          setIsConfirmDialogOpen(true);
+                        } else {
+                          handleSyncSocial(social.type);
+                        }
+                      }}
+                      className="cursor-pointer"
+                    />
+                  ))}
+                  <ConfirmDialog
+                    isOpen={isConfirmDialogOpen}
+                    onClose={() => setIsConfirmDialogOpen(false)}
+                    onConfirm={handleConfirmUnsync}
+                    title="Confirm Unsync"
+                    description={`Are you sure you want to unsync your ${selectedProvider} account?`}
                   />
-                ))}
+                </motion.div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
-
     </motion.div>
-  )
+  );
 }
 
 export default ProfilePage

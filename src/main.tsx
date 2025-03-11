@@ -7,23 +7,31 @@ import { store } from "./stores/store";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "./providers/theme/ThemeProvider";
 import LoadingPage from "./pages/LoadingPage";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { WagmiProvider } from 'wagmi'
+import { wagmiAdapter } from "./configs/reown";
+import "./index.css";
 
 const App = lazy(() => import("./App"));
-import './index.css'
+const queryClient = new QueryClient();
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ErrorBoundary>
       <I18nProvider>
         <Provider store={store}>
           <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-            <Suspense fallback={<LoadingPage/>}>
-              <App />
-              <Toaster theme="dark" />
-            </Suspense>
+            <WagmiProvider config={wagmiAdapter.wagmiConfig}>
+              <QueryClientProvider client={queryClient}>
+                <Suspense fallback={<LoadingPage />}>
+                  <App />
+                  <Toaster theme="dark" />
+                </Suspense>
+              </QueryClientProvider>
+            </WagmiProvider>
           </ThemeProvider>
         </Provider>
       </I18nProvider>
     </ErrorBoundary>
-   </StrictMode>
-)
+  </StrictMode>
+);

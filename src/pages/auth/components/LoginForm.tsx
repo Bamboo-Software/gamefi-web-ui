@@ -2,8 +2,8 @@ import google from "@/assets/icons/google.svg";
 import x from "@/assets/icons/x.svg";
 import facebook from "@/assets/icons/socials/fb_icon.svg";
 import instagram from "@/assets/icons/socials/ig_icon.svg";
-import metamask from "@/assets/icons/metamask.svg";
-import phantom from "@/assets/icons/phantom.svg";
+// import metamask from "@/assets/icons/metamask.svg";
+// import phantom from "@/assets/icons/phantom.svg";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -17,7 +17,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { loginSchema } from "@/schemas/auth";
 import { z } from "zod";
 import { ForgotPasswordDialog } from "./ForgotPassword";
@@ -28,6 +27,7 @@ import { toast } from "sonner";
 import { LoadingSpinner } from "@/components/spinner";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { LoginSocialActionTypeEnum, SocialTypeEnum } from "@/enums/social-type.enum";
+import ConnectWallet from "@/pages/wallet/components/ConnectWallet";
 
 const { ROOT } = routes;
 const loginTypes = [
@@ -55,18 +55,18 @@ const loginTypes = [
     icon: instagram,
     type: "social",
   },
-  {
-    key: SocialTypeEnum.Metamask,
-    name: "Metamask",
-    icon: metamask,
-    type: "wallet",
-  },
-  {
-    key: SocialTypeEnum.Phantom,
-    name: "Phantom",
-    icon: phantom,
-    type: "wallet",
-  },
+//   {
+//     key: SocialTypeEnum.Metamask,
+//     name: "Metamask",
+//     icon: metamask,
+//     type: "wallet",
+//   },
+//   {
+//     key: SocialTypeEnum.Phantom,
+//     name: "Phantom",
+//     icon: phantom,
+//     type: "wallet",
+//   },
 ];
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -195,6 +195,7 @@ const LoginForm = () => {
                         </Button>
                     ))}
                 </div>
+                <ConnectWallet />
             </CardContent>
         </Card>)
 }
