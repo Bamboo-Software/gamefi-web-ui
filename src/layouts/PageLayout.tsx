@@ -1,6 +1,6 @@
 import Sidebar from "@/components/side-bar"
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom"
 import { TbLayoutSidebarLeftCollapse } from "react-icons/tb";
 import { TbLayoutSidebarRightCollapse } from "react-icons/tb";
@@ -22,12 +22,35 @@ import Dropdown from "@/components/dropdown";
 import UserAvatarDropdownProps from "@/components/avatar";
 import { useGetMeQuery } from "@/services/auth";
 import LoadingComponent from "@/components/loading-component";
+import SelectLanguage from "@/components/select-language";
+// import { useLocalStorage } from "react-use";
+import i18n from "@/utils/i18n";
+
 
 const { MISSIONS, GAMES, FRIENDS, ROOT, PROFILE } = routes
 const PageLayout = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { data, error, isLoading } = useGetMeQuery({}, { refetchOnFocus: true })
+  const [currentLang, setCurrentLang] = useState(() => {
+    const langCode = i18n.language || localStorage.getItem('i18nextLng') || 'en';
+    return langCode.split('-')[0].toUpperCase();
+  });
 
+  // Listen for language changes
+  useEffect(() => {
+    const handleLanguageChanged = () => {
+      const langCode = i18n.language || localStorage.getItem('i18nextLng') || 'en';
+      setCurrentLang(langCode.split('-')[0].toUpperCase());
+    };
+
+    // Set up event listener for language changes
+    i18n.on('languageChanged', handleLanguageChanged);
+    
+    // Clean up event listener
+    return () => {
+      i18n.off('languageChanged', handleLanguageChanged);
+    };
+  }, []);
   if (isLoading) return <LoadingComponent />;
   if (error) return <p>Error loading user info</p>;
   const { avatar, firstName, lastName } = data.data;
@@ -35,7 +58,6 @@ const PageLayout = () => {
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
-
 
   const navbars: INavbar[] = [
     {
@@ -89,13 +111,14 @@ const PageLayout = () => {
     },
   ];
 
+
   return (
     <div className="flex p-5 bg-[#040817] w-full h-screen overflow-hidden">
     <div className={`h-screen ${isCollapsed ? 'w-20' : 'w-64'} transition-all duration-300 flex-shrink-0`}>
       <Sidebar isCollapsed={isCollapsed} navbars={navbars} />
     </div>
     <div className="flex flex-col w-full h-screen overflow-y-auto overflow-x-hidden">
-      <div className="sticky top-0 z-50 flex flex-row items-center justify-between bg-[#040817] shadow-md px-2">
+      <div className="sticky top-0 z-50 border-b-1 pb-4 flex flex-row items-center justify-between bg-[#040817] shadow-md px-2">
         <div className="flex flex-row items-center">
           <Button
             onClick={toggleCollapse}
@@ -122,7 +145,7 @@ const PageLayout = () => {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-row items-center text-gray-200! justify-start space-x-2 font-semibold px-4 py-2 mx-2 my-1 text-sm text-gray-200 hover:bg-gray-700/50 rounded-sm transition-colors"
+                      className="flex flex-row items-center text-gray-200! justify-start space-x-2 font-semibold px-4 py-2 mx-2 my-1 text-sm hover:bg-gray-700/50 rounded-sm transition-colors"
                     >
                       <img src={link.icon} className="size-6 mr-2" alt="" />
                       <span className="whitespace-nowrap">{link.name}</span>
@@ -136,6 +159,25 @@ const PageLayout = () => {
 
         <div className="text-gray-200 flex items-center">
           <FaRegBell className="size-5 mx-4" />
+          
+          {/* Language Selector */}
+          <Dropdown
+            offset={4}
+            triggers={
+              <div className="flex items-center mx-4 cursor-pointer">
+                <div className="flex items-center gap-1">
+                  <span className="text-sm font-medium">{currentLang}</span>
+                  <FaAngleDown className="text-gray-300 text-xs" />
+                </div>
+              </div>
+            }
+            contents={
+              <div className="py-2 fixed top-0 right-0 min-w-32">
+                <SelectLanguage/>
+              </div>
+            }
+          />
+          
           <UserAvatarDropdownProps 
             imageUrl={avatar} 
             userName={firstName && lastName ? `${firstName} ${lastName}` : "User"} 
