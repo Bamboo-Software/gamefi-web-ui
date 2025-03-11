@@ -6,9 +6,9 @@ import { TbLayoutSidebarLeftCollapse } from "react-icons/tb";
 import { TbLayoutSidebarRightCollapse } from "react-icons/tb";
 import { INavbar } from "@/components/side-bar";
 import routes from "@/constants/routes"
-import missions from "@/assets/icons/missions_icon.svg"
-import games from "@/assets/icons/games_icon.svg"
-import airdrop from "@/assets/icons/airdrop_icon.svg"
+import missions from "@/assets/icons/bottom_tab/missions.svg"
+import games from "@/assets/icons/bottom_tab/games.svg"
+import airdrop from "@/assets/icons/bottom_tab/airdrop.svg"
 import friends from "@/assets/icons/friends_icon.svg"
 import profile from "@/assets/icons/profile_icon.svg"
 import logo from "@/assets/icons/logo.svg"
@@ -26,11 +26,11 @@ import LoadingComponent from "@/components/loading-component";
 const { MISSIONS, GAMES, FRIENDS, ROOT, PROFILE } = routes
 const PageLayout = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const { data, error, isLoading } = useGetMeQuery({})
+  const { data, error, isLoading } = useGetMeQuery({}, { refetchOnFocus: true })
 
   if (isLoading) return <LoadingComponent />;
   if (error) return <p>Error loading user info</p>;
-  const { avatar, firstName,  lastName, pointsBalance } = data.data;
+  const { avatar, firstName, lastName } = data.data;
 
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
@@ -90,56 +90,65 @@ const PageLayout = () => {
   ];
 
   return (
-    <div className="flex bg-[#040817] w-full h-screen">
-      <div className="h-screen p-4">
-        <Sidebar isCollapsed={isCollapsed} navbars={navbars} />
-      </div>
-      <div className="flex flex-col w-full h-auto overflow-scroll">
-        <div className="mt-2 sticky top-0 z-50 flex flex-row items-center justify-between bg-[#040817] shadow-md">
-          <div className="p-4 flex flex-row items-center">
-            <Button
-              onClick={toggleCollapse}
-              className="size-10 shadow-[0_0_15px_rgba(0,0,0,0.5)] border border-gray-700/50 bg-[#040817] hover:bg-gray-600"
-            >
-              {isCollapsed ? <TbLayoutSidebarRightCollapse className="text-gray-200 size-5" /> : <TbLayoutSidebarLeftCollapse className="text-gray-200 size-5" />}
-            </Button>
-            <div className="flex flex-row items-center gap-8 ml-5">
-              <Link to={ROOT} className="text-gray-200! font-semibold text-sm">About Us</Link>
-              <Link to={ROOT} className="text-gray-200! font-semibold text-sm">Introduction</Link>
-              <Dropdown triggers={
-                <>
-                  <span className="text-gray-200 font-semibold text-sm transition-colors">Follow Us</span>
-                  <FaAngleDown className="text-gray-200" />
-                </>
-              } contents={
-                <>
+    <div className="flex p-5 bg-[#040817] w-full h-screen overflow-hidden">
+    <div className={`h-screen ${isCollapsed ? 'w-20' : 'w-64'} transition-all duration-300 flex-shrink-0`}>
+      <Sidebar isCollapsed={isCollapsed} navbars={navbars} />
+    </div>
+    <div className="flex flex-col w-full h-screen overflow-y-auto overflow-x-hidden">
+      <div className="sticky top-0 z-50 flex flex-row items-center justify-between bg-[#040817] shadow-md px-2">
+        <div className="flex flex-row items-center">
+          <Button
+            onClick={toggleCollapse}
+            className="size-10 shadow-[0_0_15px_rgba(0,0,0,0.5)] border border-gray-700/50 bg-[#040817] hover:bg-gray-600"
+          >
+            {isCollapsed ? <TbLayoutSidebarRightCollapse className="text-gray-200 size-5" /> : <TbLayoutSidebarLeftCollapse className="text-gray-200 size-5" />}
+          </Button>
+          <div className="hidden md:flex flex-row items-center gap-4 lg:gap-8 ml-2 lg:ml-5">
+            <Link to={ROOT} className="text-gray-200! font-semibold text-sm whitespace-nowrap">About Us</Link>
+            <Link to={ROOT} className="text-gray-200! font-semibold text-sm whitespace-nowrap">Introduction</Link>
+            <Dropdown
+              offset={4} 
+              triggers={
+                <div className="flex items-center">
+                  <span className="text-gray-200 font-semibold text-sm transition-colors whitespace-nowrap">Follow Us</span>
+                  <FaAngleDown className="text-gray-200 ml-1" />
+                </div>
+              } 
+              contents={
+                <div className="py-2">
                   {socialLinks.map((link) => (
                     <a
                       key={link.name}
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex flex-row items-center justify-start space-x-2 font-semibold px-4 py-2 mx-2 my-1 text-sm text-gray-200! hover:bg-gray-700/50 rounded-sm transition-colors"
+                      className="flex flex-row items-center text-gray-200! justify-start space-x-2 font-semibold px-4 py-2 mx-2 my-1 text-sm text-gray-200 hover:bg-gray-700/50 rounded-sm transition-colors"
                     >
-                      <img src={link.icon} className="size-8 mr-2" alt="" />
-                      {link.name}
+                      <img src={link.icon} className="size-6 mr-2" alt="" />
+                      <span className="whitespace-nowrap">{link.name}</span>
                     </a>
                   ))}
-                </>
-              } />
-            </div>
-          </div>
-
-          <div className="text-gray-200 mr-6 flex flex-row-reverse justify-center items-center">
-            <UserAvatarDropdownProps imageUrl={avatar} userName={firstName+ " "+ lastName} pointsBalance={pointsBalance} fallback={String(firstName).charAt(0)+String(lastName).charAt(0)} />
-            <FaRegBell className="size-5 mx-8" />
+                </div>
+              } 
+            />
           </div>
         </div>
-      <div className="flex-1 p-6">
-          <Outlet />
+
+        <div className="text-gray-200 flex items-center">
+          <FaRegBell className="size-5 mx-4" />
+          <UserAvatarDropdownProps 
+            imageUrl={avatar} 
+            userName={firstName && lastName ? `${firstName} ${lastName}` : "User"} 
+            // pointsBalance={pointsBalance} 
+            fallback={firstName && lastName ? `${String(firstName).charAt(0)}${String(lastName).charAt(0)}` : "JF"} 
+          />
         </div>
       </div>
+      <div className="flex-1 md:my-8 max-w-full">
+        <Outlet />
+      </div>
     </div>
+  </div>
   )
 }
 

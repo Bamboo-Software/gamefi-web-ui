@@ -26,10 +26,12 @@ const UserAvatarDropdown = ({
   const [, , remove] = useLocalStorage('auth-token', 'foo');
 
   const trigger = (
-    <Avatar>
-      <AvatarImage src={imageUrl} alt={userName} />
-      <AvatarFallback>{fallback}</AvatarFallback>
-    </Avatar>
+    <div className="relative inline-block">
+      <Avatar>
+        <AvatarImage src={imageUrl} alt={userName} />
+        <AvatarFallback>{fallback}</AvatarFallback>
+      </Avatar>
+    </div>
   );
 
   const gotoProfile = () => {
@@ -46,7 +48,7 @@ const UserAvatarDropdown = ({
   }
 
   const content = (
-    <div className="w-[240px] p-2">
+    <div className="w-auto m-2 bg-transparent rounded-md shadow-lg">
       <div className="flex items-center gap-3 p-2">
         <Avatar className="h-10 w-10 shrink-0">
           <AvatarImage src={imageUrl} alt={userName} />
@@ -56,10 +58,13 @@ const UserAvatarDropdown = ({
           <span className="text-sm font-medium truncate" title={userName}>
             {userName}
           </span>
+          {pointsBalance ? (
           <div className="flex items-center gap-1 text-[#FFC800] font-semibold">
-            <img src={coin} alt="points" className="w-4 h-4" />
-            <span className="truncate">{pointsBalance.toLocaleString()}</span>
-          </div>
+          <img src={coin} alt="points" className="w-4 h-4" />
+          <span className="truncate">{pointsBalance.toLocaleString()}</span>
+        </div>
+          ) : <></>}
+
         </div>
       </div>
       <div className="mt-2 border-t border-gray-700/50">
@@ -78,13 +83,14 @@ const UserAvatarDropdown = ({
       </div>
     </div>
   );
-
   return (
     <div className="text-gray-200">
       <Dropdown
         position="right"
         triggers={trigger}
         contents={content}
+        className="z-50"
+        offset={4}
       />
     </div>
   );

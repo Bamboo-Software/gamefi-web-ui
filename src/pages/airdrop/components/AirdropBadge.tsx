@@ -9,7 +9,8 @@ export interface AirdropBadgeProps {
   description?: string;
   imageUrl?: string;
   color?: string;
-  bgColor?: string; 
+  bgColor?: string;
+  amount?: number | string; 
 }
 
 const AirdropBadge = ({
@@ -17,7 +18,8 @@ const AirdropBadge = ({
   description = "Complete tasks to earn rewards and tokens",
   imageUrl = income,
   color = "#E77C1B",
-  bgColor = "#29221C"
+  bgColor = "#29221C",
+  amount = 0
 }: AirdropBadgeProps) => {
   const hexToRgb = (hex: string) => {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -60,9 +62,9 @@ const AirdropBadge = ({
       <CardContent className="p-4">
         <div className="flex flex-row justify-between items-center mb-2 text-[#FFC800] font-semibold">
             <h3 className="text-lg text-gray-200">{title}</h3>
-            <div className="flex flex-row justify-between items-center ">
-                <p className="font-bold">100</p>
-                <img src={coin} alt="Coin" />
+            <div className="flex flex-row justify-between items-center space-x-0.5">
+                <p className="font-bold">{amount}</p>
+                <img className="size-6" src={coin} alt="Coin" />
             </div>
         </div>
         <p className="text-sm text-gray-400">{description}</p>

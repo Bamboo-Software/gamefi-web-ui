@@ -176,4 +176,5 @@ export const {
   useLoginGoogleQuery,
   useLoginInstagramQuery,
   useGetMeQuery,
+  useLazyGetMeQuery
 } = authApi;

@@ -14,16 +14,16 @@ import './index.css'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
+    <Suspense fallback={<LoadingPage/>}>
       <I18nProvider>
         <Provider store={store}>
           <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-            <Suspense fallback={<LoadingPage/>}>
               <App />
               <Toaster theme="dark" />
-            </Suspense>
           </ThemeProvider>
         </Provider>
       </I18nProvider>
+      </Suspense>
     </ErrorBoundary>
    </StrictMode>
 )

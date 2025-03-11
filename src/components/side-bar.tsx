@@ -52,7 +52,7 @@ const Sidebar = ({ isCollapsed, navbars }: SidebarProps) => {
               className={`${linkClasses} ${isCollapsed ? "my-2 flex justify-center" : "p-2"}`}
             >
               <div className={isCollapsed ? "" : "flex flex-row items-center gap-3"}>
-                <img src={item.icon} className="size-8 my-2" alt="" />
+                <img src={item.icon} className="h-8 w-6 my-2" alt="" />
                 {!isCollapsed && (
                   <span className="text-gray-300 font-semibold text-center text-sm">{item.title}</span>
                 )}

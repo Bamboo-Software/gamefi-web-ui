@@ -9,6 +9,7 @@ interface IDropdownProps {
   borderColor?: string;
   className?: string; 
   contentClassName?: string; 
+  offset?: number;
 }
 
 const Dropdown = ({
@@ -20,6 +21,7 @@ const Dropdown = ({
   borderColor = "border-gray-700/50",
   className = "",
   contentClassName = "",
+  offset = 4,
 }: IDropdownProps) => {
   const positionStyles =
     position === "right"
@@ -29,7 +31,7 @@ const Dropdown = ({
       : "left-0";
 
   return (
-    <div className={`group relative inline-block ${className}`}>
+    <div className={`group relative inline-block ${className} ${offset}`}>
       <button className="flex flex-row items-center gap-1 focus:outline-none space-x-2 hover:text-gray-400">
         {triggers}
       </button>
