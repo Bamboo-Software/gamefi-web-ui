@@ -117,8 +117,17 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "@swc/core",
+      "bigint-buffer",
+      "blake-hash",
+      "bufferutil",
       "esbuild",
-      "msw"
+      "keccak",
+      "msw",
+      "protobufjs",
+      "secp256k1",
+      "tiny-secp256k1",
+      "usb",
+      "utf-8-validate"
     ]
   }
 }
