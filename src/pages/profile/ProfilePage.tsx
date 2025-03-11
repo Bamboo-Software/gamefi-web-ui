@@ -176,12 +176,10 @@ const ProfilePage = () => {
   ]
 
   const redirectToSyncSocial = (provider: SocialTypeEnum) => {
-    // const appUrl = window.location.origin;
-    const appUrl = 'https://lottery-jfox.bamboosoft.io';
+    const appUrl = window.location.origin;
 
     const params = new URLSearchParams({
-      // state: `${appUrl}${routes.AUTH_CALLBACK}`,
-      state: `http://localhost:5173${routes.AUTH_CALLBACK}`,
+      state: `${appUrl}${routes.AUTH_CALLBACK}`,
       action: LoginSocialActionTypeEnum.Sync,
       token: token || '',
     });
