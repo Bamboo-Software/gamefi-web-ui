@@ -22,13 +22,13 @@ export const ActionButtonList = () => {
   return (
     <div className="flex flex-row mt-2 space-x-2">
       <button
-        className="bg-green-500 py-1.5 space-x-2 px-4 text-white flex flex-row justify-center items-center  border-1 border-green-300 rounded-full text-base font-medium cursor-pointer transition-all duration-300 ease-in-out hover:bg-green-400 hover:text-white active:bg-gray-800 active:text-white"
+        className="bg-green-500 py-1.5 space-x-2 px-4 text-white flex flex-row justify-center items-center  border-1 border-green-300 rounded-sm text-base font-medium cursor-pointer transition-all duration-300 ease-in-out hover:bg-green-400 hover:text-white active:bg-gray-800 active:text-white"
         onClick={() => open()}
       >
         <PiPlugsConnected className="text-lg"/><span>Open</span>
       </button>
       <button
-        className="bg-red-500 py-1.5 space-x-2 px-4 text-white flex flex-row justify-center items-center border-1 border-red-300 rounded-full text-base font-medium cursor-pointer transition-all duration-300 ease-in-out hover:bg-red-400 hover:text-white active:bg-gray-800 active:text-white"
+        className="bg-red-500 py-1.5 space-x-2 px-4 text-white flex flex-row justify-center items-center border-1 border-red-300 rounded-sm text-base font-medium cursor-pointer transition-all duration-300 ease-in-out hover:bg-red-400 hover:text-white active:bg-gray-800 active:text-white"
         onClick={handleDisconnect}
       >
        <TbPlugConnectedX className="text-lg"/><span>Disconnect</span>
