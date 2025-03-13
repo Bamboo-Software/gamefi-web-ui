@@ -43,7 +43,7 @@ const UserAvatarDropdown = ({
     try {
       remove();
       await disconnect();
-      navigate(AUTH);
+      window.location.href= AUTH;
     } catch (error) {
       console.error("Logout failed:", error);
     }

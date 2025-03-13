@@ -44,6 +44,20 @@ const PrivateRoute = ({ children }: {children: React.ReactNode}) => {
   return children;
 };
 
+const PublicRoute = ({ children }: { children: React.ReactNode }) => {
+  const token = localStorage.getItem('auth-token');
+  const { error, isLoading } = useGetMeQuery({});
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
+
+  if (token && !(error && 'status' in error && error.status === 401)) {
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
 
 const routes = createBrowserRouter([
   {
@@ -65,7 +79,11 @@ const routes = createBrowserRouter([
   },
   {
     path: AUTH,
-    element: <AuthLayout />,
+    element: (
+      <PublicRoute>
+        <AuthLayout />
+      </PublicRoute>
+    ),
     children: [
       { index: true, element: <AuthPage /> },
       { path: "callback", element: <AuthCallback /> },

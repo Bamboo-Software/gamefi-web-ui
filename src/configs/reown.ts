@@ -3,11 +3,8 @@ import {
   mainnet,
   arbitrum,
   solana,
-  solanaDevnet,
-  solanaTestnet,
   optimism,
   polygon,
-  sepolia,
 } from "@reown/appkit/networks";
 import type { AppKitNetwork } from "@reown/appkit/networks";
 import { SolanaAdapter } from "@reown/appkit-adapter-solana/react";
@@ -39,10 +36,7 @@ export const networks = [
   arbitrum,
   optimism,
   polygon,
-  sepolia,
   solana,
-  solanaDevnet,
-  solanaTestnet,
 ] as [AppKitNetwork, ...AppKitNetwork[]];
 
 //Set up the Wagmi Adapter (Config)
