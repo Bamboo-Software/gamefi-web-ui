@@ -25,9 +25,10 @@ import LoadingComponent from "@/components/loading-component";
 import SelectLanguage from "@/components/select-language";
 // import { useLocalStorage } from "react-use";
 import i18n from "@/utils/i18n";
+import { useNavigate } from "react-router-dom";
 
 
-const { MISSIONS, GAMES, FRIENDS, ROOT, PROFILE } = routes
+const { MISSIONS, GAMES, FRIENDS, ROOT, PROFILE, AUTH } = routes
 const PageLayout = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const { data, error, isLoading } = useGetMeQuery({}, { refetchOnFocus: true })
@@ -35,7 +36,7 @@ const PageLayout = () => {
     const langCode = i18n.language || localStorage.getItem('i18nextLng') || 'en';
     return langCode.split('-')[0].toUpperCase();
   });
-
+  const navigate = useNavigate();
   // Listen for language changes
   useEffect(() => {
     const handleLanguageChanged = () => {
@@ -51,8 +52,18 @@ const PageLayout = () => {
       i18n.off('languageChanged', handleLanguageChanged);
     };
   }, []);
+
+  const goBackToLogin = () => {
+    localStorage.removeItem('auth-token');
+    navigate(AUTH)
+  }
   if (isLoading) return <LoadingComponent />;
-  if (error) return <p>Error loading user info</p>;
+  if (error) return (
+    <div className="flex flex-col space-y-2 justify-center items-center h-screen w-full">
+       <p className="font-semibold text-xl">Failed To Get Data</p>
+       <Button onClick={goBackToLogin}>Back To Login</Button>
+    </div>
+  );
   const { avatar, firstName, lastName } = data.data;
 
   const toggleCollapse = () => {
