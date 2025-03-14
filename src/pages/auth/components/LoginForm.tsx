@@ -4,15 +4,16 @@ import facebook from "@/assets/icons/socials/fb_icon.svg";
 import instagram from "@/assets/icons/socials/ig_icon.svg";
 // import metamask from "@/assets/icons/metamask.svg";
 // import phantom from "@/assets/icons/phantom.svg";
+import wallets from "@/assets/images/profile/wallet.svg"
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
@@ -21,52 +22,55 @@ import { loginSchema } from "@/schemas/auth";
 import { z } from "zod";
 import { ForgotPasswordDialog } from "./ForgotPassword";
 import { useLoginMutation } from "@/services/auth";
-import { useNavigate } from "react-router-dom";
 import routes from "@/constants/routes";
 import { toast } from "sonner";
 import { LoadingSpinner } from "@/components/spinner";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { LoginSocialActionTypeEnum, SocialTypeEnum } from "@/enums/social-type.enum";
 import ConnectWallet from "@/pages/wallet/components/ConnectWallet";
+import ConnectWalletDialog from "./ConnectWalletDialog";
+import { siteURL } from "@/configs/config";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 
 const { ROOT } = routes;
 const loginTypes = [
-  {
-    key: SocialTypeEnum.Google,
-    name: "Google",
-    icon: google,
-    type: "social",
-  },
-  {
-    key: SocialTypeEnum.X,
-    name: "X",
-    icon: x,
-    type: "social",
-  },
-  {
-    key: SocialTypeEnum.Facebook,
-    name: "Facebook",
-    icon: facebook,
-    type: "social",
-  },
-  {
-    key: SocialTypeEnum.Instagram,
-    name: "Instagram",
-    icon: instagram,
-    type: "social",
-  },
-//   {
-//     key: SocialTypeEnum.Metamask,
-//     name: "Metamask",
-//     icon: metamask,
-//     type: "wallet",
-//   },
-//   {
-//     key: SocialTypeEnum.Phantom,
-//     name: "Phantom",
-//     icon: phantom,
-//     type: "wallet",
-//   },
+    {
+        key: SocialTypeEnum.Google,
+        name: "Google",
+        icon: google,
+        type: "social",
+    },
+    {
+        key: SocialTypeEnum.X,
+        name: "X",
+        icon: x,
+        type: "social",
+    },
+    {
+        key: SocialTypeEnum.Facebook,
+        name: "Facebook",
+        icon: facebook,
+        type: "social",
+    },
+    {
+        key: SocialTypeEnum.Instagram,
+        name: "Instagram",
+        icon: instagram,
+        type: "social",
+    },
+    //   {
+    //     key: SocialTypeEnum.Metamask,
+    //     name: "Metamask",
+    //     icon: metamask,
+    //     type: "wallet",
+    //   },
+    //   {
+    //     key: SocialTypeEnum.Phantom,
+    //     name: "Phantom",
+    //     icon: phantom,
+    //     type: "wallet",
+    //   },
 ];
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -76,9 +80,9 @@ const defaultLoginFormValues = {
     password: "",
 }
 const LoginForm = () => {
-    const navigate = useNavigate();
-    const { setToken} = useAuthToken()
-    const [login, {isLoading: isLoginLoading}] = useLoginMutation()
+    const { setToken } = useAuthToken()
+    const [showPassword, setShowPassword] = useState(false);
+    const [login, { isLoading: isLoginLoading }] = useLoginMutation()
     const loginForm = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
         defaultValues: defaultLoginFormValues
@@ -89,14 +93,20 @@ const LoginForm = () => {
         try {
             const response = await login(data).unwrap();
             if (response && response.data.token) {
-                setToken(JSON.stringify(response.data.token));
-                navigate(ROOT);
-                location.reload();
+                setToken(response.data.token);
+                window.location.href = ROOT; 
+                // navigate(ROOT);
             } else {
                 toast.error("Login Failed!");
             }
+
+            // if(response.data.statusCode == 400){
+            //     toast.error("Login Failed!");
+
+            // }
         } catch (error) {
             console.error(error);
+            toast.error("Login Failed! Please check your Email or Password!");
         }
     };
 
@@ -110,7 +120,7 @@ const LoginForm = () => {
             action: LoginSocialActionTypeEnum.Login,
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
         });
-        window.location.href = `${appUrl}/api/auth/login/${provider}?${params.toString()}`;
+        window.location.href = `${siteURL}/api/auth/login/${provider}?${params.toString()}`;
     };
 
     const handleSocialLogin = async (provider: SocialTypeEnum) => {
@@ -125,6 +135,8 @@ const LoginForm = () => {
             console.error(error);
         }
     };
+
+
     return (
         <Card className="border-none bg-[#222936]">
             <CardContent className="space-y-4">
@@ -148,27 +160,46 @@ const LoginForm = () => {
                                 </FormItem>
                             )}
                         />
-                        <FormField
+<FormField
                             control={loginForm.control}
                             name="password"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="text-gray-20 flex flex-row justify-between"><span>Password</span> <ForgotPasswordDialog/>
-                                    </FormLabel>    
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            type="password"
-                                            className="bg-transparent border-gray-600 border-2 text-gray-200"
-                                            placeholder="Enter your password"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
+                            render={({ field }) => {
+                                return (
+                                    <FormItem>
+                                        <FormLabel className="text-gray-20 flex flex-row justify-between">
+                                            <span>Password</span>
+                                            <ForgotPasswordDialog />
+                                        </FormLabel>
+                                        <div className="relative">
+                                            <FormControl>
+                                                <Input
+                                                    {...field}
+                                                    type={showPassword ? "text" : "password"}
+                                                    className="bg-transparent border-gray-600 border-2 text-gray-200 pr-10"
+                                                    placeholder="Enter your password"
+                                                />
+                                            </FormControl>
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="sm"
+                                                className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 hover:bg-transparent"
+                                                onClick={() => setShowPassword(!showPassword)}
+                                            >
+                                                {showPassword ? (
+                                                    <EyeOff className="h-4 w-4 text-gray-400" />
+                                                ) : (
+                                                    <Eye className="h-4 w-4 text-gray-400" />
+                                                )}
+                                            </Button>
+                                        </div>
+                                        <FormMessage />
+                                    </FormItem>
+                                );
+                            }}
                         />
                         <Button type="submit" className="w-full text-gray-200 bg-[#E77C1B] hover:bg-[#cca785] cursor-pointer border-2 h-10 text-sm border-[#FFB571]">
-                            {isLoginLoading ? <LoadingSpinner/> : "Sign In"}
+                            {isLoginLoading ? <LoadingSpinner /> : "Sign In"}
                         </Button>
                     </form>
                 </Form>
@@ -196,7 +227,19 @@ const LoginForm = () => {
                         </Button>
                     ))}
                 </div>
-                <ConnectWallet />
+                <div className="flex justify-center">
+                    <ConnectWalletDialog trigger={
+                        <Button
+                            variant="outline"
+                            className="border-gray-600 flex-row justify-center items-center bg-[#222936] text-gray-200 cursor-pointer w-full"
+                        >
+                            <img className="size-5 mr-2" src={wallets} alt={"login wallet"} srcSet="" />
+                            <span>Connect to wallets</span>
+                        </Button>
+                    }>
+                        <ConnectWallet />
+                    </ConnectWalletDialog>
+                </div>
             </CardContent>
         </Card>)
 }

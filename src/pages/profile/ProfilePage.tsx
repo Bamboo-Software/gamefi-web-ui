@@ -1,7 +1,7 @@
 import { motion } from "framer-motion"
 import bg_profile from "@/assets/images/profile/bg_profile.svg";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { IWalletContentDialog, SocialContentDialog } from "@/constants/profile";
+import { IWalletContentDialog, SocialContentDialog, WalletContentDialog } from "@/constants/profile";
 import { TbPlugConnectedX } from "react-icons/tb";
 import { PiPlugsConnectedFill } from "react-icons/pi";
 import { useGetMeQuery, useUnsyncSocialMutation } from "@/services/auth";
@@ -21,6 +21,9 @@ import { handleApiError } from "@/utils/apiUtils";
 import { useState } from "react";
 import { ConfirmDialog } from "@/components/ui/dialog";
 import ConnectWallet from "../wallet/components/ConnectWallet";
+import ConnectWalletDialog from "../auth/components/ConnectWalletDialog";
+import { siteURL } from "@/configs/config";
+
 
 interface IConnectedButtonProps {
   walletContent: IWalletContentDialog,
@@ -47,6 +50,8 @@ const ConnectedButton = ({ isConnected }: IConnectedButtonProps) => {
 const ProfilePage = () => {
   const { totalCoins, transactions, friends, achivements } = ProfileContentDialog();
   const { google, x, facebook, instagram } = SocialContentDialog();
+  const { wallets } = WalletContentDialog()
+
   const { data, error, isLoading } = useGetMeQuery({})
   const userInfo = useAppSelector(
     (state) => (state.authApi.queries["getMe({})"] as { data?: { data: IUser } })?.data?.data
@@ -183,7 +188,7 @@ const ProfilePage = () => {
       action: LoginSocialActionTypeEnum.Sync,
       token: token || '',
     });
-    window.location.href = `${appUrl}/api/auth/login/${provider}?${params.toString()}`;
+    window.location.href = `${siteURL}/api/auth/login/${provider}?${params.toString()}`;
   };
 
   const handleSyncSocial = (provider: SocialTypeEnum) => {
@@ -269,7 +274,17 @@ const ProfilePage = () => {
                 Connect to wallets
               </p>
               <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
-                <ConnectWallet />
+                {/* <ConnectWallet /> */}
+                <div className="flex justify-center">
+                    <ConnectWalletDialog trigger={
+                        <BadgeModal
+                        imgContent={wallets.imgContent}
+                        title={wallets.title}
+                        />
+                    }>
+                        <ConnectWallet />
+                    </ConnectWalletDialog>
+                </div>
               </div>
             </div>
             <div className="flex w-full md:w-1/2 flex-col">

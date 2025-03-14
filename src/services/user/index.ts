@@ -3,12 +3,22 @@ import { baseUrl } from "@/configs/config";
 import { InvalidatesTagsEnum } from "@/constants/invalidates-tags";
 import { baseQueryWithReauth } from "@/utils/baseQuery";
 
+export interface IUserAirdropResponse {
+data: {
+  achievements: number;
+  earnTasks: number;
+  inviteFriends: number;
+  lotterySpinner: number;
+  passiveIncome: number;
+}
+}
+
 export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: baseQueryWithReauth(baseUrl),
   tagTypes: [InvalidatesTagsEnum.USER],
   endpoints: (builder) => ({
-    getUserAirdrop: builder.query({
+    getUserAirdrop: builder.query<IUserAirdropResponse, void>({
       query: () => ({
         url: "user/earn-point-stats",
       }),

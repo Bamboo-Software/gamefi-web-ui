@@ -2,13 +2,12 @@ import coin from "@/assets/icons/coin.svg";
 import transaction from "@/assets/icons/transaction_icon.svg";
 import friends from "@/assets/icons/friends_icon.svg";
 import achivements from "@/assets/icons/cup_icon.svg";
-import metamask from "@/assets/icons/metamask.svg"
-import phantom from "@/assets/icons/phantom.svg"
 import x from "@/assets/icons/x.svg";
 import google from "@/assets/icons/google.svg";
 import facebook from "@/assets/icons/facebook.svg";
 import instagram from "@/assets/icons/instagram.svg";
 import { useTranslation } from "react-i18next";
+import wallets from "@/assets/images/profile/wallet.svg";
 
 interface IContentDialog {
   imgContent: string;
@@ -78,20 +77,12 @@ export const WalletContentDialog = (): Record<
   const { t } = useTranslation();
 
   return {
-    metamask: {
-      imgContent: metamask,
-      title: t("profile.wallet.title", {wallet: "MetaMask"}),
+    wallets: {
+      imgContent: wallets,
+      title: t("profile.wallet.title", {wallet: "wallets"}),
       alert: {
-        success: t("profile.wallet.alert.success", {wallet: "MetaMask"}),
-        failure: t("profile.wallet.alert.failure", {wallet: "MetaMask"}),
-      }
-    },
-    phantom: {
-      imgContent: phantom,
-      title: t("profile.wallet.title", {wallet: "Phantom"}),
-      alert: {
-        success: t("profile.wallet.alert.success", {wallet: "Phantom"}),
-        failure: t("profile.wallet.alert.failure", {wallet: "Phantom"}),
+        success: t("profile.wallet.alert.success", {wallet: "wallets"}),
+        failure: t("profile.wallet.alert.failure", {wallet: "wallets"}),
       }
     }
   }

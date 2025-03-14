@@ -14,16 +14,14 @@ import { LoginSocialRequest } from "@/interfaces/ILogin";
 import { SolanaVerifier } from "@/services/wallet/SolanaVerifier";
 import routes from "@/constants/routes";
 import { useAuthToken } from "@/hooks/useAuthToken";
-import { useNavigate } from "react-router-dom";
 
 const ConnectWallet = () => {
   const [loginSocial] = useLoginSocialMutation();
   const [syncSocial] = useSyncSocialMutation();
   const { setToken, token } = useAuthToken();
-  const navigate = useNavigate();
   const { ROOT } = routes;
 
-  const loginSocialWrapper = async (data: LoginSocialRequest) => {
+  const loginOrSyncSocialWrapper = async (data: LoginSocialRequest) => {
     let result;
     if (!token) {
       result = await loginSocial({
@@ -31,10 +29,8 @@ const ConnectWallet = () => {
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       }).unwrap();
       if (result?.success) {
-        if (!token) {
-          setToken(result.data.token);
-          navigate(ROOT);
-        }
+        setToken(result.data.token);
+        window.location.href = ROOT;
       }
     } else {
       result = await syncSocial({
@@ -56,13 +52,16 @@ const ConnectWallet = () => {
       socials: [],
       email: false,
     },
+    allWallets: "SHOW",
+    enableWalletConnect: true,
     themeVariables: {
       "--w3m-accent": "#000000",
     },
+    debug: true,
     siwx: new DefaultSIWX({
       verifiers: [
-        new EIP155Verifier(loginSocialWrapper),
-        new SolanaVerifier(loginSocialWrapper),
+        new EIP155Verifier(loginOrSyncSocialWrapper),
+        new SolanaVerifier(loginOrSyncSocialWrapper),
       ],
     }),
   });

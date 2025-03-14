@@ -7,18 +7,18 @@ import { LoginSocialRequest } from "@/interfaces/ILogin";
 export class EIP155Verifier extends SIWXVerifier {
   public readonly chainNamespace = "eip155";
 
-  private loginSocialAPI: (data: LoginSocialRequest) => Promise<LoginResponse>;
+  private loginOrSyncSocialAPI: (data: LoginSocialRequest) => Promise<LoginResponse>;
 
   constructor(
-    loginSocialAPI: (data: LoginSocialRequest) => Promise<LoginResponse>
+    loginOrSyncSocialAPI: (data: LoginSocialRequest) => Promise<LoginResponse>
   ) {
     super();
-    this.loginSocialAPI = loginSocialAPI;
+    this.loginOrSyncSocialAPI = loginOrSyncSocialAPI;
   }
 
   public async verify(session: SIWXSession): Promise<boolean> {
     try {
-      const result = await this.loginSocialAPI({
+      const result = await this.loginOrSyncSocialAPI({
         socialType: SocialTypeEnum.Metamask,
         walletAddress: session.data.accountAddress,
         signature: session.signature,

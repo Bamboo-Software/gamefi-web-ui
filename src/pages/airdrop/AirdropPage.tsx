@@ -28,7 +28,8 @@ import bg_airdrop_header_r from "@/assets/images/airdrop/bg_airdrop_header_r.svg
 import coin from '@/assets/icons/coin.svg';
 import UserInfo from "@/components/user-info";
 import group_coins from "@/assets/images/airdrop/group_coins.svg";
-
+import { useGetUserAirdropQuery } from "@/services/user";
+import LoadingComponent from "@/components/loading-component";
 
 const maxTreeLevel = 6;
 const levelExpRequirements = [100, 250, 400, 600, 800, 1200];
@@ -47,6 +48,8 @@ const AirdropPage = () => {
   const [waterTree, { data: levelData }] = useHandleWaterRewardTreeMutation({});
   const [handleTabCoin] = useHandleTapCoinMutation()
   const { data: treeData, refetch: refetchTree } = useGetRewardTreeQuery({});
+  const { data: userAirdrop, isLoading: isUserAirdropLoading } = useGetUserAirdropQuery()
+  const { achievements, earnTasks, inviteFriends, lotterySpinner, passiveIncome }  = userAirdrop?.data || {}
   const { data: userInfo } = useAppSelector((state) => {
     const response = state.authApi.queries["getMe({})"]?.data as {
       data: {
@@ -59,7 +62,10 @@ const AirdropPage = () => {
     return response;
   });
 
-  const { achievementCount = 0, pointsBalance = 0, referralCount = 0, transactionCount = 0 } = userInfo || {};
+
+  console.log(userAirdrop);
+  
+  const { pointsBalance = 0 } = userInfo || {};
 
   const airdropContents: AirdropBadgeProps[] = [
     {
@@ -68,7 +74,7 @@ const AirdropPage = () => {
       imageUrl: income,
       color: "#E77C1B",
       bgColor: "#29221C",
-      amount: formatCompactNumber(pointsBalance)
+      amount: formatCompactNumber(passiveIncome || 0)
     },
     {
       title: "Lottery Spinner",
@@ -76,7 +82,7 @@ const AirdropPage = () => {
       imageUrl: spinner,
       color: "#65DEB8",
       bgColor: "#243C48",
-      amount: transactionCount
+      amount: lotterySpinner
     },
     {
       title: "Invite friends",
@@ -84,7 +90,7 @@ const AirdropPage = () => {
       imageUrl: friends,
       color: "#6D89FF",
       bgColor: "#2A334A",
-      amount: referralCount
+      amount: inviteFriends
     },
     {
       title: "Earn tasks",
@@ -92,7 +98,7 @@ const AirdropPage = () => {
       imageUrl: tasks,
       color: "#EB886D",
       bgColor: "#47313D",
-      amount: 0
+      amount: earnTasks
     },
     {
       title: "Achivements",
@@ -100,7 +106,7 @@ const AirdropPage = () => {
       imageUrl: achivements,
       color: "#5A2DFD",
       bgColor: "#47313D",
-      amount: achievementCount
+      amount: achievements
     },
   ]
 
@@ -184,6 +190,10 @@ const AirdropPage = () => {
     }
   }, [handleTabCoin, tapCoins, tapCount]);
 
+  if(isUserAirdropLoading) {
+    return <LoadingComponent/>
+  }
+   
   return (
     <motion.div
       className="w-full flex flex-col px-4 md:px-6 lg:px-8"

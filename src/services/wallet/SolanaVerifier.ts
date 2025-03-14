@@ -7,18 +7,18 @@ import { LoginResponse } from "../auth";
 export class SolanaVerifier extends SIWXVerifier {
   public readonly chainNamespace = "solana";
 
-  private loginSocialAPI: (data: LoginSocialRequest) => Promise<LoginResponse>;
+  private loginOrSyncSocialAPI: (data: LoginSocialRequest) => Promise<LoginResponse>;
 
   constructor(
-    loginSocialAPI: (data: LoginSocialRequest) => Promise<LoginResponse>
+    loginOrSyncSocialAPI: (data: LoginSocialRequest) => Promise<LoginResponse>
   ) {
     super();
-    this.loginSocialAPI = loginSocialAPI;
+    this.loginOrSyncSocialAPI = loginOrSyncSocialAPI;
   }
 
   public async verify(session: SIWXSession): Promise<boolean> {
     try {
-      const result = await this.loginSocialAPI({
+      const result = await this.loginOrSyncSocialAPI({
         socialType: SocialTypeEnum.Phantom,
         walletAddress: session.data.accountAddress,
         signature: session.signature,
