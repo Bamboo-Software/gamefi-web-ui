@@ -22,7 +22,6 @@ import { loginSchema } from "@/schemas/auth";
 import { z } from "zod";
 import { ForgotPasswordDialog } from "./ForgotPassword";
 import { useLoginMutation } from "@/services/auth";
-import { useNavigate } from "react-router-dom";
 import routes from "@/constants/routes";
 import { toast } from "sonner";
 import { LoadingSpinner } from "@/components/spinner";
@@ -81,7 +80,6 @@ const defaultLoginFormValues = {
     password: "",
 }
 const LoginForm = () => {
-    const navigate = useNavigate();
     const { setToken } = useAuthToken()
     const [showPassword, setShowPassword] = useState(false);
     const [login, { isLoading: isLoginLoading }] = useLoginMutation()
@@ -96,8 +94,8 @@ const LoginForm = () => {
             const response = await login(data).unwrap();
             if (response && response.data.token) {
                 setToken(response.data.token);
-                navigate(ROOT);
-                location.reload();
+                window.location.href = ROOT; 
+                // navigate(ROOT);
             } else {
                 toast.error("Login Failed!");
             }
