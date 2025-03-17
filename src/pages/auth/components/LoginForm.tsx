@@ -147,7 +147,7 @@ const LoginForm = () => {
                             name="email"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel className="text-gray-200">Username or Email</FormLabel>
+                                    <FormLabel className="text-gray-200">Email</FormLabel>
                                     <FormControl>
                                         <Input
                                             {...field}
@@ -166,7 +166,7 @@ const LoginForm = () => {
                             render={({ field }) => {
                                 return (
                                     <FormItem>
-                                        <FormLabel className="text-gray-20 flex flex-row justify-between">
+                                        <FormLabel className="text-gray-200 flex flex-row justify-between">
                                             <span>Password</span>
                                             <ForgotPasswordDialog />
                                         </FormLabel>
