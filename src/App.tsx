@@ -1,6 +1,7 @@
 import { createBrowserRouter, 
   Navigate, 
-  RouterProvider } from 'react-router-dom';
+  RouterProvider, 
+  useLocation} from 'react-router-dom';
 import routesPath from '@/constants/routes';
 import ErrorPage from '@/pages/ErrorPage';
 import PageLayout from './layouts/PageLayout';
@@ -11,11 +12,12 @@ import MissionsPage from './pages/missions/MissionsPage';
 import FriendsPage from './pages/friends/FriendsPage';
 import GamesPage from './pages/games/GamesPage';
 import ProfilePage from './pages/profile/ProfilePage';
-import { useGetMeQuery } from './services/auth';
+import { useGetMeQuery, useLazyGetMeQuery } from './services/auth';
 import LotterySpinnerGame from './pages/games/ourgame/lottery-spinner-game';
 import LoadingPage from './pages/LoadingPage';
 import AuthCallback from './pages/auth/components/AuthCallback';
 import FlappyJfoxGame from './pages/games/ourgame/flappy-jfox-game/FlappyJfoxGame';
+import { useRef } from 'react';
 const {
   ROOT,
   AUTH,
@@ -33,7 +35,6 @@ const PrivateRoute = ({ children }: {children: React.ReactNode}) => {
 
   const { error, isLoading } = useGetMeQuery({});
   
-
   if (isLoading) {
     return <LoadingPage/>;
   }
@@ -46,10 +47,21 @@ const PrivateRoute = ({ children }: {children: React.ReactNode}) => {
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const token = localStorage.getItem('auth-token');
-  const { error, isLoading } = useGetMeQuery({});
+  const location = useLocation();
+  const [getMe, { isLoading, error }] = useLazyGetMeQuery();
+  const isGetMeCalled = useRef(false);
+
+  if (token && !isGetMeCalled.current) {
+    getMe({});
+    isGetMeCalled.current = true;
+  }
 
   if (isLoading) {
     return <LoadingPage />;
+  }
+
+  if (location.pathname === '/auth/callback') {
+    return children;
   }
 
   if (token && !(error && 'status' in error && error.status === 401)) {
