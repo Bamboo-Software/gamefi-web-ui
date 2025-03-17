@@ -6,6 +6,9 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    allowedHosts: ['iq7j95dqn8gf.share.zrok.io']
+  },
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

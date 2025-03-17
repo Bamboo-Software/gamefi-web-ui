@@ -29,9 +29,10 @@ import { useAuthToken } from "@/hooks/useAuthToken";
 import { LoginSocialActionTypeEnum, SocialTypeEnum } from "@/enums/social-type.enum";
 import ConnectWallet from "@/pages/wallet/components/ConnectWallet";
 import ConnectWalletDialog from "./ConnectWalletDialog";
-import { siteURL } from "@/configs/config";
+import { botUsername, siteURL } from "@/configs/config";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { LoginButton } from '@telegram-auth/react';
 
 const { ROOT } = routes;
 const loginTypes = [
@@ -239,6 +240,19 @@ const LoginForm = () => {
                     }>
                         <ConnectWallet />
                     </ConnectWalletDialog>
+                </div>
+                <div className="flex justify-center">
+                    <LoginButton
+                        botUsername={botUsername}
+                        buttonSize="large"
+                        cornerRadius={10}
+                        showAvatar={true}
+                        lang="en"
+                        onAuthCallback={(data) => {
+                            console.log(data);
+                            // call your backend here to validate the data and sign in the user
+                        }}
+                    />
                 </div>
             </CardContent>
         </Card>)
