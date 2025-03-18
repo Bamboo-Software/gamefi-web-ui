@@ -78,7 +78,7 @@ const UserAvatarDropdown = ({
         </button>
         <button
           onClick={handleLogout}
-          className="w-full text-left px-2 py-1.5 text-sm hover:bg-gray-700/50 rounded-md text-red-400 transition-colors"
+          className="w-full text-left px-2 py-1.5 text-sm hover:bg-gray-700/50 rounded-md text-red-400 transition-colors cursor-pointer"
         >
           Sign out
         </button>

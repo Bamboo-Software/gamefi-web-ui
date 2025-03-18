@@ -47,6 +47,8 @@ const AuthCallback = () => {
 
     if (action) {
       handleLoginOrSync(action);
+    } else {
+      navigate(routes.AUTH);
     }
   }, [location, navigate, setToken]);
 

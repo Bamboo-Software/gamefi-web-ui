@@ -17,12 +17,12 @@ import { LoginSocialActionTypeEnum, SocialTypeEnum } from "@/enums/social-type.e
 import routes from "@/constants/routes";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { toast } from "sonner";
-import { handleApiError } from "@/utils/apiUtils";
 import { useState } from "react";
 import { ConfirmDialog } from "@/components/ui/dialog";
 import ConnectWallet from "../wallet/components/ConnectWallet";
 import ConnectWalletDialog from "../auth/components/ConnectWalletDialog";
 import { siteURL } from "@/configs/config";
+import { handleError } from "@/utils/apiError";
 
 
 interface IConnectedButtonProps {
@@ -52,14 +52,14 @@ const ProfilePage = () => {
   const { google, x, facebook, instagram } = SocialContentDialog();
   const { wallets } = WalletContentDialog()
 
-  const { data, error, isLoading } = useGetMeQuery({})
+  const { data, error, isLoading, refetch } = useGetMeQuery({})
   const userInfo = useAppSelector(
     (state) => (state.authApi.queries["getMe({})"] as { data?: { data: IUser } })?.data?.data
   );
   const { token } = useAuthToken();
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState<SocialTypeEnum | null>(null);
-  const [unsyncSocial, { error: unsyncSocialError }] = useUnsyncSocialMutation();
+  const [unsyncSocial] = useUnsyncSocialMutation();
 
   const isSocialConnected = (socialType: SocialTypeEnum): boolean => {
     return !!userInfo?.socials?.some((s) => s.socialType === socialType);
@@ -202,16 +202,18 @@ const ProfilePage = () => {
       toast.error(`No linked ${provider} account found.`);
       return;
     }
-  
-    const response = await unsyncSocial({
-      socialType: provider,
-      socialId: social.socialId,
-    });
-  
-    if (unsyncSocialError) handleApiError(unsyncSocialError);
-    if (response.data) {
-      toast.success(`Unsync ${provider} succeeded`);
-      window.location.reload();
+    try {
+      
+      const response = await unsyncSocial({
+        socialType: provider,
+        socialId: social.socialId,
+      }).unwrap();
+      if (response.success) {
+        toast.success(`Unsync ${provider} succeeded`);
+        refetch();
+      }
+    } catch (error: unknown) {
+      handleError(error);
     }
   };
 

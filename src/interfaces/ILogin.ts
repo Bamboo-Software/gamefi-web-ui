@@ -1,4 +1,5 @@
 import { LoginSocialActionTypeEnum, SocialTypeEnum } from "@/enums/social-type.enum";
+import { ApiResponse } from "./IApiResponse";
 
 export interface CreateLoginSocialUrlRequest {
   state?: string;
@@ -18,3 +19,5 @@ export interface LoginSocialRequest {
   ref?: string;
   timezone?: string;
 }
+
+export type UnsyncSocialResponse = ApiResponse<boolean>
