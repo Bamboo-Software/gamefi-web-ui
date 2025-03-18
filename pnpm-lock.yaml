@@ -80,6 +80,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.56.2
         version: 5.67.2(react@19.0.0)
+      '@telegram-auth/react':
+        specifier: ^1.0.4
+        version: 1.0.4(react@19.0.0)
       '@types/react-color':
         specifier: ^3.0.13
         version: 3.0.13(@types/react@19.0.10)
@@ -2882,6 +2885,11 @@ packages:
     resolution: {integrity: sha512-6Sa+BVNJWhAV4QHvIqM73norNeGRWGC3ftN0Ix87cmMvI215I1wyJ44KUTt/9a0V9YimfGcg25AITaYVel71Og==}
     peerDependencies:
       react: ^18 || ^19
+
+  '@telegram-auth/react@1.0.4':
+    resolution: {integrity: sha512-VPCIrA6h5+w69S1QvB/k2PphmAA9E8BSqEX4WMSE1P7KxexKl/VRdoTRKSsSx1/In94S+R7FufbjLrRMnEGEKg==}
+    peerDependencies:
+      react: '>=18'
 
   '@testing-library/dom@10.4.0':
     resolution: {integrity: sha512-pemlzrSESWbdAloYml3bAJMEfNh1Z7EduzqPKprCH5S341frlpYnUEW0H72dLxa6IsYr+mPno20GiSm+h9dEdQ==}
@@ -10359,6 +10367,10 @@ snapshots:
       '@tanstack/query-core': 5.67.2
       react: 19.0.0
 
+  '@telegram-auth/react@1.0.4(react@19.0.0)':
+    dependencies:
+      react: 19.0.0
+
   '@testing-library/dom@10.4.0':
     dependencies:
       '@babel/code-frame': 7.26.2
@@ -13549,6 +13561,7 @@ snapshots:
       '@solana/web3.js': 1.98.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       '@tailwindcss/vite': 4.0.11(vite@6.2.0(@types/node@22.13.9)(jiti@2.4.2)(lightningcss@1.29.2))
       '@tanstack/react-query': 5.67.2(react@19.0.0)
+      '@telegram-auth/react': 1.0.4(react@19.0.0)
       '@types/react-color': 3.0.13(@types/react@19.0.10)
       '@wagmi/core': 2.16.5(@tanstack/query-core@5.67.2)(@types/react@19.0.10)(immer@10.1.1)(react@19.0.0)(typescript@5.7.3)(use-sync-external-store@1.4.0(react@19.0.0))(viem@2.23.8(bufferutil@4.0.9)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.2))
       '@walletconnect/ethereum-provider': 2.19.0(@types/react@19.0.10)(bufferutil@4.0.9)(react@19.0.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.24.2)

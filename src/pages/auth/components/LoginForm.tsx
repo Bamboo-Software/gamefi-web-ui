@@ -21,7 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/schemas/auth";
 import { z } from "zod";
 import { ForgotPasswordDialog } from "./ForgotPassword";
-import { useLoginMutation } from "@/services/auth";
+import { useLoginMutation, useLoginSocialMutation } from "@/services/auth";
 import routes from "@/constants/routes";
 import { toast } from "sonner";
 import { LoadingSpinner } from "@/components/spinner";
@@ -29,9 +29,11 @@ import { useAuthToken } from "@/hooks/useAuthToken";
 import { LoginSocialActionTypeEnum, SocialTypeEnum } from "@/enums/social-type.enum";
 import ConnectWallet from "@/pages/wallet/components/ConnectWallet";
 import ConnectWalletDialog from "./ConnectWalletDialog";
-import { siteURL } from "@/configs/config";
+import { botUsername, siteURL } from "@/configs/config";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { LoginButton, TelegramAuthData } from '@telegram-auth/react';
+import { handleError } from "@/utils/apiError";
 
 const { ROOT } = routes;
 const loginTypes = [
@@ -88,6 +90,7 @@ const LoginForm = () => {
         defaultValues: defaultLoginFormValues
     });
     const searchParams = new URLSearchParams(location.search);
+    const [loginSocial] = useLoginSocialMutation();
 
     const onLoginSubmit = async (data: LoginFormValues) => {
         try {
@@ -136,6 +139,27 @@ const LoginForm = () => {
         }
     };
 
+    const handleLoginWithTelegram = async (data: TelegramAuthData) => {
+        const formattedData = {
+            user: JSON.stringify(data),
+        };
+        const queryString = new URLSearchParams(formattedData as unknown as Record<string, string>).toString();
+        try {
+            const response = await loginSocial({
+            socialType: SocialTypeEnum.Telegram,
+            telegramInitData: queryString,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            }).unwrap();
+            if (response && response.data.token) {
+            setToken(response.data.token);
+            window.location.href = ROOT;
+            } else {
+            toast.error("Login Failed!");
+            }
+        } catch (error: unknown) {
+            handleError(error);
+        }
+    }
 
     return (
         <Card className="border-none bg-[#222936]">
@@ -160,7 +184,7 @@ const LoginForm = () => {
                                 </FormItem>
                             )}
                         />
-<FormField
+                        <FormField
                             control={loginForm.control}
                             name="password"
                             render={({ field }) => {
@@ -239,6 +263,18 @@ const LoginForm = () => {
                     }>
                         <ConnectWallet />
                     </ConnectWalletDialog>
+                </div>
+                <div className="flex justify-center">
+                    <LoginButton
+                        botUsername={botUsername}
+                        buttonSize="large"
+                        cornerRadius={10}
+                        showAvatar={true}
+                        lang="en"
+                        onAuthCallback={async (data: TelegramAuthData) => {
+                            handleLoginWithTelegram(data);
+                        }}
+                    />
                 </div>
             </CardContent>
         </Card>)
