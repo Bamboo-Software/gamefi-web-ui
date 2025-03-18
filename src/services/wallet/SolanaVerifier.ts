@@ -1,16 +1,15 @@
 import { SIWXSession } from "@reown/appkit/react";
 import { SIWXVerifier } from "./SIWXVerifier";
 import { SocialTypeEnum } from "@/enums/social-type.enum";
-import { LoginSocialRequest } from "@/interfaces/ILogin";
-import { LoginResponse } from "../auth";
+import { LoginSocialRequest, LoginSocialResponse, SyncSocialResponse } from "@/interfaces/ILogin";
 
 export class SolanaVerifier extends SIWXVerifier {
   public readonly chainNamespace = "solana";
 
-  private loginOrSyncSocialAPI: (data: LoginSocialRequest) => Promise<LoginResponse>;
+  private loginOrSyncSocialAPI: (data: LoginSocialRequest) => Promise<LoginSocialResponse | SyncSocialResponse>;
 
   constructor(
-    loginOrSyncSocialAPI: (data: LoginSocialRequest) => Promise<LoginResponse>
+    loginOrSyncSocialAPI: (data: LoginSocialRequest) => Promise<LoginSocialResponse | SyncSocialResponse>
   ) {
     super();
     this.loginOrSyncSocialAPI = loginOrSyncSocialAPI;

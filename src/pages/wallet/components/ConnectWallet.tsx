@@ -28,7 +28,7 @@ const ConnectWallet = () => {
         ...data,
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       }).unwrap();
-      if (result?.success) {
+      if (result?.data.token) {
         setToken(result.data.token);
         window.location.href = ROOT;
       }
