@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { baseUrl } from "@/configs/config";
 import { InvalidatesTagsEnum } from "@/constants/invalidates-tags";
-import { CreateLoginSocialUrlRequest, LoginSocialRequest, UnsyncSocialResponse } from "@/interfaces/ILogin";
+import { CreateLoginSocialUrlRequest, LoginSocialRequest, LoginSocialResponse, SyncSocialResponse, UnsyncSocialResponse } from "@/interfaces/ILogin";
 import { SocialTypeEnum } from "@/enums/social-type.enum";
 
 const reducerPath = "authApi";
@@ -124,7 +124,7 @@ export const authApi = createApi({
         }
       },
     }),
-    loginSocial: builder.mutation<UserResponse, LoginSocialRequest>({
+    loginSocial: builder.mutation<LoginSocialResponse, LoginSocialRequest>({
       query: (body) => ({
         url: `${endpoint}/login-social`,
         method: "POST",
@@ -158,7 +158,7 @@ export const authApi = createApi({
       }),
       providesTags: [InvalidatesTagsEnum.AUTH],
     }),
-    syncSocial: builder.mutation<LoginResponse, LoginSocialRequest>({
+    syncSocial: builder.mutation<SyncSocialResponse, LoginSocialRequest>({
       query: (body) => ({
         url: `${endpoint}/sync-social`,
         method: "POST",

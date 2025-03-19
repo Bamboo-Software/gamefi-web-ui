@@ -25,10 +25,10 @@ export interface IUser {
   transactionCount?: number;
   referralCount?: number;
   achievementCount?: number;
-  socials?: UserSocial[];
+  socials?: IUserSocial[];
 }
 
-export interface UserSocial {
+export interface IUserSocial {
   id: string;
   socialType?: SocialTypeEnum;
   socialId?: string;
