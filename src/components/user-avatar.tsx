@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { useLocalStorage } from "react-use";
 import {
   Avatar,
@@ -14,10 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "./ui/button";
 import { PageEnum } from "@/enums/page";
-import avatars from "@/assets/icons/avatars";
-import achivements from "@/assets/icons/achivements";
 import { SliderPicker   } from 'react-color';
 import { useTranslation } from "react-i18next";
 
@@ -30,20 +25,12 @@ interface UserAvatarProps {
   onBadgeChange?: (newBadge: string) => void;
 }
 
-const UserAvatar = ({ isUserAvatar, page, userName, userImage, className, onBadgeChange }: UserAvatarProps) => {
-  const [selectedAvatar, setSelectedAvatar] = useLocalStorage("selectedAvatar", avatars[0]);
+const UserAvatar = ({ page, userName, userImage, className }: UserAvatarProps) => {
+  // const [selectedAvatar, setSelectedAvatar] = useLocalStorage("selectedAvatar", avatars[0]);
   const [selectedColor, setSelectedColor] = useLocalStorage("selectedColor", "#AB62FA");
 
   const { t } = useTranslation();
   const canOpenDialog = page === PageEnum.AIRDROP || page === PageEnum.PROFILE;
-  const [value] = useLocalStorage('selectedArchivement', 'foo');
-
-  const [selectedArchivement, setSelectedArchivement] = useState(value);
-
-  const handleArchivementClick = (archivement: string) => {
-    setSelectedArchivement(archivement);
-    if (onBadgeChange) onBadgeChange(archivement); 
-  };
 
   return (
     <Dialog>
@@ -73,13 +60,13 @@ const UserAvatar = ({ isUserAvatar, page, userName, userImage, className, onBadg
             <AvatarImage src={userImage} alt={userName} />
             <AvatarFallback>{userName}</AvatarFallback>
           </Avatar>
-          {isUserAvatar && (
+          {/* {isUserAvatar && (
             <img
               className="absolute top-0 left-0 scale-150"
               src={selectedAvatar}
               alt=""
             />
-          )}
+          )} */}
         </motion.div>
       </DialogTrigger>
       {canOpenDialog && (
@@ -92,7 +79,7 @@ const UserAvatar = ({ isUserAvatar, page, userName, userImage, className, onBadg
             <div>
               <h3 className="text-lg font-semibold mb-4">{t("airdrop.avatar.choose_avatar")}</h3>
               <div className="flex gap-4 gap-y-4 flex-wrap justify-center">
-                {avatars.map((avatar, index) => (
+                {/* {avatars.map((avatar, index) => (
                   <Button
                     variant={"outline"}
                     key={index}
@@ -107,7 +94,7 @@ const UserAvatar = ({ isUserAvatar, page, userName, userImage, className, onBadg
                       className="size-20 rounded-full"
                     />
                   </Button>
-                ))}
+                ))} */}
               </div>
             </div>
             {/* Color Selection */}
@@ -123,7 +110,7 @@ const UserAvatar = ({ isUserAvatar, page, userName, userImage, className, onBadg
             <div>
               <h3 className="text-lg font-semibold mb-4">{t("airdrop.avatar.choose_archivement")}</h3>
               <div className="flex gap-4 gap-y-4 flex-wrap justify-center">
-                {achivements.map((archivement, index) => (
+                {/* {achivements.map((archivement, index) => (
                   <Button
                     variant="outline"
                     key={index}
@@ -140,7 +127,7 @@ const UserAvatar = ({ isUserAvatar, page, userName, userImage, className, onBadg
                       className="w-full h-full"
                     />
                   </Button>
-                ))}
+                ))} */}
               </div>
             </div>
           </div>

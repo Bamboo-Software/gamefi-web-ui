@@ -30,20 +30,27 @@ import UserInfo from "@/components/user-info";
 import group_coins from "@/assets/images/airdrop/group_coins.svg";
 import { useGetUserAirdropQuery } from "@/services/user";
 import LoadingComponent from "@/components/loading-component";
+import { coinsBonusPerLevel, coinsPerTap } from "@/configs/config";
+import { FaArrowsUpToLine } from "react-icons/fa6";
+import Image from "@/components/image";
+import useFPS from "@/hooks/useFPS";
 
 const maxTreeLevel = 6;
 const levelExpRequirements = [100, 250, 400, 600, 800, 1200];
 const MAX_WATERING_PER_DAY = 3;
 const MAX_TAB_COUNT = 30;
 // const POLLING_INTERVAL = 30000;
-const COIN_PER_TAP = 0.001
 const RESET_AFTER = 3000;
+
+const coinBonusArray = new String(coinsBonusPerLevel).split(',');
+
 const AirdropPage = () => {
   const [isWatering, setIsWatering] = useState(false);
   const [tapCount, setTapCount] = useState<number>(1);
   const tapTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [tapCoins, setTapCoins] = useState(0);
   const { t } = useTranslation();
+  const fps = useFPS()
 
   const [waterTree, { data: levelData }] = useHandleWaterRewardTreeMutation({});
   const [handleTabCoin] = useHandleTapCoinMutation()
@@ -63,9 +70,10 @@ const AirdropPage = () => {
   });
 
 
-  console.log(userAirdrop);
+  console.log("FPS: ",fps);
   
   const { pointsBalance = 0 } = userInfo || {};
+  const coinTabLevel = (+coinsPerTap + +coinBonusArray[treeData?.data?.treeLevel || 0])
 
   const airdropContents: AirdropBadgeProps[] = [
     {
@@ -73,7 +81,7 @@ const AirdropPage = () => {
       description: "Complete tasks to earn rewards and tokens",
       imageUrl: income,
       color: "#E77C1B",
-      bgColor: "#29221C",
+      bgColor: "#E77C1B95",
       amount: formatCompactNumber(passiveIncome || 0)
     },
     {
@@ -81,7 +89,7 @@ const AirdropPage = () => {
       description: "Complete tasks to earn rewards and tokens",
       imageUrl: spinner,
       color: "#65DEB8",
-      bgColor: "#243C48",
+      bgColor: "#65DEB895",
       amount: lotterySpinner
     },
     {
@@ -89,7 +97,7 @@ const AirdropPage = () => {
       description: "Complete tasks to earn rewards and tokens",
       imageUrl: friends,
       color: "#6D89FF",
-      bgColor: "#2A334A",
+      bgColor: "#6D89FF95",
       amount: inviteFriends
     },
     {
@@ -97,7 +105,7 @@ const AirdropPage = () => {
       description: "Complete tasks to earn rewards and tokens",
       imageUrl: tasks,
       color: "#EB886D",
-      bgColor: "#47313D",
+      bgColor: "#EB886D95",
       amount: earnTasks
     },
     {
@@ -105,7 +113,7 @@ const AirdropPage = () => {
       description: "Complete tasks to earn rewards and tokens",
       imageUrl: achivements,
       color: "#5A2DFD",
-      bgColor: "#47313D",
+      bgColor: "#5A2DFD95",
       amount: achievements
     },
   ]
@@ -166,29 +174,28 @@ const AirdropPage = () => {
 
   const handleCoinTreeClick = useCallback(async () => {
     try {
-      // dispatch(playSound(SoundType.COIN_TREE_SOUND));
-      if (tapCount < MAX_TAB_COUNT) {
-        setTapCount(prev => prev + 1);
+        if (tapCount < MAX_TAB_COUNT) {
+            setTapCount(prev => prev + 1);
 
-      } else {
-        setTapCount(MAX_TAB_COUNT)
-      }
-      handleTabCoin({ tapCount }).unwrap();
-      setTapCoins(tapCoins + COIN_PER_TAP)
+        } else {
+            setTapCount(MAX_TAB_COUNT)
+        }
+        handleTabCoin({ tapCount }).unwrap();
+        // getUserInfo({}).unwrap();
+        setTapCoins(tapCoins + coinTabLevel)
+        if (tapTimeoutRef.current) {
+            clearTimeout(tapTimeoutRef.current);
+        }
 
-      if (tapTimeoutRef.current) {
-        clearTimeout(tapTimeoutRef.current);
-      }
-
-      tapTimeoutRef.current = setTimeout(() => {
-        setTapCount(1);
-      }, RESET_AFTER);
-      // toast.success(t('airdrop.success.shake'));
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        tapTimeoutRef.current = setTimeout(() => {
+            setTapCount(1);
+        }, RESET_AFTER);
+        // toast.success(t('airdrop.success.shake'));
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast.error("Hello");
+        toast.error(t('airdrop.errors.shake_failed', { hours: 6 }));
     }
-  }, [handleTabCoin, tapCoins, tapCount]);
+}, [coinTabLevel, handleTabCoin, t, tapCoins, tapCount]);
 
   if(isUserAirdropLoading) {
     return <LoadingComponent/>
@@ -201,15 +208,11 @@ const AirdropPage = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
-      <div className="w-full min-h-screen">
-        <h1 className="border-l-4 border-[#E77C1B] text-gray-50 font-semibold text-xl pl-5 mb-6">
-          Airdrop
-        </h1>
-
-        <div className="flex flex-col lg:flex-row gap-6">
+      <div className="w-full h-full overflow-hidden">
+      <div className="flex flex-col lg:flex-row gap-16 h-full">
           {/* Left Section - Fox Game */}
-          <div className="w-full lg:w-1/2">
-            <div className="flex flex-col w-full bg-[#2A334A] border border-[#759CFF] bg-opacity-70 rounded-xl px-4 pt-2">
+          <div className="w-full lg:w-1/2 mb-6 rounded-2xl overflow-auto">
+          <div className="flex flex-col w-full bg-opacity-70 rounded-xl px-4">
               <motion.div
                 initial={{ y: -100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -217,10 +220,10 @@ const AirdropPage = () => {
                   duration: 0.5,
                   ease: "easeOut"
                 }}
-                className='w-full  mt-2 h-16 bg-cover bg-center bg-no-repeat' style={{
+                className='w-full h-14 bg-cover bg-center bg-no-repeat' style={{
                   backgroundImage: `url(${bg_airdrop_header1})`
                 }}>
-                <div className='w-full h-16 bg-cover z-10 bg-center bg-no-repeat' style={{
+                <div className='w-full h-15 bg-cover z-10 bg-center bg-no-repeat' style={{
                   backgroundImage: `url(${bg_airdrop_header})`
                 }}>
                   <div className='flex w-full flex-row justify-between items-center px-2'>
@@ -231,10 +234,10 @@ const AirdropPage = () => {
                         <img className='size-8' src={coin} alt="" />
                         <div className='flex  flex-col justify-between'>
                           <p className='text-sm truncate'>
-                            +3.6
+                            10K
                           </p>
                           <div className='flex flex-row justify-center items-center'>
-                            <p className='text-xs text-gray-400 truncate'>/hour</p>
+                          <FaArrowsUpToLine className='text-xs text-gray-400 truncate'/>
 
                           </div>
                         </div>
@@ -258,7 +261,7 @@ const AirdropPage = () => {
                   </div>
                 </div>
               </motion.div>
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full p-4 space-y-4 sm:space-y-0">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full ">
                 {/* Progress Section */}
                 <div className="flex flex-col space-y-2 w-full ">
                   <div className="relative w-full h-2.5 mt-2 bg-[#1D2C42] rounded-full overflow-hidden">
@@ -303,7 +306,7 @@ const AirdropPage = () => {
                   </div>
                   <div className='flex flex-row space-x-2 justify-center items-center'>
                     <img src={thunder} alt="" />
-                    <p className='text-lg font-medium'>+3.6/hour</p>
+                    <p className='text-md font-medium'>+{coinTabLevel} / per tap</p>
                     <AirdropDialog
                       title={"How to earn coins?"}
                       icon={<IoHelpCircleSharp className='size-6' />}
@@ -366,27 +369,29 @@ const AirdropPage = () => {
                       }
                     />
                   </div>
-                  <div id="wallet-icon" className="flex flex-row space-x-2 justify-center items-center">
-                    <img src={group_coins} alt="" />
-                    <p className="text-2xl font-bold">
-                      {typeof tapCoins === 'number' ? tapCoins.toFixed(3) : tapCoins}
+                  <div  className="flex flex-row space-x-2 justify-center items-center">
+                    <Image src={group_coins} className="" alt="" width={40} height={30} />
+                    <p className="text-xl font-bold">
+                      {typeof tapCoins === 'number' ? tapCoins.toFixed(0) : tapCoins}
                     </p>
                   </div>
                 </div>
               </div>
               {/* Fox Section */}
-              <div className="flex justify-center items-center">
+              <div className="flex justify-center items-center flex-1 p-4">
                 <CoinFox
                   isWatering={isWatering}
                   foxLevel={foxState.treeLevel}
                   onClick={handleCoinTreeClick}
+                  coinTabLevel={coinTabLevel}
+                  targetId="wallet-icon"
                 />
               </div>
             </div>
           </div>
 
           {/* Right Section - Badges Grid */}
-          <div className="w-full lg:w-1/2">
+          <div className="w-full lg:w-1/2 mt-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
               {airdropContents.map((airdrop, index) => (
                 <motion.div

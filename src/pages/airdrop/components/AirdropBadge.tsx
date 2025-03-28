@@ -46,9 +46,9 @@ const AirdropBadge = ({
   return (
 <motion.div
   className={cn(
-    `overflow-hidden bg-[${bgColor}] rounded-2xl relative shadow-lg border-2 border-solid`
+    `overflow-hidden  rounded-2xl relative shadow-lg border-2 border-solid`
   )}
-  style={{ borderColor: color }}
+  style={{ borderColor: color, backgroundColor: bgColor }}
   variants={imageVariants}
   initial="initial"
   whileHover="hover">
@@ -61,13 +61,13 @@ const AirdropBadge = ({
 
       <CardContent className="p-4">
         <div className="flex flex-row justify-between items-center mb-2 text-[#FFC800] font-semibold">
-            <h3 className="text-lg text-gray-200">{title}</h3>
+            <h3 className="text-lg text-gray-50">{title}</h3>
             <div className="flex flex-row justify-between items-center space-x-0.5">
                 <p className="font-bold">{amount}</p>
                 <img className="size-6" src={coin} alt="Coin" />
             </div>
         </div>
-        <p className="text-sm text-gray-400">{description}</p>
+        <p className="text-sm text-gray-100">{description}</p>
       </CardContent>
     </motion.div>
   );

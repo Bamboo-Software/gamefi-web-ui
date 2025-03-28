@@ -16,7 +16,7 @@ const AuthForm = () => {
     const [selectedTab, setSelectedTab] = useState("login");
 
     return (
-        <div className="w-4/5 flex flex-col items-center justify-start mt-4 px-4 h-auto overflow-auto">
+        <div className="w-full md:w-4/5 flex flex-col items-center justify-start mt-4 px-4 h-auto overflow-auto">
                         <img src={logo} className="size-24" alt="logo" srcSet="" />
 
             <p className="font-bold text-2xl text-gray-200 mb-4">

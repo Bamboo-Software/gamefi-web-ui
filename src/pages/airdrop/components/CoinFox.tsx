@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import coin from '@/assets/icons/coin.svg';
 import jupiter_fox from '@/assets/images/airdrop/jupiter.svg';
 import salmon from '@/assets/icons/salmon.svg';
+import Image from '@/components/image';
 
 interface CoinPosition {
   id: number;
@@ -16,15 +17,15 @@ interface CoinFoxProps {
   foxLevel: number;
   onClick?: () => void;
   targetId?: string;
+  coinTabLevel?: number;
 }
 
 const getRandomPosition = () => {
-  const centerX = window.innerWidth * 0.15; // Approximate center of the fox
-  const centerY = window.innerHeight * 0.2; // Approximate center of the fox
+  const centerX = window.innerWidth * 0.15; 
+  const centerY = window.innerHeight * 0.2; 
   
-  // Random offset from center (smaller radius)
   const radius = Math.min(window.innerWidth, window.innerHeight) * 0.15;
-  const angle = Math.random() * Math.PI * 2; // Random angle
+  const angle = Math.random() * Math.PI * 2; 
   
   return {
     x: centerX + Math.cos(angle) * radius * Math.random(),
@@ -32,7 +33,7 @@ const getRandomPosition = () => {
   };
 };
 
-const CoinFox: React.FC<CoinFoxProps> = ({ isWatering, foxLevel, onClick, targetId }) => {
+const CoinFox: React.FC<CoinFoxProps> = ({ isWatering, foxLevel, onClick, targetId, coinTabLevel }) => {
   const [coins, setCoins] = useState<CoinPosition[]>(() =>
     Array.from({ length: 3 }, (_, i) => ({
       id: Date.now() + i,
@@ -71,11 +72,11 @@ const CoinFox: React.FC<CoinFoxProps> = ({ isWatering, foxLevel, onClick, target
       setCoins(prevCoins => {
         // Only add new coins if we have fewer than 5 non-animating coins
         const nonAnimatingCoins = prevCoins.filter(c => !c.isAnimating);
-        if (nonAnimatingCoins.length >= 5) return prevCoins;
+        if (nonAnimatingCoins.length >= 3) return prevCoins;
         
         // Add new coins to reach 5 total non-animating coins
         const newCoins = Array.from(
-          { length: 5 - nonAnimatingCoins.length }, 
+          { length: 3 - nonAnimatingCoins.length }, 
           (_, i) => ({
             id: Date.now() + i,
             ...getRandomPosition(),
@@ -140,7 +141,7 @@ const CoinFox: React.FC<CoinFoxProps> = ({ isWatering, foxLevel, onClick, target
     <div className="relative w-full flex items-center justify-center">
       {/* Fox animation */}
       <motion.div
-        className="w-full my-1"
+        className="w-full"
         animate={isJumping ? { y: -30 } : { y: 0 }}
         transition={{ duration: 0.2, ease: 'easeOut' }}
       >
@@ -163,7 +164,7 @@ const CoinFox: React.FC<CoinFoxProps> = ({ isWatering, foxLevel, onClick, target
               </defs>
             </svg>
           </motion.div>
-          <img className="w-[90%] ml-[5%]" src={jupiter_fox} alt="fox" style={{ filter: 'url(#glow)' }} />
+          <Image className="w-[80%] ml-[10%]" src={jupiter_fox} alt="fox" style={{ filter: 'url(#glow)' }} />
         </div>
       </motion.div>
 
@@ -253,7 +254,7 @@ const CoinFox: React.FC<CoinFoxProps> = ({ isWatering, foxLevel, onClick, target
             exit={{ opacity: 0 }}
             transition={{ duration: 1, ease: 'easeOut', times: [0, 0.1, 0.9, 1] }}
           >
-            +0.001
+            +{coinTabLevel}
           </motion.div>
         ))}
       </AnimatePresence>

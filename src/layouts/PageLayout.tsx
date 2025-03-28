@@ -22,36 +22,35 @@ import Dropdown from "@/components/dropdown";
 import UserAvatarDropdownProps from "@/components/avatar";
 import { useGetMeQuery } from "@/services/auth";
 import LoadingComponent from "@/components/loading-component";
-import SelectLanguage from "@/components/select-language";
 // import { useLocalStorage } from "react-use";
-import i18n from "@/utils/i18n";
 import { useNavigate } from "react-router-dom";
 
 
 const { MISSIONS, GAMES, FRIENDS, ROOT, PROFILE, AUTH } = routes
 const PageLayout = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { data, error, isLoading } = useGetMeQuery({}, { refetchOnFocus: true })
-  const [currentLang, setCurrentLang] = useState(() => {
-    const langCode = i18n.language || localStorage.getItem('i18nextLng') || 'en';
-    return langCode.split('-')[0].toUpperCase();
-  });
+
   const navigate = useNavigate();
-  // Listen for language changes
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   useEffect(() => {
-    const handleLanguageChanged = () => {
-      const langCode = i18n.language || localStorage.getItem('i18nextLng') || 'en';
-      setCurrentLang(langCode.split('-')[0].toUpperCase());
+    const handleClickOutside = (event: MouseEvent) => {
+      const sidebar = document.getElementById('mobile-sidebar');
+      if (sidebar && !sidebar.contains(event.target as Node) && isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+      }
     };
 
-    // Set up event listener for language changes
-    i18n.on('languageChanged', handleLanguageChanged);
-    
-    // Clean up event listener
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      i18n.off('languageChanged', handleLanguageChanged);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [isMobileMenuOpen]);
 
   const goBackToLogin = () => {
     localStorage.removeItem('auth-token');
@@ -60,8 +59,8 @@ const PageLayout = () => {
   if (isLoading) return <LoadingComponent />;
   if (error) return (
     <div className="flex flex-col space-y-2 justify-center items-center h-screen w-full">
-       <p className="font-semibold text-xl">Failed To Get Data</p>
-       <Button onClick={goBackToLogin}>Back To Login</Button>
+      <p className="font-semibold text-xl">Failed To Get Data</p>
+      <Button onClick={goBackToLogin}>Back To Login</Button>
     </div>
   );
   const { avatar, firstName, lastName } = data.data;
@@ -124,84 +123,102 @@ const PageLayout = () => {
 
 
   return (
-    <div className="flex p-5 bg-[#040817] w-full h-screen overflow-hidden">
-    <div className={`h-screen ${isCollapsed ? 'w-20' : 'w-64'} transition-all duration-300 flex-shrink-0`}>
-      <Sidebar isCollapsed={isCollapsed} navbars={navbars} />
-    </div>
-    <div className="flex flex-col w-full h-screen overflow-y-auto overflow-x-hidden">
-      <div className="sticky top-0 z-50 border-b-1 pb-4 flex flex-row items-center justify-between bg-[#040817] shadow-md px-2">
-        <div className="flex flex-row items-center">
-          <Button
-            onClick={toggleCollapse}
-            className="size-10 shadow-[0_0_15px_rgba(0,0,0,0.5)] border border-gray-700/50 bg-[#040817] hover:bg-gray-600"
-          >
-            {isCollapsed ? <TbLayoutSidebarRightCollapse className="text-gray-200 size-5" /> : <TbLayoutSidebarLeftCollapse className="text-gray-200 size-5" />}
-          </Button>
-          <div className="hidden md:flex flex-row items-center gap-4 lg:gap-8 ml-2 lg:ml-5">
-            <Link to={ROOT} className="text-gray-200! font-semibold text-sm whitespace-nowrap">About Us</Link>
-            <Link to={ROOT} className="text-gray-200! font-semibold text-sm whitespace-nowrap">Introduction</Link>
-            <Dropdown
-              offset={4} 
-              triggers={
-                <div className="flex items-center">
-                  <span className="text-gray-200 font-semibold text-sm transition-colors whitespace-nowrap">Follow Us</span>
-                  <FaAngleDown className="text-gray-200 ml-1" />
-                </div>
-              } 
-              contents={
-                <div className="py-2">
-                  {socialLinks.map((link) => (
-                    <a
-                      key={link.name}
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex flex-row items-center text-gray-200! justify-start space-x-2 font-semibold px-4 py-2 mx-2 my-1 text-sm hover:bg-gray-700/50 rounded-sm transition-colors"
-                    >
-                      <img src={link.icon} className="size-6 mr-2" alt="" />
-                      <span className="whitespace-nowrap">{link.name}</span>
-                    </a>
-                  ))}
-                </div>
-              } 
-            />
+    <div style={{
+      backgroundImage: `url('/images/bg_web.png')`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+    }} className="flex p-5 w-full h-screen overflow-hidden">
+      <div className={`h-auto hidden md:block ${isCollapsed ? 'w-20' : 'w-64'} transition-all duration-300 flex-shrink-0`}>
+        <Sidebar isCollapsed={isCollapsed} navbars={navbars} />
+      </div>
+      <div className="flex flex-col w-full h-screen  overflow-x-hidden">
+        <div
+          id="mobile-sidebar"
+          className={`fixed md:hidden top-0 left-0 h-full z-50 transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}
+        >
+          <div className="h-full w-64 p-5">
+            <Sidebar isCollapsed={false} navbars={navbars} />
           </div>
         </div>
 
-        <div className="text-gray-200 flex items-center">
-          <FaRegBell className="size-5 mx-4" />
-          
-          {/* Language Selector */}
-          <Dropdown
-            offset={4}
-            triggers={
-              <div className="flex items-center mx-4 cursor-pointer">
-                <div className="flex items-center gap-1">
-                  <span className="text-sm font-medium">{currentLang}</span>
-                  <FaAngleDown className="text-gray-300 text-xs" />
+        {/* Overlay for mobile sidebar */}
+        {isMobileMenuOpen && (
+          <div
+            className="fixed md:hidden inset-0 bg-black bg-opacity-50 z-40"
+            onClick={() => setIsMobileMenuOpen(false)}
+          ></div>
+        )}
+
+        <div className="flex flex-col w-full h-screen overflow-x-hidden">
+          <div className="sticky top-0 z-30 py-2 flex flex-row items-center justify-between rounded-lg px-2">
+            <div className="flex flex-row items-center">
+              {/* Mobile menu button */}
+              <Button
+                onClick={toggleMobileMenu}
+                className="md:hidden size-10 shadow-2xl bg-transparent hover:bg-gray-600"
+              >
+                <TbLayoutSidebarRightCollapse className="text-gray-50 size-5" />
+              </Button>
+
+              {/* Desktop collapse button */}
+              <Button
+                onClick={toggleCollapse}
+                className="hidden md:flex size-10 shadow-2xl bg-transparent hover:bg-gray-600"
+              >
+                {isCollapsed ? <TbLayoutSidebarRightCollapse className="text-gray-50 size-5" /> : <TbLayoutSidebarLeftCollapse className="text-gray-50 size-5" />}
+              </Button>
+
+              {/* Rest of the header content */}
+              <div className="hidden md:flex flex-row items-center gap-4 lg:gap-8 ml-2 lg:ml-5">
+                <div className="hidden md:flex flex-row items-center gap-4 lg:gap-8 ml-2 lg:ml-5">
+                  <Link to={ROOT} className="text-gray-50! font-semibold text-sm whitespace-nowrap">About Us</Link>
+                  <Link to={ROOT} className="text-gray-50! font-semibold text-sm whitespace-nowrap">Introduction</Link>
+                  <Dropdown
+                    offset={4}
+                    triggers={
+                      <div className="flex items-center">
+                        <span className="text-gray-50 font-semibold text-sm transition-colors whitespace-nowrap">Follow Us</span>
+                        <FaAngleDown className="text-gray-50 ml-1" />
+                      </div>
+                    }
+                    contents={
+                      <div className="py-2">
+                        {socialLinks.map((link) => (
+                          <a
+                            key={link.name}
+                            href={link.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex flex-row items-center text-gray-50! justify-start space-x-2 font-semibold px-4 py-2 mx-2 my-1 text-sm hover:bg-gray-700/50 rounded-sm transition-colors"
+                          >
+                            <img src={link.icon} className="size-6 mr-2" alt="" />
+                            <span className="whitespace-nowrap">{link.name}</span>
+                          </a>
+                        ))}
+                      </div>
+                    }
+                  />
                 </div>
               </div>
-            }
-            contents={
-              <div className="py-2 fixed top-0 right-0 min-w-32">
-                <SelectLanguage/>
-              </div>
-            }
-          />
-          
-          <UserAvatarDropdownProps 
-            imageUrl={avatar} 
-            userName={firstName && lastName ? `${firstName} ${lastName}` : "User"} 
-            // pointsBalance={pointsBalance} 
-            fallback={firstName && lastName ? `${String(firstName).charAt(0)}${String(lastName).charAt(0)}` : "JF"} 
-          />
+            </div>
+            <div className="text-gray-50 flex items-center">
+              <FaRegBell className="size-5 mx-4" />
+              <UserAvatarDropdownProps
+                imageUrl={avatar}
+                userName={firstName && lastName ? `${firstName} ${lastName}` : "User"}
+                // pointsBalance={pointsBalance} 
+                fallback={firstName && lastName ? `${String(firstName).charAt(0)}${String(lastName).charAt(0)}` : "JF"}
+              />
+            </div>
+          </div>
+          <div className="flex-1 md:my-2 max-w-full overflow-y-auto">
+            <Outlet />
+          </div>
         </div>
       </div>
-      <div className="flex-1 md:my-8 max-w-full">
-        <Outlet />
-      </div>
     </div>
-  </div>
   )
 }
 
