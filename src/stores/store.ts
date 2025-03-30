@@ -10,6 +10,7 @@ import { tasksApi } from '@/services/tasks';
 import { lotteryApi } from '@/services/lottery';
 import { rewardTreeApi } from '@/services/reward-tree';
 import { airdropApi } from '@/services/airdrop';
+import {gamesApi} from '@/services/game';
 
 export const listenerMiddleware = createListenerMiddleware({
   onError: () => console.error('An error listener middleware occurred'),
@@ -27,6 +28,7 @@ const reducer = {
   [lotteryApi.reducerPath]: lotteryApi.reducer,
   [rewardTreeApi.reducerPath]: rewardTreeApi.reducer,
   [airdropApi.reducerPath]: airdropApi.reducer,
+  [gamesApi.reducerPath]: gamesApi.reducer,
 };
 
 export const store = configureStore({
@@ -40,7 +42,8 @@ export const store = configureStore({
       tasksApi.middleware,
       lotteryApi.middleware,
       rewardTreeApi.middleware,
-      airdropApi.middleware
+      airdropApi.middleware,
+      gamesApi.middleware,
     )
     .prepend(listenerMiddleware.middleware)
 });

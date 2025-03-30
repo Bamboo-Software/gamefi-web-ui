@@ -36,6 +36,7 @@ const LotterySpinnerHistory: React.FC<LotterySpinnerHistoryProps> = ({ contents}
                     title={airdrop.title}
                     content={airdrop.content}
                     dialog={airdrop.dialog}
+                    titleClassName={"font-semibold text-lg"}
                 />
             ))}
         </motion.div>

@@ -27,7 +27,7 @@ interface UserAvatarProps {
 
 const UserAvatar = ({ page, userName, userImage, className }: UserAvatarProps) => {
   // const [selectedAvatar, setSelectedAvatar] = useLocalStorage("selectedAvatar", avatars[0]);
-  const [selectedColor, setSelectedColor] = useLocalStorage("selectedColor", "#AB62FA");
+  const [selectedColor, setSelectedColor] = useLocalStorage("selectedColor", "#24E6F3");
 
   const { t } = useTranslation();
   const canOpenDialog = page === PageEnum.AIRDROP || page === PageEnum.PROFILE;

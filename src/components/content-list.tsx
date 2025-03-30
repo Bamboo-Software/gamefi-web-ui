@@ -40,6 +40,7 @@ const ContentList: React.FC<ContentListProps> = ({ contents, variant = 'default'
                     content={airdrop.content}
                     dialog={airdrop.dialog}
                     variant={variant}
+                    className='bg-[#05A2C6CC] border-1 border-[#24E6F399]'
                 />
             ))}
         </motion.div>

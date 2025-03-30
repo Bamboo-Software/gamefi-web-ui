@@ -14,11 +14,12 @@ import social_icon from "@/assets/icons/social_icon.svg";
 import referral_icon from "@/assets/icons/referral_icon.svg";
 import { SocialTaskTypeEnum, MissionStatus } from "@/enums/mission";
 import { fb_icon, ig_icon, tele_icon, x_icon, youtube_icon } from "@/assets/icons/socials";
-import bg_mission from "@/assets/images/missions/bg_mission.svg"
+import bg_mission from "@/assets/images/missions/bg_missions.png"
 import { useClaimTaskMutation, useGetMissionsQuery, useStartTaskMutation } from "@/services/tasks";
 import LoadingPage from "../LoadingPage";
-
-
+import Image from "@/components/image";
+import { useNavigate } from "react-router-dom";
+import routes from "@/constants/routes";
 const statusStyles = {
   [MissionStatus.OPEN]: "bg-gradient-to-br from-blue-500 to-blue-700 text-white",
   [MissionStatus.READY_TO_CLAIM]: "bg-gradient-to-br from-green-500 to-green-700 text-white",
@@ -108,13 +109,14 @@ const MissionsPage = () => {
   const { data, error, isLoading, refetch } = useGetMissionsQuery({ page: 1, limit: 50 });
   const [startTask] = useStartTaskMutation();
   const [claimTask] = useClaimTaskMutation();
+  const navigate = useNavigate();
 
   if (isLoading) return <LoadingPage />;
   if (error) return <p>Error loading missions</p>;
 
   const processMissions = (missions: Mission[]) => {
     return missions.map(mission => {
-      const handleAction = () => {
+      const handleAction = (mission: Mission) => {
         const status = mapApiStatusToUI(mission.status);
         if (status === MissionStatus.OPEN) {
           startTask({ userTaskId: mission._id })
@@ -122,13 +124,23 @@ const MissionsPage = () => {
             .then(() => refetch())
             .catch(console.error);
           if (mission.task.type === MissionTypeEnum.SOCIAL) {
-            window.open(mission.task.actionUrl, '_blank');
+            window.open(mission.task.actionUrl, "_blank");
+          }
+          if (mission.task.type === MissionTypeEnum.REFERRAL) {
+            navigate(routes.FRIENDS);
           }
         } else if (status === MissionStatus.READY_TO_CLAIM) {
           claimTask({ userTaskId: mission._id })
             .unwrap()
             .then(() => refetch())
             .catch(console.error);
+        } else {
+          if (mission.task.type === MissionTypeEnum.SOCIAL) {
+            window.open(mission.task.actionUrl, "_blank");
+          }
+          if (mission.task.type === MissionTypeEnum.REFERRAL) {
+            navigate(routes.FRIENDS);
+          }
         }
       };
 
@@ -155,7 +167,7 @@ const MissionsPage = () => {
             title={mission.title}
             description={mission.description}
             dialogClassName="max-w-sm p-5 space-y-2 rounded-lg bg-background shadow-lg"
-            actionBtn={getMissionStatusButton(mapApiStatusToUI(mission.status), handleAction)}
+            actionBtn={getMissionStatusButton(mapApiStatusToUI(mission.status), () => handleAction(mission))}
           />
         )
       };
@@ -172,17 +184,12 @@ const MissionsPage = () => {
       <div className="px-8">
         <p className="border-l-4 border-[#E77C1B] text-gray-50 font-semibold text-xl pl-5">Misions</p>
 
-        <div className="w-full relative mt-6 bg-[#2F3543] rounded-2xl">
-          <div
-            className="rounded-t-2xl w-full h-48 bg-cover bg-center bg-no-repeat"
-            style={{ backgroundImage: `url(${bg_mission})` }}
-          >
-            <div className="flex pt-10 flex-col justify-center items-center text-center px-4">
-              <p className="text-2xl font-bold text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] [-webkit-text-stroke:1px_#000]">
-                Missions Daily
-              </p>
-              <p className="text-white text-xl mt-2 max-w-2xl drop-shadow-[0.5px_2px_1px_rgba(0,0,0,0.8)] [-webkit-text-stroke:0.3px_#000]">
-                Take on exciting challenges, complete tasks, and unlock amazing rewards as you progress through your missions.
+        <div className="w-full relative mt-6 rounded-2xl">
+          <div className="rounded-t-2xl w-full my-10 h-48 bg-cover bg-center bg-no-repeat" >
+              <div className="flex  flex-col justify-center items-center text-center px-4">
+            <Image src={bg_mission} className="size-32" alt="game_bg" width={270} height={180} loading={'lazy'} />
+              <p className="text-2xl mt-4 font-bold text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)] [-webkit-text-stroke:1px_#000]">
+              Missions Daily
               </p>
             </div>
           </div>
