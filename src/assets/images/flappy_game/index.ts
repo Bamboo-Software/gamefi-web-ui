@@ -20,9 +20,14 @@ import pipe_green_top from './pipe-green-top.png';
 import pipe_red_bot from './pipe-red-bottom.png';
 import pipe_red_top from './pipe-red-top.png';
 import restart_btn from './restart-button.png';
-
+import leaderboard_btn from './leaderboard-button.png';
+import leaderboard_list from './leaderboard-list.png';
+import leaderboard_close_btn from './leaderboard-close-button.png';
 
 export {
+    leaderboard_btn,
+    leaderboard_list,
+    leaderboard_close_btn,
         background_day,
         background_night,
         bird_blue,

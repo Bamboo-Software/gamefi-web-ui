@@ -1,6 +1,5 @@
 import coin from "@/assets/icons/coin.svg";
 import transaction from "@/assets/icons/transaction_icon.svg";
-import friends from "@/assets/icons/friends_icon.svg";
 import achivements from "@/assets/icons/cup_icon.svg";
 import x from "@/assets/icons/x.svg";
 import google from "@/assets/icons/google.svg";
@@ -8,7 +7,10 @@ import facebook from "@/assets/icons/facebook.svg";
 import instagram from "@/assets/icons/instagram.svg";
 import { useTranslation } from "react-i18next";
 import wallets from "@/assets/images/profile/wallet.svg";
-
+import star from "@/assets/icons/star.svg";
+export const ProfileContent = () => {
+  
+}
 interface IContentDialog {
   imgContent: string;
   title: string;
@@ -51,7 +53,7 @@ export const ProfileContentDialog = (): Record<
       },
     },
     friends: {
-      imgContent: friends,
+      imgContent: star,
       title: t("profile.friends.title"),
       dialog: {
         title: t("profile.friends.popup.title"),

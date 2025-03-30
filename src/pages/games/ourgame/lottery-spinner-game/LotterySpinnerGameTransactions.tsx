@@ -55,7 +55,7 @@ const LotterySpinnerGameTransactions = () => {
         <p className='text-[#FFC800] font-semibold text-3xl'>
           +{transaction.earnPoints}
         </p>
-        <p className='text-sm text-gray-400'>
+        <p className='text-sm text-gray-100'>
           {new Date(transaction.createdAt).toLocaleDateString(Intl.DateTimeFormat().resolvedOptions().timeZoneName, {
             day: '2-digit',
             month: '2-digit',
@@ -69,7 +69,7 @@ const LotterySpinnerGameTransactions = () => {
   }))
 
   return (
-    <div className="w-full flex flex-col items-center justify-center mt-2 px-2">
+    <div className="w-full flex flex-col items-center overflow-scroll justify-center mt-2 px-2">
       <motion.p
         className="text-2xl font-semibold"
         initial={{ opacity: 0, y: -20 }}
@@ -86,7 +86,7 @@ const LotterySpinnerGameTransactions = () => {
           hasMore={hasMore}
           loader={isFetching && <LoadingComponent />}
           endMessage={
-            <p className="text-center  text-gray-500">
+            <p className="text-center  text-gray-100">
               {/* {t('common.no_more_data')} */}
               No More Data
             </p>

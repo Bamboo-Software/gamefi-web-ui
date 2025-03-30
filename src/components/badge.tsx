@@ -29,7 +29,7 @@ const BadgeModal: React.FC<BadgeModalProps> = ({
   onClick, 
 }) => {
   return (
-    <div onClick={onClick} className={`flex flex-row w-full items-center justify-between py-4 px-6 bg-[#41434E] shadow-2xl rounded-md ${className}`}>
+    <div onClick={onClick} className={`flex flex-row w-full items-center justify-between py-4 px-6 shadow-2xl rounded-md ${className}`}>
       <div className={`flex flex-row items-center justify-start ${containerClassName}`}>
         <div className="relative inline-block">
             <img 
@@ -39,7 +39,7 @@ const BadgeModal: React.FC<BadgeModalProps> = ({
             />
         </div>
         <div className="flex ml-3 flex-col items-start justify-start">
-          <p className={`font-normal text-sm text-white ${titleClassName}`}>{title}</p>
+          <p className={`font-normal text-sm ${titleClassName}`}>{title}</p>
           {content && (
             <div className={`text-sm text-gray-300 text-justify ${contentClassName}`}>
               {content}

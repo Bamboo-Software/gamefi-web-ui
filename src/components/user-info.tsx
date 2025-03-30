@@ -15,8 +15,8 @@ const UserInfo = ({type="default"}: {type: UserInfoType}) => {
     
     const { firstName, lastName, avatar, pointsBalance } = userInfo?.data || {};
   return (
-    <div className='mt-3 flex flex-row'>
-    <div className="relative size-11 rounded-full flex items-center justify-center bg-gradient-to-b from-[#24E6F3] to-[#0F8D98] border-gradient">
+    <div className='flex flex-row'>
+    <div className="relative size-10 rounded-full flex items-center justify-center bg-gradient-to-b from-[#24E6F3] to-[#0F8D98] border-gradient">
       <div className="relative size-8 rounded-full flex items-center justify-center bg-white border-gradient">
       <Avatar>
           <AvatarImage src={avatar} alt={""} />
@@ -30,13 +30,13 @@ const UserInfo = ({type="default"}: {type: UserInfoType}) => {
     </div>
     <div className='flex ml-2 flex-col justify-between'>
       <p className='text-sm truncate font-semibold'>
-        {`${firstName} ${lastName}`.length > 8 ? `${firstName} ${lastName}`.slice(0, 10) + '...' : `${firstName} ${lastName}`}
+        {`${firstName} ${lastName}`.length > 15 ? `${firstName} ${lastName}`.slice(0, 10) + '...' : `${firstName} ${lastName}`}
       </p>
 
       <div className='flex flex-row justify-start items-start'>
         {type == 'other' && <>
             <img className="size-4" src={coin} alt="" />
-            <p className='text-xs text-gray-100 truncate'>{typeof pointsBalance === 'number' ? pointsBalance.toFixed(3) : pointsBalance}</p>
+            <p className='text-xs text-gray-100 truncate'>{typeof pointsBalance === 'number' ? pointsBalance.toFixed(0) : pointsBalance}</p>
         </>}
         <p className='text-xs text-gray-400 ml-0.5 truncate'>LVL</p>
         <div className='bg-[#24E6F3] size-4 rounded-sm ml-1 flex justify-center items-center'>
