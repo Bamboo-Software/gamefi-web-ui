@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useRef, useEffect } from 'react';
-import { AnimatePresence, motion, useAnimation } from 'framer-motion';
+import React, { useState, useRef } from 'react';
+import { motion, useAnimation } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import invite_btn from "@/assets/images/friends/invite_btn.png";
 import { HiChevronDoubleUp } from "react-icons/hi";
@@ -35,11 +35,11 @@ const CustomSpinner: React.FC<CustomSpinnerProps> = ({
     spinTime = 5000,
     onResult,
     onFinishSpin,
-    onReset,
-    spinButtonText = 'Spin',
+    // onReset,
+    // spinButtonText = 'Spin',
     disabled = false,
     className = '',
-    buttonClassName = '',
+    // buttonClassName = '',
 }) => {
     const [spinning, setSpinning] = useState(false);
     //   const [result, setResult] = useState<SpinnerItem | null>(null);
@@ -146,8 +146,8 @@ const CustomSpinner: React.FC<CustomSpinnerProps> = ({
                             // Create zigzag path for lightningspinnerImage
                             const generateLightningPath = () => {
                                 let path = `M ${startX} ${startY} `;
-                                let currentX = startX;
-                                let currentY = startY;
+                                // let currentX = startX;
+                                // let currentY = startY;
                                 const segments = fps > 30 ? 4 + Math.floor(Math.random() * 3) : 2;
                                 const outwardDistance = size / 2 + 30;
                                 
@@ -161,8 +161,8 @@ const CustomSpinner: React.FC<CustomSpinnerProps> = ({
                                     const zigzagY = targetY + (Math.random() * 20 - 10);
                                     
                                     path += `L ${zigzagX} ${zigzagY} `;
-                                    currentX = zigzagX;
-                                    currentY = zigzagY;
+                                    // currentX = zigzagX;
+                                    // currentY = zigzagY;
                                 }
                                 
                                 return path;
