@@ -81,7 +81,6 @@ class MinesweeperSceneClass extends Phaser.Scene {
   private timeBonus = 0;
   private revealedCells = 0;
   private totalNonMineCells = 0;
-  private leaderboard: any[] = [];
   private textPool: Phaser.GameObjects.Text[] = [];
   private onScoreChange: (score: number) => void;
   private onGameEnd: (won: boolean, score: number, duration: number) => void;
@@ -102,7 +101,6 @@ class MinesweeperSceneClass extends Phaser.Scene {
       this.cellSize = 32 * this.scaleRatio;
     }
     this.setupDifficulty();
-    this.leaderboard = this.game.registry.get('leaderboard') || [];
   }
   updateScore() {
     const totalScore = this.score + this.timeBonus;
@@ -682,7 +680,7 @@ const { data, isError, isFetching } = useGetGameLeaderboardQuery({
   const handleGameEnd = async (won: boolean, finalScore: number, duration: number) => {
     setScore({ score: finalScore, duration });
     // dispatch(playSound(SoundType.END_MIXED))
-
+    if (!won) return;
     const securePayload = await generateSecurePayload({
       gameId: searchParams.get('id') || '',
       score: finalScore - 500,

@@ -34,10 +34,10 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { handleError } from '@/utils/apiError';
 import { toast } from 'sonner';
 import routes from '@/constants/routes';
-import { useAppDispatch } from '@/stores/store';
+// import { useAppDispatch } from '@/stores/store';
 // import { playSound } from '@/stores/sound/soundSlice';
 // import { SoundType } from '@/enums/sound';
-import { generateSecurePayload } from '@/utils/game';
+// import { generateSecurePayload } from '@/utils/game';
 
 // const { END_MIXED,JUMP } = SoundType;
 const BIRD_JUMP_VELOCITY = -800;
@@ -63,7 +63,7 @@ export default function FlappyJfoxGame() {
     const gameInstance = useRef<Phaser.Game | null>(null);
     const { width, height } = useWindowSize();
     const [searchParams] = useSearchParams();
-    const [handleGameScoreSubmit] = useHandleGameScoreSubmitMutation({});
+    // const [handleGameScoreSubmit] = useHandleGameScoreSubmitMutation({});
     // const dispatch = useAppDispatch();
 
     const [gameSize, setGameSize] = useState({ width: 0, height: 0 });
@@ -172,7 +172,6 @@ export default function FlappyJfoxGame() {
     let score: string | number
     let pipePool: Phaser.GameObjects.GameObject[] = []
     let activePipes: Phaser.GameObjects.GameObject[] = []
-    let nearestPipe: Phaser.GameObjects.GameObject | null
 
     const navigate = useNavigate();
     const { GAMES } = routes
@@ -280,7 +279,6 @@ export default function FlappyJfoxGame() {
         currentGapSize = INITIAL_GAP_SIZE * scaleRatio; // Scale gap size
         currentPipeSpawnInterval = INITIAL_PIPE_SPAWN_INTERVAL;
         activePipes = [];
-        nearestPipe = null;
         gameStartTime = 0;
         gamePlayTime = 0;
 
@@ -477,13 +475,13 @@ export default function FlappyJfoxGame() {
         messageInitial.visible = true;
 
         // Add timer text with scaled font size
-        const textStyle = {
-            fontFamily: 'Arial',
-            fontSize: `${18 * scaleRatio}px`,
-            color: '#ffffff',
-            stroke: '#000000',
-            strokeThickness: 3 * scaleRatio
-        };
+        // const textStyle = {
+        //     fontFamily: 'Arial',
+        //     fontSize: `${18 * scaleRatio}px`,
+        //     color: '#ffffff',
+        //     stroke: '#000000',
+        //     strokeThickness: 3 * scaleRatio
+        // };
         
         // Scale other UI elements
         timerText = this.add.text(assets.scene.width, 70 * scaleRatio, 'Time: 0s', {
@@ -592,7 +590,6 @@ export default function FlappyJfoxGame() {
             }
         }
         let minDistance = Number.MAX_VALUE;
-        nearestPipe = null;
         // Update pipes
         pipesGroup.children.iterate((pipe: Phaser.GameObjects.GameObject): any | null => {
             if (!pipe || !pipe.active) return;
@@ -615,7 +612,6 @@ export default function FlappyJfoxGame() {
                 const distance = gameObject.x - 60; // Player x position is 60
                 if (distance > 0 && distance < minDistance) {
                     minDistance = distance;
-                    nearestPipe = pipe;
                 }
             }
         });
@@ -675,7 +671,6 @@ export default function FlappyJfoxGame() {
             }
             pipePool = [];
             activePipes = [];
-            nearestPipe = null;
         };
     }, [gameSize.width, gameSize.height]); 
 
