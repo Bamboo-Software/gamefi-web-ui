@@ -33,7 +33,7 @@ import LoadingComponent from "@/components/loading-component";
 import { coinsBonusPerLevel, coinsPerTap } from "@/configs/config";
 import { FaArrowsUpToLine } from "react-icons/fa6";
 import Image from "@/components/image";
-import useFPS from "@/hooks/useFPS";
+// import useFPS from "@/hooks/useFPS";
 
 const maxTreeLevel = 6;
 const levelExpRequirements = [100, 250, 400, 600, 800, 1200];
@@ -50,7 +50,7 @@ const AirdropPage = () => {
   const tapTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [tapCoins, setTapCoins] = useState(0);
   const { t } = useTranslation();
-  const fps = useFPS()
+  // const fps = useFPS()
 
   const [waterTree, { data: levelData }] = useHandleWaterRewardTreeMutation({});
   const [handleTabCoin] = useHandleTapCoinMutation()
@@ -70,7 +70,7 @@ const AirdropPage = () => {
   });
 
 
-  console.log("FPS: ",fps);
+  // console.log("FPS: ",fps);
   
   const { pointsBalance = 0 } = userInfo || {};
   const coinTabLevel = (+coinsPerTap + +coinBonusArray[treeData?.data?.treeLevel || 0])

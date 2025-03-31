@@ -50,13 +50,13 @@ const UserAvatarDropdown = ({
   };
 
   const content = (
-    <div className="w-auto m-2 bg-transparent rounded-md shadow-lg">
+    <div className="w-auto p-2 rounded-md shadow-lg">
       <div className="flex items-center gap-3 p-2">
         <Avatar className="h-10 w-10 shrink-0">
           <AvatarImage src={imageUrl} alt={userName} />
           <AvatarFallback>{fallback}</AvatarFallback>
         </Avatar>
-        <div className="flex flex-col min-w-0">
+        <div className="flex flex-col">
           <span className="text-sm font-medium truncate" title={userName}>
             {userName}
           </span>
@@ -69,16 +69,16 @@ const UserAvatarDropdown = ({
 
         </div>
       </div>
-      <div className="mt-2 border-t border-gray-700/50">
+      <div className="mt-2 ">
         <button
           onClick={gotoProfile}
-          className="w-full text-left px-2 py-1.5 text-sm hover:bg-gray-700/50 rounded-md transition-colors"
+          className="w-full text-left px-2 py-1.5 text-sm hover:bg-gray-700/50 rounded-md font-semibold transition-colors"
         >
           Profile
         </button>
         <button
           onClick={handleLogout}
-          className="w-full text-left px-2 py-1.5 text-sm hover:bg-gray-700/50 rounded-md text-red-400 transition-colors cursor-pointer"
+          className="w-full text-left px-2 py-1.5 text-sm hover:bg-gray-700/50 rounded-md font-semibold transition-colors cursor-pointer"
         >
           Sign out
         </button>
@@ -88,10 +88,11 @@ const UserAvatarDropdown = ({
   return (
     <div className="text-gray-200">
       <Dropdown
+        contentClassName="bg-gradient-to-b from-[#47C3E6]/95 via-[#47C3E6]/95 via-[#32BAE0]/95  via-[#13A0C8]/95 to-[#24E6F3]/95"
         position="right"
         triggers={trigger}
         contents={content}
-        className="z-50"
+        className=""
         offset={4}
       />
     </div>

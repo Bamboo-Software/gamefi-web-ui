@@ -18,6 +18,7 @@ import LoadingPage from './pages/LoadingPage';
 import AuthCallback from './pages/auth/components/AuthCallback';
 import FlappyJfoxGame from './pages/games/ourgame/flappy-jfox-game/FlappyJfoxGame';
 import { useRef } from 'react';
+import MinesweeperGame from './pages/games/ourgame/minesweeper/MinesweeperGame';
 const {
   ROOT,
   AUTH,
@@ -27,7 +28,8 @@ const {
   PROFILE,
 
   GAMES_LOTTERY_SPINNER,
-  GAMES_FLAPPY_JFOX 
+  GAMES_FLAPPY_JFOX,
+  GAMES_MINESWEEPER
 } = routesPath;
 
 const PrivateRoute = ({ children }: {children: React.ReactNode}) => {
@@ -87,6 +89,8 @@ const routes = createBrowserRouter([
       { path: PROFILE, element: <ProfilePage /> },
       { path: GAMES_FLAPPY_JFOX, element: <FlappyJfoxGame /> },
       { path: GAMES_LOTTERY_SPINNER, element: <LotterySpinnerGame/>},
+      { path: GAMES_MINESWEEPER, element: <MinesweeperGame /> },
+
     ],
   },
   {

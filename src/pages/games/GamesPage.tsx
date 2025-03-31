@@ -264,7 +264,9 @@ const GamesPage = () => {
                       </Button>
                     }
                   />
+                  <div className="absolute -bottom-4 right-3">
                   {game.endDate && new Date(game.endDate) > new Date() && <CountdownTimer endDate={game.endDate} />}
+                  </div>
                 </div>
               ) : (
                 <Button
