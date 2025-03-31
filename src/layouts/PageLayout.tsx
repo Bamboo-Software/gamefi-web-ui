@@ -13,18 +13,14 @@ import friends from "@/assets/icons/friends_icon.svg"
 import profile from "@/assets/icons/profile_icon.svg"
 import logo from "@/assets/icons/logo.svg"
 import { FaAngleDown } from "react-icons/fa6";
-import youtube from "@/assets/icons/youtube.svg"
-import x from "@/assets/icons/x2.svg"
-import instagram from "@/assets/icons/instagram.svg"
-import tiktok from "@/assets/icons/tiktok.svg"
-import { FaRegBell } from "react-icons/fa";
+// import { FaRegBell } from "react-icons/fa";
 import Dropdown from "@/components/dropdown";
 import UserAvatarDropdownProps from "@/components/avatar";
 import { useGetMeQuery } from "@/services/auth";
 import LoadingComponent from "@/components/loading-component";
 // import { useLocalStorage } from "react-use";
 import { useNavigate } from "react-router-dom";
-
+import { socialLinks, webLinks } from "@/constants/social-links";
 
 const { MISSIONS, GAMES, FRIENDS, ROOT, PROFILE, AUTH } = routes
 const PageLayout = () => {
@@ -98,33 +94,12 @@ const PageLayout = () => {
     }
   ];
 
-  const socialLinks = [
-    {
-      name: "YouTube",
-      href: "https://youtube.com/@yourhandle",
-      icon: youtube
-    },
-    {
-      name: "X (Twitter)",
-      href: "https://x.com/yourhandle",
-      icon: x
-    },
-    {
-      name: "Instagram",
-      href: "https://instagram.com/yourhandle",
-      icon: instagram
-    },
-    {
-      name: "Tiktok",
-      href: "https://tiktok.com/yourhandle",
-      icon: tiktok
-    },
-  ];
+  
 
 
   return (
     <div style={{
-      backgroundImage: `url('/images/bg_web.png')`,
+      backgroundImage: `url('/images/bg_web.webp')`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
@@ -173,9 +148,10 @@ const PageLayout = () => {
               {/* Rest of the header content */}
               <div className="hidden md:flex flex-row items-center gap-4 lg:gap-8 ml-2 lg:ml-5">
                 <div className="hidden md:flex flex-row items-center gap-4 lg:gap-8 ml-2 lg:ml-5">
-                  <Link to={ROOT} className="text-gray-50! font-semibold text-sm whitespace-nowrap">About Us</Link>
-                  <Link to={ROOT} className="text-gray-50! font-semibold text-sm whitespace-nowrap">Introduction</Link>
+                  <Link to={webLinks} className="text-gray-50! font-semibold text-sm whitespace-nowrap">About Us</Link>
+                  <Link to={webLinks} className="text-gray-50! font-semibold text-sm whitespace-nowrap">Introduction</Link>
                   <Dropdown
+                  contentClassName="bg-gradient-to-b from-[#47C3E6]/95 via-[#47C3E6]/95 via-[#32BAE0]/95  via-[#13A0C8]/95 to-[#24E6F3]/95"
                     offset={4}
                     triggers={
                       <div className="flex items-center">
@@ -197,6 +173,7 @@ const PageLayout = () => {
                             <span className="whitespace-nowrap">{link.name}</span>
                           </a>
                         ))}
+                        
                       </div>
                     }
                   />
@@ -204,7 +181,7 @@ const PageLayout = () => {
               </div>
             </div>
             <div className="text-gray-50 flex items-center">
-              <FaRegBell className="size-5 mx-4" />
+              {/* <FaRegBell className="size-5 mx-4" /> */}
               <UserAvatarDropdownProps
                 imageUrl={avatar}
                 userName={firstName && lastName ? `${firstName} ${lastName}` : "User"}

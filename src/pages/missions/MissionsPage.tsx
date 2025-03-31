@@ -7,19 +7,23 @@ import { FaCirclePlay } from "react-icons/fa6";
 // import { useTranslation } from 'react-i18next';
 import MissionsList from "./missionsList/MissionsList";
 // import { useGetMissionsQuery, useStartTaskMutation, useClaimTaskMutation } from "@/services/tasks";
-import { MissionTypeEnum } from "@/enums/mission";
+import { AchievementTaskTypeEnum, MissionTypeEnum, OtherTaskTypeEnum } from "@/enums/mission";
 import achievement_icon from "@/assets/icons/cup_icon.svg";
 import game_icon from "@/assets/icons/game_icon2.svg";
-import social_icon from "@/assets/icons/social_icon.svg";
-import referral_icon from "@/assets/icons/referral_icon.svg";
+import social_icon from "@/assets/icons/social_icon.png";
+import referral_icon from "@/assets/icons/referral_icon.png";
 import { SocialTaskTypeEnum, MissionStatus } from "@/enums/mission";
-import { fb_icon, ig_icon, tele_icon, x_icon, youtube_icon } from "@/assets/icons/socials";
+import  { tiktok_icon, fb_icon, ig_icon, tele_icon, x_icon, youtube_icon } from "@/assets/icons/socials";
 import bg_mission from "@/assets/images/missions/bg_missions.png"
+import login from "@/assets/images/missions/login.svg";
 import { useClaimTaskMutation, useGetMissionsQuery, useStartTaskMutation } from "@/services/tasks";
 import LoadingPage from "../LoadingPage";
 import Image from "@/components/image";
 import { useNavigate } from "react-router-dom";
 import routes from "@/constants/routes";
+import phantom_icon from "@/assets/icons/phantom.png";
+
+
 const statusStyles = {
   [MissionStatus.OPEN]: "bg-gradient-to-br from-blue-500 to-blue-700 text-white",
   [MissionStatus.READY_TO_CLAIM]: "bg-gradient-to-br from-green-500 to-green-700 text-white",
@@ -69,24 +73,51 @@ const getMissionButton = (missionStatus: MissionStatus) => {
 
 const getPlatformIcon = (taskType: string, socialTaskType?: string) => {
   switch (taskType) {
-    case MissionTypeEnum.ACHIEVEMENT: return achievement_icon;
-    case MissionTypeEnum.GAME: return game_icon;
-    case MissionTypeEnum.REFERRAL: return referral_icon;
+    case AchievementTaskTypeEnum.DAILY_LOGIN_STREAK ||
+      AchievementTaskTypeEnum.POINT_MILESTONE_100000 ||
+      AchievementTaskTypeEnum.POINT_MILESTONE_500000:
+      return login;
+    case MissionTypeEnum.ACHIEVEMENT:
+      return achievement_icon;
+    case MissionTypeEnum.GAME:
+      return game_icon;
+    case MissionTypeEnum.REFERRAL:
+      return referral_icon;
     case MissionTypeEnum.SOCIAL:
       switch (socialTaskType) {
-        case SocialTaskTypeEnum.YOUTUBE_SUBSCRIBE: return youtube_icon;
-        case SocialTaskTypeEnum.YOUTUBE_WATCH: return youtube_icon;
-        case SocialTaskTypeEnum.TWITTER_FOLLOW: return x_icon;
-        case SocialTaskTypeEnum.TWITTER_RETWEET: return x_icon;
-        case SocialTaskTypeEnum.FACEBOOK_LIKE: return fb_icon;
-        case SocialTaskTypeEnum.FACEBOOK_SHARE: return fb_icon;
-        case SocialTaskTypeEnum.INSTAGRAM_FOLLOW: return ig_icon;
-        case SocialTaskTypeEnum.INSTAGRAM_LIKE: return ig_icon;
-        case SocialTaskTypeEnum.TELEGRAM_JOIN: return tele_icon;
-        default: return social_icon;
+        case SocialTaskTypeEnum.YOUTUBE_WATCH:
+        case SocialTaskTypeEnum.YOUTUBE_SUBSCRIBE:
+          return youtube_icon;
+        case SocialTaskTypeEnum.X_FOLLOW:
+        case SocialTaskTypeEnum.X_RETWEET:
+        case SocialTaskTypeEnum.X_LIKE_COMMENT:
+        case SocialTaskTypeEnum.X_SHARE_RETWEET:
+          return x_icon;
+        case SocialTaskTypeEnum.FACEBOOK_LIKE:
+        case SocialTaskTypeEnum.FACEBOOK_SHARE:
+          return fb_icon;
+        case SocialTaskTypeEnum.INSTAGRAM_FOLLOW:
+        case SocialTaskTypeEnum.INSTAGRAM_LIKE:
+        case SocialTaskTypeEnum.INSTAGRAM_LIKE_COMMENT:
+        case SocialTaskTypeEnum.INSTAGRAM_SHARE:
+          return ig_icon;
+        case SocialTaskTypeEnum.TELEGRAM_JOIN:
+          return tele_icon;
+        case SocialTaskTypeEnum.TIKTOK_WATCH:
+          return tiktok_icon;
+        default:
+          return social_icon;
       }
-    case MissionTypeEnum.OTHER: return task;
-    default: return task;
+    case MissionTypeEnum.OTHER:
+      switch (socialTaskType) {
+        case OtherTaskTypeEnum.PHANTOM_CONNECT:
+          return phantom_icon;
+        default:
+          return task;
+      }
+
+    default:
+      return task;
   }
 };
 

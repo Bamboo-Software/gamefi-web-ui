@@ -6,6 +6,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar";
+import { formatCompactUser } from "@/utils/formatCompactNumber";
 type UserInfoType = 'default' | 'other'; 
 const UserInfo = ({type="default"}: {type: UserInfoType}) => {
     const { data: userInfo  } = useGetMeQuery(undefined, { refetchOnFocus: true});
@@ -36,7 +37,7 @@ const UserInfo = ({type="default"}: {type: UserInfoType}) => {
       <div className='flex flex-row justify-start items-start'>
         {type == 'other' && <>
             <img className="size-4" src={coin} alt="" />
-            <p className='text-xs text-gray-100 truncate'>{typeof pointsBalance === 'number' ? pointsBalance.toFixed(0) : pointsBalance}</p>
+            <p className='text-xs text-gray-100 truncate'>{formatCompactUser(pointsBalance)}</p>
         </>}
         <p className='text-xs text-gray-400 ml-0.5 truncate'>LVL</p>
         <div className='bg-[#24E6F3] size-4 rounded-sm ml-1 flex justify-center items-center'>

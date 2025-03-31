@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/dialog";
 
 interface IMissionDialog {
-    title: string;
-    description: string;
+    title: string | React.ReactNode;
+    description: string | React.ReactNode;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
 }
@@ -24,10 +24,10 @@ const MissionDialog = ({ title, description, ...props }: IMissionDialog) => {
             <DialogContent className={dialogClassName}>
                 <DialogHeader>
                     {dialogIcon}
-                    <DialogTitle className="text-lg">
+                    <DialogTitle className="text-md font-semibold pb-3 mb-2 border-b border-[#ffffff40]">
                         {title}
                     </DialogTitle>
-                    <DialogDescription className="text-sm py-2">{description}</DialogDescription>
+                    <DialogDescription className="text-sm py-2 text-gray-100">{description}</DialogDescription>
                     {actionBtn}
                 </DialogHeader>
             </DialogContent>

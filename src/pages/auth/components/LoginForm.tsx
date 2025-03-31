@@ -1,7 +1,7 @@
 import google from "@/assets/icons/google.svg";
 import x from "@/assets/icons/x.svg";
-import facebook from "@/assets/icons/socials/fb_icon.svg";
-import instagram from "@/assets/icons/socials/ig_icon.svg";
+import facebook from "@/assets/icons/socials/fb_icon.png";
+import instagram from "@/assets/icons/socials/ig_icon.png";
 // import metamask from "@/assets/icons/metamask.svg";
 // import phantom from "@/assets/icons/phantom.svg";
 import wallets from "@/assets/images/profile/wallet.svg"
