@@ -8,6 +8,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   server: {
     port: 5000,
+    allowedHosts: ['goetqgmqh9ag.share.zrok.io']
   },
   plugins: [react(), tailwindcss()],
   resolve: {

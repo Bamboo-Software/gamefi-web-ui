@@ -13,6 +13,14 @@ const AuthCallback = () => {
   const [details, setDetails] = useState<string>("");
   const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
   const [countdown, setCountdown] = useState(5);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isIOS = /iphone|ipad|ipod/i.test(userAgent);
+    const isAndroid = /android/i.test(userAgent);
+    setIsMobile(isIOS || isAndroid || /mobile/i.test(userAgent));
+  }, []);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -60,7 +68,7 @@ const AuthCallback = () => {
     }
   }, [location, navigate, setToken]);
 
-  // Countdown effect
+  // Countdown effect - only for desktop
   useEffect(() => {
     if (isSuccess !== null && countdown > 0) {
       const timer = setTimeout(() => {
@@ -69,6 +77,21 @@ const AuthCallback = () => {
       return () => clearTimeout(timer);
     }
   }, [countdown, isSuccess]);
+
+  const handleBackToTelegram = () => {
+    window.location.href = "tg://";
+  };
+
+  const getRedirectPath = () => {
+    const searchParams = new URLSearchParams(location.search);
+    const action = searchParams.get("action") as LoginSocialActionTypeEnum;
+
+    if (action === LoginSocialActionTypeEnum.Login) {
+      return isSuccess ? routes.ROOT : routes.AUTH;
+    } else {
+      return routes.PROFILE;
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900 p-4">
@@ -98,14 +121,24 @@ const AuthCallback = () => {
             <p className="text-sm text-gray-400">
               Redirecting in {countdown} second{countdown !== 1 ? "s" : ""}...
             </p>
-            <button
-              onClick={() => navigate(isSuccess ? routes.ROOT : routes.AUTH)}
-              className={`mt-4 px-4 py-2 rounded-md ${
-                isSuccess ? "bg-green-600 hover:bg-green-500 text-white" : "bg-red-600 hover:bg-red-500 text-white"
-              } transition-colors`}
-            >
-              Go Now
-            </button>
+            <div className="flex flex-col gap-2 w-full mt-4">
+              <button
+                onClick={() => navigate(getRedirectPath())}
+                className={`px-4 py-2 rounded-md ${
+                  isSuccess ? "bg-green-600 hover:bg-green-500 text-white" : "bg-red-600 hover:bg-red-500 text-white"
+                } transition-colors`}
+              >
+                {isSuccess ? "Go to Home" : "Try Again"}
+              </button>
+              {isMobile && (
+                <button
+                  onClick={handleBackToTelegram}
+                  className="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-500 text-white transition-colors"
+                >
+                  Back to Telegram
+                </button>
+              )}
+            </div>
           </div>
         )}
       </div>
