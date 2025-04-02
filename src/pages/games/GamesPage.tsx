@@ -24,20 +24,23 @@ import { useNavigate } from "react-router-dom";
 import { handleError } from "@/utils/apiError";
 import coin from "@/assets/icons/coin.png";
 import CountdownTimer from "@/components/countdown";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-interface IGame {
-  img: string;
-  gameId?: string;
-  title: string;
-  color: string;
-  handle?: (id: string) => void;
-  intro?: string;
-  active: boolean;
-  spent: string;
-  period?: string;
-  startDate?: Date;
-  endDate?: Date;
-}
+// interface IGame {
+//   img: string;
+//   gameId?: string;
+//   title: string;
+//   color: string;
+//   handle?: (id: string) => void;
+//   intro?: string;
+//   active: boolean;
+//   spent: string;
+//   period?: string;
+//   startDate?: Date;
+//   endDate?: Date;
+//   prizeTable?: React.ReactNode; 
+//   prizes?: {id: string, minRank: number, maxRank: number, prizeName: string}[];
+// }
 
 enum GameEnum {
   LOTTERY_SPINNER = "Lottery Spinner",
@@ -77,6 +80,35 @@ const GamesPage = () => {
   //   toast.error(t('game.alerts.coming_soon_alert'));
   // }
 
+  const awardsTable = (prizes: any) => {
+    return (
+      <div className="flex flex-col justify-center items-center w-full">
+        <p className="text-xl my-2 text-gray-100 font-semibold">Awards Season</p>
+        <div className="max-h-[30vh] w-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+          <Table className="text-gray-100">
+            <TableHeader className="sticky top-0">
+              <TableRow className="border border-gray-100 sticky top-0">
+                <TableHead className="text-gray-100 text-center bg-[#1594B8]/95 z-10 font-semibold">Rank</TableHead>
+                <TableHead className="text-gray-100 text-center bg-[#1594B8]/95 z-10 font-semibold">Prize Name</TableHead>
+                {/* <TableHead className="text-gray-100">Note</TableHead> */}
+              </TableRow>
+            </TableHeader>
+            <TableBody className="border border-gray-100">
+              {prizes?.map((prize: any) => (
+                <TableRow key={prize.id} className="border border-gray-100">
+                  <TableCell>{prize.minRank == prize.maxRank ? (`#${prize.minRank}`) : (`#${prize.minRank} - #${prize.maxRank}`)}</TableCell>
+                  <TableCell>{prize.prizeName}</TableCell>
+                  {/* <TableCell>{user.email}</TableCell> */}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
+
+    )
+  }
+
   const baseGames = [
     {
       img: wheel,
@@ -105,6 +137,7 @@ const GamesPage = () => {
       spent: anotherGamePointRequired,
       intro: `Test your skills in the iconic Flappy JFOX! Each attempt costs ${anotherGamePointRequired} coins, giving you the chance to soar to the top of the leaderboard. Compete fiercely and aim for greatness! At the end of the season, the best players will win exclusive rewards, with a prize pool totaling $500. Are you ready to flap your way to victory?`,
       active: true,
+      prizeTable: awardsTable(data?.data?.[1]?.prizes)
     },
     {
       img: jupiter_fox,
@@ -120,6 +153,7 @@ const GamesPage = () => {
       spent: anotherGamePointRequired,
       intro: `Dive into the classic Minesweeper and outsmart the grid! Each game requires ${anotherGamePointRequired} coins to play, challenging your strategy and precision. Climb the rankings to secure your place among the elite. At season's end, top performers will share incredible prizes, with the total rewards reaching $500. Think you've got what it takes? Start sweeping now!`,
       active: true,
+      prizeTable: awardsTable(data?.data?.[2]?.prizes)
     },
     {
       img: sudoku,
@@ -133,10 +167,11 @@ const GamesPage = () => {
       },
       spent: anotherGamePointRequired,
       active: false,
+      prizeTable: awardsTable(data?.data?.[3]?.prizes)
     },
   ];
 
-  const games: IGame[] = baseGames.map((game) => {
+  const games: any[] = baseGames.map((game) => {
     const matchingPeriod = allGamesPeriod?.data.find((periodGame) => periodGame._id === game.gameId);
 
     return {
@@ -230,11 +265,14 @@ const GamesPage = () => {
               {game.active === true ? (
                 <div className="flex flex-col items-end">
                   <GameDialog
-                    title={game.title}
+                    title={<p className="text-xl">{game.title}</p>}
                     dialogClassName={`border-4 w-[90%] bg-gradient-to-b from-[#1594B8]/95 via-[#47C3E6]/95 via-[#32BAE0]/95 via-[#1594B8]/95 via-[#13A0C8]/95 to-[#24E6F3]/95 rounded-xl`}
                     description={
                       <div className="w-full text-center">
                         <article className="text-justify mb-5 text-gray-100">{game?.intro}</article>
+                        <div className="my-4">
+                        {game?.prizeTable}
+                        </div>
                         <div className="flex flex-row justify-center items-center space-x-2">
                           {game.title !== GameEnum.LOTTERY_SPINNER && (
                             <LeaderboardDialog id={game.gameId || ""} title={`${game.title} Leaderboard`} endDate={game.endDate} />

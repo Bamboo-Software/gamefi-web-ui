@@ -179,8 +179,9 @@ const MissionsPage = () => {
         imgContent: getPlatformIcon(mission.task.type, mission.task.socialTaskType),
         title: mission.title,
         content: (
-          <div className='flex flex-row justify-center items-center text-[#FFC800] font-semibold'>
-            <img className="size-6 mt-1" src={coin} alt="coin" />+{mission.pointsReward}
+          <div className='flex flex-row mt-1 justify-center items-center text-[#FFC800] font-semibold'>
+            <img className="size-6" src={coin} alt="coin" />
+            <span>+{mission.pointsReward}</span>
           </div>
         ),
         dialog: (
@@ -197,7 +198,7 @@ const MissionsPage = () => {
             dialogIcon={<img className="size-8" src={getPlatformIcon(mission.task.achievementTaskType, mission.task.socialTaskType)} alt="icon" />}
             title={mission.title}
             description={mission.description}
-            dialogClassName="max-w-sm p-5 space-y-2 rounded-lg bg-background shadow-lg"
+            dialogClassName="max-w-sm p-5 space-y-2 rounded-lg bg-gradient-to-b from-[#1594B8]/95 via-[#47C3E6]/95 via-[#32BAE0]/95 via-[#1594B8]/95 via-[#13A0C8]/95 to-[#24E6F3]/95 shadow-lg"
             actionBtn={getMissionStatusButton(mapApiStatusToUI(mission.status), () => handleAction(mission))}
           />
         )
