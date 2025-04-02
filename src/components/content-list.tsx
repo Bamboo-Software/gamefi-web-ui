@@ -34,6 +34,7 @@ const ContentList: React.FC<ContentListProps> = ({ contents, variant = 'default'
         >
             {contents.map((airdrop, index) => (
                 <BadgeModal
+                    titleClassName={"font-medium"}
                     key={index}
                     imgContent={airdrop.imgContent}
                     title={airdrop.title}

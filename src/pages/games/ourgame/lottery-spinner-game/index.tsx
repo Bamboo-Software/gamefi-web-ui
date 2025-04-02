@@ -39,6 +39,8 @@ import { SettingKeyEnum } from '@/enums/setting';
 import { SettingValueType } from '@/interfaces/ISetting';
 import { FaAngleRight } from "react-icons/fa6";
 import routes from '@/constants/routes';
+import Trunk from './Trunk';
+import { TransactionTypeEnum } from '@/enums/transactions';
 
 
 const { GAMES } = routes;
@@ -63,6 +65,8 @@ const LotterySpinnerGame = () => {
     const [spinResult, setSpinResult] = useState('');
     const [helpOpen, setHelpOpen] = useState(false);
     const [transactionOpen, setTransactionOpen] = useState(false);
+    const [trunkOpen, setTrunkOpen] = useState(false);
+
     const navigate = useNavigate();
     // const dispatch = useAppDispatch();
     const { t } = useTranslation();
@@ -160,7 +164,7 @@ const LotterySpinnerGame = () => {
 
     return (
         <div>
-            <div className='flex flex-row items-center'>
+            <div className='flex ml-4 flex-row items-center'>
             <Link to={GAMES} className="border-l-4 border-[#E77C1B] text-gray-50 font-semibold text-xl pl-5">Games</Link>
             <FaAngleRight className='mx-5'/>
             <Link to={GAMES} className=" text-gray-50 font-semibold text-xl">Lottery Spinner</Link>
@@ -184,10 +188,10 @@ const LotterySpinnerGame = () => {
                             </div>
                             <button
                                 onClick={() => setTransactionOpen(true)}
-                                className="w-1/4 mt-2 h-16 relative flex flex-col justify-center items-center rounded-lg bg-cover bg-center bg-no-repeat"
+                                className="w-1/4 mt-2 h-20 relative flex flex-col justify-center items-center rounded-lg bg-cover bg-center bg-no-repeat"
                                 style={{ backgroundImage: `url(${leader_board1})` }}
                             >
-                                <Image className="absolute -top-0" width={50} height={80} src={history} alt="leader board" />
+                                <Image className="absolute -top-0" width={45} height={40} src={history} alt="leader board" />
                                 <p className="text-sm font-medium mt-1"> {t("game.our_game.lottery_game.history.title")}</p>
                             </button>
                         </div>
@@ -198,18 +202,17 @@ const LotterySpinnerGame = () => {
                             transition={{ duration: 0.5 }}
                         >
                             <div className="flex flex-row items-center justify-between w-full">
-                                <motion.div
-                                    className="cursor-pointer">
-                                    {/* <GiSpellBook size={28} className="" /> */}
-                                </motion.div>
-
-                                <Badge className="bg-[#21BBD880] text-gray-100flex items-center gap-1 text-xs sm:text-sm">
-                                    <img src={coin} alt="coin" className="size-4 sm:size-5" /> -{maxCoinPerSpin}
-                                </Badge>
-
+                                
                                 <motion.div onClick={() => setHelpOpen(true)} className="cursor-pointer">
                                     <IoHelpCircleSharp size={28} className="" />
                                 </motion.div>
+                                <Badge className="bg-[#21BBD880] text-gray-100flex items-center gap-1 text-xs sm:text-sm">
+                                    <img src={coin} alt="coin" className="size-4 sm:size-5" /> -{maxCoinPerSpin}
+                                </Badge>
+                                <motion.div className="cursor-pointer">
+                                <Trunk trunkOpen={trunkOpen} setTrunkOpen={setTrunkOpen} type={TransactionTypeEnum.SPINNER_REWARD} />
+                                </motion.div>
+                                
                             </div>
                             <div className="overflow-hidden mt-2 h-10 sm:h-12 w-full relative border-none bg-gradient-to-r from-[#21BBD833] via-[#21BBD880] to-[#21BBD833] rounded-lg">
                                 <motion.div
