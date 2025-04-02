@@ -1,5 +1,5 @@
 import { SocialTypeEnum } from "@/enums/user";
-import { ApiResponse } from "../IApiResponse";
+import { ApiResponse } from "./IApiResponse";
 
 export interface SharePrizeRequest {
   transactionId: string;

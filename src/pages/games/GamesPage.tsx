@@ -26,21 +26,21 @@ import coin from "@/assets/icons/coin.png";
 import CountdownTimer from "@/components/countdown";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-interface IGame {
-  img: string;
-  gameId?: string;
-  title: string;
-  color: string;
-  handle?: (id: string) => void;
-  intro?: string;
-  active: boolean;
-  spent: string;
-  period?: string;
-  startDate?: Date;
-  endDate?: Date;
-  prizeTable?: React.ReactNode; 
-  prizes?: {id: string, minRank: number, maxRank: number, prizeName: string}[];
-}
+// interface IGame {
+//   img: string;
+//   gameId?: string;
+//   title: string;
+//   color: string;
+//   handle?: (id: string) => void;
+//   intro?: string;
+//   active: boolean;
+//   spent: string;
+//   period?: string;
+//   startDate?: Date;
+//   endDate?: Date;
+//   prizeTable?: React.ReactNode; 
+//   prizes?: {id: string, minRank: number, maxRank: number, prizeName: string}[];
+// }
 
 enum GameEnum {
   LOTTERY_SPINNER = "Lottery Spinner",
@@ -171,7 +171,7 @@ const GamesPage = () => {
     },
   ];
 
-  const games: IGame[] = baseGames.map((game) => {
+  const games: any[] = baseGames.map((game) => {
     const matchingPeriod = allGamesPeriod?.data.find((periodGame) => periodGame._id === game.gameId);
 
     return {
