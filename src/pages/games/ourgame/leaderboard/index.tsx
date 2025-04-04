@@ -62,7 +62,7 @@ const LeaderboardDialog = ({ id, title, endDate }: { id: string, title: string, 
                     )}
                 </div>}
                 description={!isError ? (
-                    <div id="scrollableDiv" className="h-[30vh] overflow-auto">
+                    <div id="scrollableDiv" className="h-[25vh] overflow-auto">
                         <InfiniteScroll
                             dataLength={leaderboardItems.length}
                             next={loadMore}

@@ -2,7 +2,7 @@ import { ApiErrorResponse } from "@/interfaces/IApiResponse";
 import { toast } from "sonner";
 
 export const handleError = (error: unknown): string => {
-  const errorMessage = (error as ApiErrorResponse).data.message;
+  const errorMessage = (error as ApiErrorResponse).data?.message;
 
   let displayMessage: string;
 

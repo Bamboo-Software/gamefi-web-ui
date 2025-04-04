@@ -26,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 import routes from "@/constants/routes";
 import { CryptoCurrencyEnum } from "@/enums/games";
 import { ITransaction } from "@/interfaces/ITransaction";
+import { FaDownload } from "react-icons/fa";
 
 const { PROFILE } = routes;
 
@@ -45,7 +46,8 @@ const ShareDialog = ({
   const navigate = useNavigate();
   const shareRef = useRef<HTMLDivElement>(null);
   const [uploadFile] = useUploadFileMutation();
-  const [sharePrizeOnSocial, { isLoading: isSharePrizeLoading }] = useSharePrizeOnSocialMutation();
+  const [sharePrizeOnSocial] = useSharePrizeOnSocialMutation();
+  const [isSharePrizeLoading, setIsSharePrizeLoading] = useState<boolean>(false);
   const [loadingPlatform, setLoadingPlatform] = useState<SocialTypeEnum | null>(null);
   const prizeName =
     (selectedItem.metadata?.prize as { prizeName: string })?.prizeName ||
@@ -170,7 +172,7 @@ const ShareDialog = ({
     ctx.fillText(referralCode, rect.width * 0.75, rect.height * 0.8);
 
     return new Promise((resolve) => {
-      canvas.toBlob((blob) => resolve(blob), "image/png");
+      canvas.toBlob((blob) => resolve(blob), "image/png", 1);
     });
   };
 
@@ -187,6 +189,7 @@ const ShareDialog = ({
   };
 
   const handleSharePrize = async (provider: SocialTypeEnum) => {
+    setIsSharePrizeLoading(true);
     setLoadingPlatform(provider);
     try {
       if (isSharePrizeLoading) return;
@@ -207,38 +210,43 @@ const ShareDialog = ({
 
       if (response.success && response.data) {
         setOpenShare(false);
-        toast.success("Prize shared successfully!");
+        setIsSharePrizeLoading(false);
+        toast.info(`Sharing prize on ${provider}...`);
 
         if (!hasPhantomWallet()) {
-          toast.info("Please connect your Phantom wallet to claim your prize.");
+          setTimeout(() => {
+            toast.info("Please connect your Phantom wallet to claim your prize.");
+          }, 3000);
         }
       }
     } catch (error: unknown) {
+      setIsSharePrizeLoading(false);
       handleError(error);
     } finally {
+      setIsSharePrizeLoading(false);
       setLoadingPlatform(null);
     }
   };
 
-  // const handleDownload = async () => {
-  //   try {
-  //     const blob = await createImageFromShareRef();
-  //     if (!blob) throw new Error("Failed to create image");
+  const handleDownload = async () => {
+    try {
+      const blob = await createImageFromShareRef();
+      if (!blob) throw new Error("Failed to create image");
 
-  //     const url = URL.createObjectURL(blob);
+      const url = URL.createObjectURL(blob);
 
-  //     const link = document.createElement("a");
-  //     link.href = url;
-  //     link.download = "lottery_prize.png";
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     document.body.removeChild(link);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "lottery_prize.png";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
-  //     URL.revokeObjectURL(url);
-  //   } catch (error) {
-  //     console.error("Error downloading image:", error);
-  //   }
-  // };
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading image:", error);
+    }
+  };
 
   const handleRewards = (cryptoCurrency: CryptoCurrencyEnum) => {
     switch (cryptoCurrency) {
@@ -295,7 +303,7 @@ const ShareDialog = ({
             <div
               id="img_share"
               ref={shareRef}
-              className="bg-cover relative flex flex-row w-full h-52 border-2 bg-gradient-to-bl from-[#1594B8]/95 via-[#47C3E6]/95 via-[#32BAE0]/95 via-[#1594B8]/95 via-[#13A0C8]/95 to-[#24E6F3]/95 border-[#24E6F3] rounded-xl"
+              className="bg-cover relative flex flex-row w-5/6 mx-auto h-52 border-2 bg-gradient-to-bl from-[#1594B8]/95 via-[#47C3E6]/95 via-[#32BAE0]/95 via-[#1594B8]/95 via-[#13A0C8]/95 to-[#24E6F3]/95 border-[#24E6F3] rounded-xl"
             >
               <div className="w-1/2 flex z-10 flex-col justify-center items-center h-full">
                 <img src={logo} alt="" />
@@ -317,7 +325,7 @@ const ShareDialog = ({
         <div className="flex flex-col w-full items-center justify-between space-y-4">
           <Separator orientation="horizontal" className="bg-gray-50 opacity-40" />
           <p className="font-bold text-lg ">Share on Social</p>
-          <p className="text-yellow-400 text-xs text-center flex justify-center items-center leading-relaxed">
+          <p className="text-yellow-400 text-sm text-center flex justify-center items-center leading-relaxed">
             Warning: You need to connect at least one social platform to share.
           </p>
           <div className="flex flex-row w-full justify-evenly items-center">
@@ -351,14 +359,14 @@ const ShareDialog = ({
             </Button>
           )}
 
-          {/* <Button
+          <Button
             onClick={handleDownload}
-            className="rounded-full flex flex-row space-x-2 justify-center items-center border-2 my-2 border-[#50D7EE] text-black font-sans w-fit px-6 py-5 bg-gradient-to-tr from-[#9CFF8F] via-[#92FDB9] to-[#83FEE4]"
+            className="rounded-full flex flex-row space-x-2 justify-center items-center border-2 my-2 border-[#50D7EE] text-black font-sans w-fit px-6 py-5 bg-gradient-to-tr from-[#9CFF8F] via-[#92FDB9] to-[#83FEE4] cursor-pointer"
             variant={"outline"}
             disabled={/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)}
           >
             <FaDownload /> Download
-          </Button> */}
+          </Button>
         </div>
       }
     />
