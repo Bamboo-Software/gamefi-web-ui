@@ -3,7 +3,6 @@ import Image from "@/components/image";
 import bg_friend1 from "@/assets/images/friends/bg_friend1.svg";
 import bg_friend2 from "@/assets/images/friends/bg_friend2.svg";
 import { TbReload } from "react-icons/tb";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IoCalendarOutline } from "react-icons/io5";
 import { BsCopy } from "react-icons/bs";
 import { GrFormNextLink } from "react-icons/gr";
@@ -11,21 +10,11 @@ import { Button } from "@/components/ui/button";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { useCopyToClipboard } from "react-use";
-import {
-  useAddReferralMutation,
-  useGetReferralListQuery,
-  useGetReferralQuery,
-} from "@/services/referral";
+import { useAddReferralMutation, useGetReferralListQuery, useGetReferralQuery } from "@/services/referral";
 import LoadingComponent from "@/components/loading-component";
 import { toast } from "sonner";
 import { useAppSelector } from "@/stores/store";
@@ -36,31 +25,16 @@ import { SettingKeyEnum } from "@/enums/setting";
 import { useCallback, useState } from "react"; // Added useState for pagination
 import { SettingValueType } from "@/interfaces/ISetting";
 import { useGetUserSettingQuery } from "@/services/user";
+import { IUser } from "@/interfaces/IUser";
+import jfox from "@/assets/images/jupiter.png";
+import { IFriend, IMappedFriend } from "@/interfaces/friend/IFriend";
+import FriendInfo from "@/components/friend-info";
 
 const referralSchema = z.object({
-  referralUrl: z
-    .string()
-    .url({ message: "Invalid URL format" })
-    .nonempty({ message: "Referral URL is required" }),
+  referralUrl: z.string().url({ message: "Invalid URL format" }).nonempty({ message: "Referral URL is required" }),
 });
 
 type ReferralFormValues = z.infer<typeof referralSchema>;
-
-interface Friend {
-  referrer: {
-    firstName: string;
-    lastName: string;
-    name: string;
-    avatar: string;
-  };
-  referee: {
-    firstName: string;
-    lastName: string;
-    name: string;
-    avatar: string;
-  };
-  createdAt: string;
-}
 
 const FriendsPage = () => {
   const { t } = useTranslation();
@@ -74,11 +48,7 @@ const FriendsPage = () => {
   const itemsPerPage = 10; // Number of items per page
 
   // Get referral code from auth state
-  const refCode = useAppSelector(
-    (state) =>
-      (state.authApi.queries["getMe({})"]?.data as { data: { referralCode: string } })
-        ?.data.referralCode
-  );
+  const userInfo = useAppSelector((state) => (state.authApi.queries["getMe({})"]?.data as { data: IUser }).data);
   const { data: userSettings } = useGetUserSettingQuery();
   const getSettingValue = useCallback(
     (key: SettingKeyEnum): SettingValueType => {
@@ -101,7 +71,7 @@ const FriendsPage = () => {
   if (referralDataLoading || referralListLoading) return <LoadingComponent />;
 
   const handleCopy = () => {
-    copyToClipboard(refCode);
+    copyToClipboard(userInfo.referralCode);
     if (state.error) {
       toast.error(t("friends.copy.error"));
     } else {
@@ -113,9 +83,9 @@ const FriendsPage = () => {
     if (!referralData?.data) return;
 
     const shareText = t("friends.share.message");
-    const fullUrl = `https://t.me/share/url?url=${encodeURIComponent(
-      referralData.data
-    )}&text=${encodeURIComponent(shareText)}`;
+    const fullUrl = `https://t.me/share/url?url=${encodeURIComponent(referralData.data)}&text=${encodeURIComponent(
+      shareText
+    )}`;
 
     window.open(fullUrl, "_blank");
   };
@@ -133,10 +103,14 @@ const FriendsPage = () => {
   };
 
   const calculateDays = (createdAt: string) => {
-    const days = Math.floor(
-      (Date.now() - new Date(createdAt).getTime()) / (1000 * 60 * 60 * 24)
-    );
-    return `${days} ${t("friends.days")}`;
+    const msPerDay = 1000 * 60 * 60 * 24;
+    const createdTime = new Date(createdAt).getTime();
+    const now = Date.now();
+    const days = Math.floor((now - createdTime) / msPerDay);
+
+    if (days === 0) return "Today";
+    if (days === 1) return "1 day ago";
+    return `${days} days ago`;
   };
 
   const inviteFriendsContents = [
@@ -145,8 +119,7 @@ const FriendsPage = () => {
       title: t("friends.add.title"),
       content: (
         <p className="text-xs">
-          +{getSettingValue(SettingKeyEnum.REFERRAL_FIXED_POINTS_REFERRER)}{" "}
-          {t("friends.add.description")}
+          +{getSettingValue(SettingKeyEnum.REFERRAL_FIXED_POINTS_REFERRER)} {t("friends.add.description")}
         </p>
       ),
     },
@@ -155,8 +128,7 @@ const FriendsPage = () => {
       title: t("friends.add_premium.title"),
       content: (
         <p className="text-xs">
-          +{getSettingValue(SettingKeyEnum.REFERRAL_FIXED_POINTS_TELEGRAM_PREMIUM)}{" "}
-          {t("friends.add.description")}
+          +{getSettingValue(SettingKeyEnum.REFERRAL_FIXED_POINTS_TELEGRAM_PREMIUM)} {t("friends.add.description")}
         </p>
       ),
     },
@@ -175,6 +147,41 @@ const FriendsPage = () => {
     }
   };
 
+  const usersListData: IMappedFriend[] = referralList?.data?.items.map((friend: IFriend): IMappedFriend => {
+    const isRefereeMe = friend.referee?.id === userInfo.id;
+    const user = isRefereeMe ? friend.referrer : friend.referee;
+    const rewardTree = isRefereeMe ? friend.referrerRewardTree : friend.refereeRewardTree;
+
+    if (!user) {
+      return {
+        id: friend.id,
+        name: "Anonymous",
+        avatar: jfox,
+        rewardTree: null,
+        pointsBalance: 0,
+        bonusPoints: friend.referrerPoints || 0,
+        createdAt: friend.createdAt,
+      };
+    }
+
+    const fullName = user.fullName || "";
+    const name = user.name || "";
+    const username = user.username || "";
+    const avatar = user.avatar || jfox;
+    const pointsBalance = user.pointsBalance || 0;
+    const bonusPoints = friend.referrerPoints || 0;
+
+    return {
+      id: friend.id,
+      name: fullName || name || username || "Anonymous",
+      avatar,
+      rewardTree,
+      pointsBalance: pointsBalance,
+      bonusPoints: bonusPoints,
+      createdAt: friend.createdAt,
+    };
+  });
+
   return (
     <motion.div
       className="w-full flex flex-col h-screen p-4 lg:p-6"
@@ -182,9 +189,7 @@ const FriendsPage = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <p className="border-l-4 border-[#E77C1B] text-gray-50 font-semibold text-xl pl-5">
-        Friends
-      </p>
+      <p className="border-l-4 border-[#E77C1B] text-gray-50 font-semibold text-xl pl-5">Friends</p>
       <div className="flex flex-col mt-4 lg:flex-row gap-6">
         {/* Left Section */}
         <div className="w-full lg:w-1/2 space-y-6">
@@ -196,20 +201,14 @@ const FriendsPage = () => {
                 className="flex flex-row w-1/2 border-1 border-[#24E6F300] rounded-lg shadow-lg overflow-auto min-h-40 px-2 bg-gradient-to-b from-[#1594B8]/95 via-[#47C3E6]/95 via-[#32BAE0]/95 via-[#1594B8]/95 via-[#13A0C8]/95 to-[#24E6F3]/95 cursor-pointer hover:opacity-90 transition-opacity"
               >
                 <div className="flex flex-col justify-center w-4/5">
-                  <h3 className="text-lg font-semibold text-white mb-2">
-                    {inviteFriendsContent.title}
-                  </h3>
+                  <h3 className="text-lg font-semibold text-white mb-2">{inviteFriendsContent.title}</h3>
                   <div className="text-md font-semibold text-gray-100 line-clamp-2 mr-2">
                     {inviteFriendsContent.content}
                   </div>
                 </div>
 
                 <div className="w-1/5 flex items-center justify-center">
-                  <Image
-                    src={inviteFriendsContent.imgContent}
-                    alt={inviteFriendsContent.title}
-                    className="size-16"
-                  />
+                  <Image src={inviteFriendsContent.imgContent} alt={inviteFriendsContent.title} className="size-16" />
                 </div>
               </div>
             ))}
@@ -259,7 +258,7 @@ const FriendsPage = () => {
                   {t("friends.referral.title")}
                 </h2>
                 <p className="text-sm max-w-2/3 text-white font-medium text-shadow-lg drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)] [-webkit-text-stroke:0.5px_#AC5E5E] p-1.5 rounded">
-                  {t("friends.referral.description", { refCode })}
+                  {t("friends.referral.description", { refCode: userInfo.referralCode })}
                 </p>
               </div>
               <Form {...form}>
@@ -315,26 +314,14 @@ const FriendsPage = () => {
 
             <div className="flex-1 overflow-y-auto">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {referralList?.data?.items.map((friend: Friend) => (
-                  <div
-                    key={`${friend.referrer.name}-${friend.referee.name}`}
-                    className="p-4 bg-[#41434E] rounded-lg shadow-xl"
-                  >
+                {usersListData.map((item: IMappedFriend) => (
+                  <div key={`${item.id}`} className="p-4 bg-[#41434E] rounded-lg shadow-xl">
                     <div className="flex justify-between items-start mb-4">
-                      <Avatar className="h-12 w-12">
-                        <AvatarImage src={friend.referee.avatar} alt={friend.referee.name} />
-                        <AvatarFallback>
-                          {friend.referee.firstName[0]}
-                          {friend.referee.lastName[0]}
-                        </AvatarFallback>
-                      </Avatar>
+                      <FriendInfo friendInfo={item} />
                       <div className="flex flex-col items-end text-sm text-gray-300">
                         <IoCalendarOutline className="h-4 w-4" />
-                        <span>{calculateDays(friend.createdAt)}</span>
+                        <span>{calculateDays(item.createdAt)}</span>
                       </div>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium truncate">{friend.referee.name}</span>
                     </div>
                   </div>
                 ))}
@@ -355,17 +342,17 @@ const FriendsPage = () => {
                   disabled={currentPage === 1}
                   className="bg-[#E77C1B] text-white hover:bg-[#d66f0f] disabled:bg-gray-500"
                 >
-                  {t("friends.pagination.previous")}
+                  Previous
                 </Button>
                 <span className="text-gray-50">
-                  {t("friends.pagination.page", { current: currentPage, total: totalPages })}
+                  Page {currentPage} of {totalPages}
                 </span>
                 <Button
                   onClick={handleNextPage}
                   disabled={currentPage === totalPages}
                   className="bg-[#E77C1B] text-white hover:bg-[#d66f0f] disabled:bg-gray-500"
                 >
-                  {t("friends.pagination.next")}
+                  Next
                 </Button>
               </div>
             )}

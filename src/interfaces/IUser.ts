@@ -6,6 +6,7 @@ export interface IUser {
   name?: string;
   firstName?: string;
   lastName?: string;
+  fullName?: string;
   email?: string;
   phone?: string;
   username?: string;
@@ -15,7 +16,7 @@ export interface IUser {
   active?: boolean;
   telegramLanguageCode?: string;
   role?: RoleTypeEnum;
-  referralCode?: string;
+  referralCode: string;
   isTelegramPremium?: boolean;
   pointsBalance: number;
   timezone?: string;

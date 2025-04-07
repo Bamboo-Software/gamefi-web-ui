@@ -1,4 +1,4 @@
-import AirdropBadge from "./components/AirdropBadge"
+import AirdropBadge from "./components/AirdropBadge";
 import { AirdropBadgeProps } from "./components/AirdropBadge";
 import income from "@/assets/images/airdrop/income.svg";
 import achivements from "@/assets/images/airdrop/achivements.svg";
@@ -6,7 +6,7 @@ import friends from "@/assets/images/airdrop/friends.svg";
 import spinner from "@/assets/images/airdrop/spinner.svg";
 import tasks from "@/assets/images/airdrop/tasks.svg";
 import CoinFox from "./components/CoinFox";
-import { IoHelpCircleSharp } from 'react-icons/io5';
+import { IoHelpCircleSharp } from "react-icons/io5";
 import AirdropDialog from "./components/AirdropDialog";
 // import { Progress } from "@/components/ui/progress";
 import WateringCan from "./components/WateringCan";
@@ -20,19 +20,18 @@ import { useHandleTapCoinMutation } from "@/services/airdrop";
 import { useAppSelector } from "@/stores/store";
 import { formatCompactNumber } from "@/utils/formatCompactNumber";
 import thunder from "@/assets/images/airdrop/thunder.svg";
-import bg_airdrop_header from "@/assets/images/airdrop/bg_airdrop_header.svg"
-import bg_airdrop_header1 from "@/assets/images/airdrop/bg_airdrop_header1.svg"
-import bg_airdrop_header_l from "@/assets/images/airdrop/bg_airdrop_header_l.svg"
-import bg_airdrop_header_r from "@/assets/images/airdrop/bg_airdrop_header_r.svg"
+import bg_airdrop_header from "@/assets/images/airdrop/bg_airdrop_header.svg";
+import bg_airdrop_header1 from "@/assets/images/airdrop/bg_airdrop_header1.svg";
+import bg_airdrop_header_l from "@/assets/images/airdrop/bg_airdrop_header_l.svg";
+import bg_airdrop_header_r from "@/assets/images/airdrop/bg_airdrop_header_r.svg";
 // import bell from "@/assets/images/airdrop/bell.svg";
-import coin from '@/assets/icons/coin.svg';
 import UserInfo from "@/components/user-info";
 import group_coins from "@/assets/images/airdrop/group_coins.svg";
 import { useGetUserAirdropQuery } from "@/services/user";
 import LoadingComponent from "@/components/loading-component";
 import { coinsBonusPerLevel, coinsPerTap } from "@/configs/config";
-import { FaArrowsUpToLine } from "react-icons/fa6";
 import Image from "@/components/image";
+import Trunk from "../games/ourgame/lottery-spinner-game/Trunk";
 // import useFPS from "@/hooks/useFPS";
 
 const maxTreeLevel = 6;
@@ -42,7 +41,7 @@ const MAX_TAB_COUNT = 30;
 // const POLLING_INTERVAL = 30000;
 const RESET_AFTER = 3000;
 
-const coinBonusArray = new String(coinsBonusPerLevel).split(',');
+const coinBonusArray = new String(coinsBonusPerLevel).split(",");
 
 const AirdropPage = () => {
   const [isWatering, setIsWatering] = useState(false);
@@ -50,13 +49,14 @@ const AirdropPage = () => {
   const tapTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [tapCoins, setTapCoins] = useState(0);
   const { t } = useTranslation();
+  const [trunkOpen, setTrunkOpen] = useState(false);
   // const fps = useFPS()
 
   const [waterTree, { data: levelData }] = useHandleWaterRewardTreeMutation({});
-  const [handleTabCoin] = useHandleTapCoinMutation()
+  const [handleTabCoin] = useHandleTapCoinMutation();
   const { data: treeData, refetch: refetchTree } = useGetRewardTreeQuery({});
-  const { data: userAirdrop, isLoading: isUserAirdropLoading } = useGetUserAirdropQuery()
-  const { achievements, earnTasks, inviteFriends, lotterySpinner, passiveIncome }  = userAirdrop?.data || {}
+  const { data: userAirdrop, isLoading: isUserAirdropLoading } = useGetUserAirdropQuery();
+  const { achievements, earnTasks, inviteFriends, lotterySpinner, passiveIncome } = userAirdrop?.data || {};
   const { data: userInfo } = useAppSelector((state) => {
     const response = state.authApi.queries["getMe({})"]?.data as {
       data: {
@@ -64,16 +64,15 @@ const AirdropPage = () => {
         pointsBalance?: number;
         referralCount?: number;
         transactionCount?: number;
-      }
+      };
     };
     return response;
   });
 
-
   // console.log("FPS: ",fps);
-  
+
   const { pointsBalance = 0 } = userInfo || {};
-  const coinTabLevel = (+coinsPerTap + +coinBonusArray[treeData?.data?.treeLevel || 0])
+  const coinTabLevel = +coinsPerTap + +coinBonusArray[treeData?.data?.treeLevel || 0];
 
   const airdropContents: AirdropBadgeProps[] = [
     {
@@ -82,7 +81,7 @@ const AirdropPage = () => {
       imageUrl: income,
       color: "#E77C1B",
       bgColor: "#E77C1B95",
-      amount: formatCompactNumber(passiveIncome || 0)
+      amount: formatCompactNumber(passiveIncome || 0),
     },
     {
       title: "Lottery Spinner",
@@ -90,7 +89,7 @@ const AirdropPage = () => {
       imageUrl: spinner,
       color: "#65DEB8",
       bgColor: "#65DEB895",
-      amount: lotterySpinner
+      amount: lotterySpinner,
     },
     {
       title: "Invite friends",
@@ -98,7 +97,7 @@ const AirdropPage = () => {
       imageUrl: friends,
       color: "#6D89FF",
       bgColor: "#6D89FF95",
-      amount: inviteFriends
+      amount: inviteFriends,
     },
     {
       title: "Earn tasks",
@@ -106,7 +105,7 @@ const AirdropPage = () => {
       imageUrl: tasks,
       color: "#EB886D",
       bgColor: "#EB886D95",
-      amount: earnTasks
+      amount: earnTasks,
     },
     {
       title: "Achivements",
@@ -114,9 +113,9 @@ const AirdropPage = () => {
       imageUrl: achivements,
       color: "#5A2DFD",
       bgColor: "#5A2DFD95",
-      amount: achievements
+      amount: achievements,
     },
-  ]
+  ];
 
   const foxState = useMemo(() => {
     if (!treeData?.data) {
@@ -124,7 +123,7 @@ const AirdropPage = () => {
         treeLevel: 0,
         experience: 0,
         waterCountToday: 0,
-        shakeCountToday: 0
+        shakeCountToday: 0,
       };
     }
 
@@ -133,7 +132,7 @@ const AirdropPage = () => {
       treeLevel: treeData.data.treeLevel,
       experience: treeData.data.experience,
       waterCountToday: treeData.data.waterCountToday,
-      shakeCountToday: treeData.data.shakeCountToday
+      shakeCountToday: treeData.data.shakeCountToday,
     };
   }, [treeData]);
 
@@ -163,10 +162,10 @@ const AirdropPage = () => {
       await waterTree({}).unwrap();
       await refetchTree();
 
-      toast.success(t('airdrop.success.water'));
+      toast.success(t("airdrop.success.water"));
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      toast.error(t('airdrop.errors.water_failed', { hours: 4 }));
+      toast.error(t("airdrop.errors.water_failed", { hours: 4 }));
     } finally {
       setIsWatering(false);
     }
@@ -174,33 +173,32 @@ const AirdropPage = () => {
 
   const handleCoinTreeClick = useCallback(async () => {
     try {
-        if (tapCount < MAX_TAB_COUNT) {
-            setTapCount(prev => prev + 1);
+      if (tapCount < MAX_TAB_COUNT) {
+        setTapCount((prev) => prev + 1);
+      } else {
+        setTapCount(MAX_TAB_COUNT);
+      }
+      handleTabCoin({ tapCount }).unwrap();
+      // getUserInfo({}).unwrap();
+      setTapCoins(tapCoins + coinTabLevel);
+      if (tapTimeoutRef.current) {
+        clearTimeout(tapTimeoutRef.current);
+      }
 
-        } else {
-            setTapCount(MAX_TAB_COUNT)
-        }
-        handleTabCoin({ tapCount }).unwrap();
-        // getUserInfo({}).unwrap();
-        setTapCoins(tapCoins + coinTabLevel)
-        if (tapTimeoutRef.current) {
-            clearTimeout(tapTimeoutRef.current);
-        }
-
-        tapTimeoutRef.current = setTimeout(() => {
-            setTapCount(1);
-        }, RESET_AFTER);
-        // toast.success(t('airdrop.success.shake'));
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      tapTimeoutRef.current = setTimeout(() => {
+        setTapCount(1);
+      }, RESET_AFTER);
+      // toast.success(t('airdrop.success.shake'));
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-        toast.error(t('airdrop.errors.shake_failed', { hours: 6 }));
+      toast.error(t("airdrop.errors.shake_failed", { hours: 6 }));
     }
-}, [coinTabLevel, handleTabCoin, t, tapCoins, tapCount]);
+  }, [coinTabLevel, handleTabCoin, t, tapCoins, tapCount]);
 
-  if(isUserAirdropLoading) {
-    return <LoadingComponent/>
+  if (isUserAirdropLoading) {
+    return <LoadingComponent />;
   }
-   
+
   return (
     <motion.div
       className="w-full flex flex-col px-4 md:px-6 lg:px-8"
@@ -209,49 +207,53 @@ const AirdropPage = () => {
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <div className="w-full h-full overflow-hidden">
-      <div className="flex flex-col lg:flex-row gap-16 h-full">
+        <div className="flex flex-col lg:flex-row gap-16 h-full">
           {/* Left Section - Fox Game */}
           <div className="w-full lg:w-1/2 mb-6 rounded-2xl overflow-auto">
-          <div className="flex flex-col w-full bg-opacity-70 rounded-xl px-4">
+            <div className="flex flex-col w-full bg-opacity-70 rounded-xl px-4">
               <motion.div
                 initial={{ y: -100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{
                   duration: 0.5,
-                  ease: "easeOut"
+                  ease: "easeOut",
                 }}
-                className='w-full h-14 bg-cover bg-center bg-no-repeat' style={{
-                  backgroundImage: `url(${bg_airdrop_header1})`
-                }}>
-                <div className='w-full h-15 bg-cover z-10 bg-center bg-no-repeat' style={{
-                  backgroundImage: `url(${bg_airdrop_header})`
-                }}>
-                  <div className='flex w-full flex-row justify-between items-center px-2'>
-                    <button className='h-12 flex flex-row rounded-md bg-cover bg-center z-20 bg-no-repeat w-1/4 mt-2' style={{
-                      backgroundImage: `url(${bg_airdrop_header_l})`
-                    }}>
-                      <div className=' flex ml-2 flex-row items-center justify-start'>
-                        <img className='size-8' src={coin} alt="" />
-                        <div className='flex  flex-col justify-between'>
-                          <p className='text-sm truncate'>
-                            10K
-                          </p>
-                          <div className='flex flex-row justify-center items-center'>
-                          <FaArrowsUpToLine className='text-xs text-gray-400 truncate'/>
-
-                          </div>
-                        </div>
+                className="w-full h-14 bg-cover bg-center bg-no-repeat"
+                style={{
+                  backgroundImage: `url(${bg_airdrop_header1})`,
+                }}
+              >
+                <div
+                  className="w-full h-15 bg-cover z-10 bg-center bg-no-repeat"
+                  style={{
+                    backgroundImage: `url(${bg_airdrop_header})`,
+                  }}
+                >
+                  <div className="flex w-full flex-row justify-between items-center px-2">
+                    <button
+                      className="h-12 flex flex-row rounded-md bg-cover bg-center z-20 bg-no-repeat w-1/4 mt-2"
+                      style={{
+                        backgroundImage: `url(${bg_airdrop_header_l})`,
+                      }}
+                    >
+                      <div className="flex flex-row items-center justify-center w-full h-full">
+                        <Trunk trunkOpen={trunkOpen} setTrunkOpen={setTrunkOpen} />
                       </div>
                     </button>
                     <button>
                       <UserInfo type="default" />
                     </button>
-                    <button className='h-12 rounded-md bg-cover bg-center z-20 flex flex-row justify-center items-center bg-no-repeat w-1/4 mt-2' style={{
-                      backgroundImage: `url(${bg_airdrop_header_r})`
-                    }}>
+                    <button
+                      className="h-12 rounded-md bg-cover bg-center z-20 flex flex-row justify-center items-center bg-no-repeat w-1/4 mt-2"
+                      style={{
+                        backgroundImage: `url(${bg_airdrop_header_r})`,
+                      }}
+                    >
                       <div>
-                        <div className=' flex w-12 h-10 relative flex-row rounded-md bg-cover bg-center z-20 bg-no-repeat ' style={{
-                        }}>
+                        <div
+                          className=" flex w-12 h-10 relative flex-row rounded-md bg-cover bg-center z-20 bg-no-repeat "
+                          style={{}}
+                        >
                           <div className="translate-x-1/2">
                             <WateringCan onClick={handleWateringCanClick} />
                           </div>
@@ -273,7 +275,7 @@ const AirdropPage = () => {
                       }}
                       animate={{
                         width: `${progressPercent}%`,
-                        backgroundPosition: ["0px", "20rem"]
+                        backgroundPosition: ["0px", "20rem"],
                       }}
                       initial={{ width: "0%" }}
                       transition={{
@@ -281,8 +283,8 @@ const AirdropPage = () => {
                         backgroundPosition: {
                           duration: 5,
                           repeat: Infinity,
-                          ease: "linear"
-                        }
+                          ease: "linear",
+                        },
                       }}
                     />
 
@@ -291,7 +293,7 @@ const AirdropPage = () => {
                       className="absolute top-0 h-full bg-[#1E2C42] rounded-full w-3"
                       animate={{
                         left: `${progressPercent}%`,
-                        scale: [1, 1.2, 1]
+                        scale: [1, 1.2, 1],
                       }}
                       initial={{ left: "0%" }}
                       transition={{
@@ -299,81 +301,89 @@ const AirdropPage = () => {
                         scale: {
                           duration: 1.5,
                           repeat: Infinity,
-                          repeatType: "reverse"
-                        }
+                          repeatType: "reverse",
+                        },
                       }}
                     />
                   </div>
-                  <div className='flex flex-row space-x-2 justify-center items-center'>
+                  <div className="flex flex-row space-x-2 justify-center items-center">
                     <img src={thunder} alt="" />
-                    <p className='text-md font-medium'>+{coinTabLevel} / per tap</p>
+                    <p className="text-md font-medium">+{coinTabLevel} / per tap</p>
                     <AirdropDialog
                       title={"How to earn coins?"}
-                      icon={<IoHelpCircleSharp className='size-6' />}
-                      description={<div className="space-y-6 h-[80vh] overflow-y-auto p-4">
-                        <h1 className="text-3xl font-bold text-orange-400 mb-4 text-center">Lottery JFox</h1>
-                        <p className="text-gray-300 text-lg mb-6 text-center">
-                          Welcome to <span className="font-semibold text-orange-400">Lottery JFox</span>, a fun and rewarding game where your friendly fox companion brings you wealth and joy!
-                        </p>
-                        <h2 className="text-2xl font-semibold mb-4">How to Play:</h2>
-                        <ul className="space-y-4">
-                          <li className="flex items-start">
-                            <span className="text-orange-400 font-bold mr-2">•</span>
-                            <span>
-                              <strong>Tap the Fox:</strong> Every time you tap on the fox, you will receive a certain amount of coins as a reward. But there’s a catch! The fox can only give you coins once every <strong>4 hours</strong>, so make sure to come back and collect your fortune.
-                            </span>
-                          </li>
-                          <li className="flex items-start">
-                            <span className="text-orange-400 font-bold mr-2">•</span>
-                            <span>
-                              <strong>Feed the Fox:</strong> To help your fox grow stronger and more generous, feed it with fish! Each feeding increases the fox’s level, unlocking greater rewards.
-                            </span>
-                          </li>
-                          <li className="flex items-start">
-                            <span className="text-orange-400 font-bold mr-2">•</span>
-                            <span>
-                              <strong>Level Up:</strong> The fox has <strong>6 levels</strong>, and with every new level, the amount of coins you earn will significantly increase.
-                            </span>
-                          </li>
-                        </ul>
-                        <h2 className="text-2xl font-semibold mt-6 mb-4">Features:</h2>
-                        <ul className="space-y-4">
-                          <li className="flex items-start">
-                            <span className="text-orange-400 font-bold mr-2">•</span>
-                            <span>
-                              <strong>Adorable Companion:</strong> Watch your fox become cuter and livelier as it levels up.
-                            </span>
-                          </li>
-                          <li className="flex items-start">
-                            <span className="text-orange-400 font-bold mr-2">•</span>
-                            <span>
-                              <strong>Progressive Rewards:</strong> Higher levels mean bigger rewards! Work hard to level up your fox and maximize your earnings.
-                            </span>
-                          </li>
-                          <li className="flex items-start">
-                            <span className="text-orange-400 font-bold mr-2">•</span>
-                            <span>
-                              <strong>Simple Gameplay:</strong> Easy to play and fun for all ages. Just tap, feed, and collect!
-                            </span>
-                          </li>
-                        </ul>
-                        <div className="mt-6 text-center">
-                          <p className="text-lg font-semibold">
-                            Are you ready to take care of your fox and grow your fortune?
+                      icon={<IoHelpCircleSharp className="size-6" />}
+                      description={
+                        <div className="space-y-6 h-[80vh] overflow-y-auto p-4">
+                          <h1 className="text-3xl font-bold text-orange-400 mb-4 text-center">Lottery JFox</h1>
+                          <p className="text-gray-300 text-lg mb-6 text-center">
+                            Welcome to <span className="font-semibold text-orange-400">Lottery JFox</span>, a fun and
+                            rewarding game where your friendly fox companion brings you wealth and joy!
                           </p>
-                          <p className="text-lg font-semibold text-orange-400">
-                            Start playing Lottery JFox now and enjoy the thrill of earning coins while bonding with your virtual pet! 🦊💰
-                          </p>
+                          <h2 className="text-2xl font-semibold mb-4">How to Play:</h2>
+                          <ul className="space-y-4">
+                            <li className="flex items-start">
+                              <span className="text-orange-400 font-bold mr-2">•</span>
+                              <span>
+                                <strong>Tap the Fox:</strong> Every time you tap on the fox, you will receive a certain
+                                amount of coins as a reward. But there’s a catch! The fox can only give you coins once
+                                every <strong>4 hours</strong>, so make sure to come back and collect your fortune.
+                              </span>
+                            </li>
+                            <li className="flex items-start">
+                              <span className="text-orange-400 font-bold mr-2">•</span>
+                              <span>
+                                <strong>Feed the Fox:</strong> To help your fox grow stronger and more generous, feed it
+                                with fish! Each feeding increases the fox’s level, unlocking greater rewards.
+                              </span>
+                            </li>
+                            <li className="flex items-start">
+                              <span className="text-orange-400 font-bold mr-2">•</span>
+                              <span>
+                                <strong>Level Up:</strong> The fox has <strong>6 levels</strong>, and with every new
+                                level, the amount of coins you earn will significantly increase.
+                              </span>
+                            </li>
+                          </ul>
+                          <h2 className="text-2xl font-semibold mt-6 mb-4">Features:</h2>
+                          <ul className="space-y-4">
+                            <li className="flex items-start">
+                              <span className="text-orange-400 font-bold mr-2">•</span>
+                              <span>
+                                <strong>Adorable Companion:</strong> Watch your fox become cuter and livelier as it
+                                levels up.
+                              </span>
+                            </li>
+                            <li className="flex items-start">
+                              <span className="text-orange-400 font-bold mr-2">•</span>
+                              <span>
+                                <strong>Progressive Rewards:</strong> Higher levels mean bigger rewards! Work hard to
+                                level up your fox and maximize your earnings.
+                              </span>
+                            </li>
+                            <li className="flex items-start">
+                              <span className="text-orange-400 font-bold mr-2">•</span>
+                              <span>
+                                <strong>Simple Gameplay:</strong> Easy to play and fun for all ages. Just tap, feed, and
+                                collect!
+                              </span>
+                            </li>
+                          </ul>
+                          <div className="mt-6 text-center">
+                            <p className="text-lg font-semibold">
+                              Are you ready to take care of your fox and grow your fortune?
+                            </p>
+                            <p className="text-lg font-semibold text-orange-400">
+                              Start playing Lottery JFox now and enjoy the thrill of earning coins while bonding with
+                              your virtual pet! 🦊💰
+                            </p>
+                          </div>
                         </div>
-                      </div>
                       }
                     />
                   </div>
-                  <div  className="flex flex-row space-x-2 justify-center items-center">
+                  <div className="flex flex-row space-x-2 justify-center items-center">
                     <Image src={group_coins} className="" alt="" width={40} height={30} />
-                    <p className="text-xl font-bold">
-                      {typeof tapCoins === 'number' ? tapCoins.toFixed(0) : tapCoins}
-                    </p>
+                    <p className="text-xl font-bold">{typeof tapCoins === "number" ? tapCoins.toFixed(0) : tapCoins}</p>
                   </div>
                 </div>
               </div>
@@ -394,11 +404,7 @@ const AirdropPage = () => {
           <div className="w-full lg:w-1/2 mt-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
               {airdropContents.map((airdrop, index) => (
-                <motion.div
-                  key={index}
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.2 }}
-                >
+                <motion.div key={index} whileHover={{ y: -4 }} transition={{ duration: 0.2 }}>
                   <AirdropBadge
                     title={airdrop.title}
                     description={airdrop.description}
@@ -414,7 +420,7 @@ const AirdropPage = () => {
         </div>
       </div>
     </motion.div>
-  )
-}
+  );
+};
 
-export default AirdropPage
+export default AirdropPage;

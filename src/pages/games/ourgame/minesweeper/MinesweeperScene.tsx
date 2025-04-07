@@ -1,24 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Phaser from 'phaser';
+import Phaser from "phaser";
 import tiles from "@/assets/images/minesweeper/tiles.png";
-import grass from '@/assets/images/minesweeper/grass.png';
-import bomb from "@/assets/images/minesweeper/bomb.png"
-import { useEffect, useRef, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { FaCircleChevronRight, FaRankingStar } from 'react-icons/fa6';
-import MissionDialog from '@/pages/missions/components/MissionDialog';
-import { useGetGameLeaderboardQuery, useHandleGameScoreSubmitMutation, usePlayGameMutation } from '@/services/game';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { IFilter } from '@/interfaces/IFilter';
-import { toast } from 'sonner';
-import { handleError } from '@/utils/apiError';
-import routes from '@/constants/routes';
+import grass from "@/assets/images/minesweeper/grass.png";
+import bomb from "@/assets/images/minesweeper/bomb.png";
+import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { FaCircleChevronRight, FaRankingStar } from "react-icons/fa6";
+import MissionDialog from "@/pages/missions/components/MissionDialog";
+import { useGetGameLeaderboardQuery, useHandleGameScoreSubmitMutation, usePlayGameMutation } from "@/services/game";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { IFilter } from "@/interfaces/IFilter";
+import { toast } from "sonner";
+import { handleError } from "@/utils/apiError";
+import routes from "@/constants/routes";
 // import { SoundType } from '@/enums/sound';
 // import { playSound } from '@/stores/sound/soundSlice';
 // import { useAppDispatch } from '@/stores/store';
-import { generateSecurePayload } from '@/utils/game';
-import { useWindowSize } from 'react-use';
+import { generateSecurePayload } from "@/utils/game";
+import { useWindowSize } from "react-use";
+import { getDisplayName } from "@/utils/user";
 
 interface Cell {
   x: number;
@@ -32,31 +33,30 @@ interface Cell {
 }
 
 enum DifficultyEnum {
-  Easy = 'easy',
-  Medium = 'medium',
-  Hard = 'hard',
-  INSANE = 'insane'
+  Easy = "easy",
+  Medium = "medium",
+  Hard = "hard",
+  INSANE = "insane",
 }
 
 const Difficulty = [
   {
     key: DifficultyEnum.Easy,
-    label: 'Easy'
+    label: "Easy",
   },
   {
     key: DifficultyEnum.Medium,
-    label: 'Medium'
+    label: "Medium",
   },
   {
     key: DifficultyEnum.Hard,
-    label: 'Hard'
+    label: "Hard",
   },
   {
     key: DifficultyEnum.INSANE,
-    label: 'Insane'
-  }
-]
-
+    label: "Insane",
+  },
+];
 
 class MinesweeperSceneClass extends Phaser.Scene {
   private grid: Cell[][] = [];
@@ -73,7 +73,7 @@ class MinesweeperSceneClass extends Phaser.Scene {
   private scoreText!: Phaser.GameObjects.Text;
   private timer = 0;
   private timerEvent?: Phaser.Time.TimerEvent;
-  private difficulty: string = 'easy';
+  private difficulty: string = "easy";
   private background!: Phaser.GameObjects.Graphics;
   private score = 0;
   private difficultyMultiplier = 1;
@@ -85,8 +85,12 @@ class MinesweeperSceneClass extends Phaser.Scene {
   private onScoreChange: (score: number) => void;
   private onGameEnd: (won: boolean, score: number, duration: number) => void;
 
-  constructor(onScoreChange: (score: number) => void, onGameEnd: (won: boolean, score: number, duration: number) => void, scaleRatio = 1) {
-    super('MinesweeperScene');
+  constructor(
+    onScoreChange: (score: number) => void,
+    onGameEnd: (won: boolean, score: number, duration: number) => void,
+    scaleRatio = 1
+  ) {
+    super("MinesweeperScene");
     this.onScoreChange = onScoreChange;
     this.onGameEnd = onGameEnd;
     this.scaleRatio = scaleRatio;
@@ -95,7 +99,7 @@ class MinesweeperSceneClass extends Phaser.Scene {
 
   init(data: { scaleRatio?: number } = {}) {
     // Get difficulty from registry
-    this.difficulty = this.game.registry.get('difficulty') || 'easy';
+    this.difficulty = this.game.registry.get("difficulty") || "easy";
     if (data.scaleRatio) {
       this.scaleRatio = data.scaleRatio;
       this.cellSize = 32 * this.scaleRatio;
@@ -108,22 +112,22 @@ class MinesweeperSceneClass extends Phaser.Scene {
   }
   setupDifficulty() {
     switch (this.difficulty) {
-      case 'easy':
+      case "easy":
         this.gridSize = { width: 9, height: 10 };
         this.mineCount = 10;
         this.difficultyMultiplier = 1;
         break;
-      case 'medium':
+      case "medium":
         this.gridSize = { width: 12, height: 10 };
         this.mineCount = 18;
         this.difficultyMultiplier = 1.5;
         break;
-      case 'hard':
+      case "hard":
         this.gridSize = { width: 16, height: 10 };
         this.mineCount = 32;
         this.difficultyMultiplier = 2;
         break;
-      case 'insane':
+      case "insane":
         this.gridSize = { width: 16, height: 10 };
         this.mineCount = 50;
         this.difficultyMultiplier = 3;
@@ -139,18 +143,18 @@ class MinesweeperSceneClass extends Phaser.Scene {
 
   preload() {
     // Load assets
-    this.load.spritesheet('tiles', tiles, {
+    this.load.spritesheet("tiles", tiles, {
       frameWidth: 32,
-      frameHeight: 32
+      frameHeight: 32,
     });
 
-    this.load.spritesheet('grass', grass, {
+    this.load.spritesheet("grass", grass, {
       frameWidth: 40,
-      frameHeight: 40
+      frameHeight: 40,
     });
-    this.load.spritesheet('bomb', bomb, {
+    this.load.spritesheet("bomb", bomb, {
       frameWidth: 32,
-      frameHeight: 32
+      frameHeight: 32,
     });
   }
 
@@ -199,41 +203,42 @@ class MinesweeperSceneClass extends Phaser.Scene {
       delay: 1000,
       callback: this.updateTimer,
       callbackScope: this,
-      loop: true
+      loop: true,
     });
   }
   createUI(offsetX: number, offsetY: number) {
     // Create status text with scaled font size
-    this.statusText = this.add.text(
-      this.cameras.main.width / 2,
-      offsetY - 25 * this.scaleRatio,
-      'Find the mines!',
-      { fontSize: `${16 * this.scaleRatio}px`, color: '#ffffff' }
-    ).setOrigin(0.5);
+    this.statusText = this.add
+      .text(this.cameras.main.width / 2, offsetY - 25 * this.scaleRatio, "Find the mines!", {
+        fontSize: `${16 * this.scaleRatio}px`,
+        color: "#ffffff",
+      })
+      .setOrigin(0.5);
 
     // Create mine counter with scaled font size
     this.mineCountText = this.add.text(
       offsetX,
       offsetY - 10 * this.scaleRatio,
       `Mines: ${this.mineCount - this.flagsPlaced}`,
-      { fontSize: `${16 * this.scaleRatio}px`, color: '#fff' }
+      { fontSize: `${16 * this.scaleRatio}px`, color: "#fff" }
     );
 
     // Create timer with scaled font size
     this.timerText = this.add.text(
       this.cameras.main.width - offsetX - 100 * this.scaleRatio,
       offsetY - 10 * this.scaleRatio,
-      'Time: 0',
-      { fontSize: `${16 * this.scaleRatio}px`, color: '#fff' }
+      "Time: 0",
+      { fontSize: `${16 * this.scaleRatio}px`, color: "#fff" }
     );
 
     // Create score text with scaled font size
-    this.scoreText = this.add.text(
-      this.cameras.main.width / 2,
-      offsetY + 20 * this.scaleRatio,
-      'Score: 0',
-      { fontSize: `${19.2 * this.scaleRatio}px`, color: '#ffff00', fontStyle: 'bold' }
-    ).setOrigin(0.5);
+    this.scoreText = this.add
+      .text(this.cameras.main.width / 2, offsetY + 20 * this.scaleRatio, "Score: 0", {
+        fontSize: `${19.2 * this.scaleRatio}px`,
+        color: "#ffff00",
+        fontStyle: "bold",
+      })
+      .setOrigin(0.5);
     this.scoreText.setVisible(false);
   }
 
@@ -250,7 +255,7 @@ class MinesweeperSceneClass extends Phaser.Scene {
         const sprite = this.add.sprite(
           offsetX + x * this.cellSize + this.cellSize / 2,
           offsetY + y * this.cellSize + this.cellSize / 2,
-          'grass',
+          "grass",
           0
         );
 
@@ -259,7 +264,7 @@ class MinesweeperSceneClass extends Phaser.Scene {
 
         // Make cell interactive
         sprite.setInteractive();
-        sprite.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+        sprite.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
           if (this.gameOver || this.gameWon) return;
 
           if (pointer.rightButtonDown()) {
@@ -277,7 +282,7 @@ class MinesweeperSceneClass extends Phaser.Scene {
           isRevealed: false,
           isFlagged: false,
           adjacentMines: 0,
-          sprite
+          sprite,
         };
       }
     }
@@ -293,8 +298,8 @@ class MinesweeperSceneClass extends Phaser.Scene {
         this.grid[y][x].isMine = true;
         minesPlaced++;
       } else {
-        this.grid[y][x].sprite.setTexture('bomb');
-        this.grid[y][x].sprite.setTint(0xffffff)
+        this.grid[y][x].sprite.setTexture("bomb");
+        this.grid[y][x].sprite.setTint(0xffffff);
       }
     }
   }
@@ -313,9 +318,13 @@ class MinesweeperSceneClass extends Phaser.Scene {
               const nx = x + dx;
               const ny = y + dy;
 
-              if (nx >= 0 && nx < this.gridSize.width &&
-                ny >= 0 && ny < this.gridSize.height &&
-                this.grid[ny][nx].isMine) {
+              if (
+                nx >= 0 &&
+                nx < this.gridSize.width &&
+                ny >= 0 &&
+                ny < this.gridSize.height &&
+                this.grid[ny][nx].isMine
+              ) {
                 count++;
               }
             }
@@ -338,31 +347,26 @@ class MinesweeperSceneClass extends Phaser.Scene {
 
     if (cell.isMine) {
       this.endGame(false);
-      cell.sprite.setTexture('bomb');
+      cell.sprite.setTexture("bomb");
     } else {
       // Increment revealed cells counter for score calculation
       this.revealedCells++;
 
-      cell.sprite.setTexture('tiles');
+      cell.sprite.setTexture("tiles");
       cell.sprite.setTint(0xffffff);
 
       if (cell.adjacentMines > 0) {
         // Use text pool for better performance
-        cell.text = this.getTextFromPool(
-          cell.sprite.x,
-          cell.sprite.y,
-          cell.adjacentMines.toString(),
-          {
-            fontSize: '1.2rem',
-            color: this.getNumberColor(cell.adjacentMines),
-            fontStyle: 'bold'
-          }
-        ).setOrigin(0.5);
+        cell.text = this.getTextFromPool(cell.sprite.x, cell.sprite.y, cell.adjacentMines.toString(), {
+          fontSize: "1.2rem",
+          color: this.getNumberColor(cell.adjacentMines),
+          fontStyle: "bold",
+        }).setOrigin(0.5);
       }
 
       // If cell has no adjacent mines, collect neighboring cells for batch reveal
       if (cell.adjacentMines === 0) {
-        const cellsToReveal: { x: number, y: number }[] = [];
+        const cellsToReveal: { x: number; y: number }[] = [];
 
         for (let dy = -1; dy <= 1; dy++) {
           for (let dx = -1; dx <= 1; dx++) {
@@ -371,10 +375,14 @@ class MinesweeperSceneClass extends Phaser.Scene {
             const nx = x + dx;
             const ny = y + dy;
 
-            if (nx >= 0 && nx < this.gridSize.width &&
-              ny >= 0 && ny < this.gridSize.height &&
+            if (
+              nx >= 0 &&
+              nx < this.gridSize.width &&
+              ny >= 0 &&
+              ny < this.gridSize.height &&
               !this.grid[ny][nx].isRevealed &&
-              !this.grid[ny][nx].isFlagged) {
+              !this.grid[ny][nx].isFlagged
+            ) {
               cellsToReveal.push({ x: nx, y: ny });
             }
           }
@@ -399,18 +407,8 @@ class MinesweeperSceneClass extends Phaser.Scene {
     this.score = Math.floor(progressPercent * this.baseScore * this.difficultyMultiplier);
   }
   private getNumberColor(num: number): string {
-    const colors = [
-      '#ffffff',
-      '#ffffff',
-      '#ffffff',
-      '#ffffff',
-      '#ffffff',
-      '#ffffff',
-      '#ffffff',
-      '#ffffff',
-      '#ffffff'
-    ];
-    return colors[num] || '#ffffff';
+    const colors = ["#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff"];
+    return colors[num] || "#ffffff";
   }
   revealAdjacentCells(x: number, y: number) {
     for (let dy = -1; dy <= 1; dy++) {
@@ -420,8 +418,7 @@ class MinesweeperSceneClass extends Phaser.Scene {
         const nx = x + dx;
         const ny = y + dy;
 
-        if (nx >= 0 && nx < this.gridSize.width &&
-          ny >= 0 && ny < this.gridSize.height) {
+        if (nx >= 0 && nx < this.gridSize.width && ny >= 0 && ny < this.gridSize.height) {
           this.revealCell(nx, ny);
         }
       }
@@ -440,13 +437,13 @@ class MinesweeperSceneClass extends Phaser.Scene {
       // const isAlternate = (x + y) % 2 === 0;
       // const bgColor = isAlternate ? 0xa9d046 : 0xb1d64e;
       // cell.sprite.setTint(bgColor);
-      cell.sprite.setTexture('tiles');
+      cell.sprite.setTexture("tiles");
       this.flagsPlaced--;
     } else {
       // Add flag if we haven't used all flags
       if (this.flagsPlaced < this.mineCount) {
         cell.isFlagged = true;
-        cell.sprite.setTexture('tiles');
+        cell.sprite.setTexture("tiles");
         cell.sprite.setFrame(10); // Flag frame
         this.flagsPlaced++;
       }
@@ -482,8 +479,8 @@ class MinesweeperSceneClass extends Phaser.Scene {
 
     // Rest of the implementation remains the same
     if (won) {
-      this.statusText.setText('You Win!');
-      this.statusText.setColor('#00ff00');
+      this.statusText.setText("You Win!");
+      this.statusText.setColor("#00ff00");
       console.log(this.score);
 
       // Flag all mines
@@ -492,14 +489,14 @@ class MinesweeperSceneClass extends Phaser.Scene {
           const cell = this.grid[y][x];
           if (cell.isMine && !cell.isFlagged) {
             cell.isFlagged = true;
-            cell.sprite.setTexture('tiles');
+            cell.sprite.setTexture("tiles");
             cell.sprite.setFrame(10); // Flag frame
           }
         }
       }
     } else {
-      this.statusText.setText('Game Over!');
-      this.statusText.setColor('#ff0000');
+      this.statusText.setText("Game Over!");
+      this.statusText.setColor("#ff0000");
       this.scoreText.setText("Score: " + Number(this.score).toString());
       // Reveal all mines
       for (let y = 0; y < this.gridSize.height; y++) {
@@ -507,10 +504,10 @@ class MinesweeperSceneClass extends Phaser.Scene {
           const cell = this.grid[y][x];
           if (cell.isMine && !cell.isRevealed && !cell.isFlagged) {
             this.grid[y][x].sprite.setTint(0xffffff);
-            cell.sprite.setTexture('bomb');
+            cell.sprite.setTexture("bomb");
           } else if (cell.isFlagged && !cell.isMine) {
             // Wrong flag
-            cell.sprite.setTexture('tiles');
+            cell.sprite.setTexture("tiles");
             cell.sprite.setFrame(11); // Wrong flag frame
           }
         }
@@ -521,7 +518,7 @@ class MinesweeperSceneClass extends Phaser.Scene {
   updateTimer = () => {
     this.timer++;
     this.timerText.setText(`Time: ${this.timer}`);
-  }
+  };
 
   update() {
     if (!this.gameOver && !this.gameWon) {
@@ -546,7 +543,12 @@ class MinesweeperSceneClass extends Phaser.Scene {
     }
   }
 
-  getTextFromPool(x: number, y: number, text: string, style: Phaser.Types.GameObjects.Text.TextStyle): Phaser.GameObjects.Text {
+  getTextFromPool(
+    x: number,
+    y: number,
+    text: string,
+    style: Phaser.Types.GameObjects.Text.TextStyle
+  ): Phaser.GameObjects.Text {
     // Reuse a text object from the pool or create a new one
     let textObj: Phaser.GameObjects.Text;
 
@@ -564,7 +566,7 @@ class MinesweeperSceneClass extends Phaser.Scene {
   }
 
   // Optimize performance by batching cell reveals
-  revealCellBatch(cellsToReveal: { x: number, y: number }[]) {
+  revealCellBatch(cellsToReveal: { x: number; y: number }[]) {
     if (cellsToReveal.length === 0) return;
 
     // Process cells in batches to avoid frame drops
@@ -576,20 +578,24 @@ class MinesweeperSceneClass extends Phaser.Scene {
     });
 
     if (cellsToReveal.length > 0) {
-      this.time.delayedCall(5, () => {
-        this.revealCellBatch(cellsToReveal);
-      }, [], this);
+      this.time.delayedCall(
+        5,
+        () => {
+          this.revealCellBatch(cellsToReveal);
+        },
+        [],
+        this
+      );
     }
   }
 
   // Optimize the revealCell method to use the text pool
 
-
   // Optimize game restart
   restartGame() {
     // Return text objects to pool
-    this.grid.forEach(row => {
-      row.forEach(cell => {
+    this.grid.forEach((row) => {
+      row.forEach((cell) => {
         if (cell.text) {
           cell.text.setVisible(false);
           this.textPool.push(cell.text);
@@ -609,7 +615,7 @@ class MinesweeperSceneClass extends Phaser.Scene {
     }
 
     // Clear text pool
-    this.textPool.forEach(text => {
+    this.textPool.forEach((text) => {
       text.destroy();
     });
     this.textPool = [];
@@ -626,15 +632,15 @@ const MinesweeperScene: React.FC = () => {
   const [game, setGame] = useState<Phaser.Game | null>(null);
   const [score, setScore] = useState({
     score: 0,
-    duration: 0
+    duration: 0,
   });
-  const [difficulty, setDifficulty] = useState('medium');
+  const [difficulty, setDifficulty] = useState("medium");
   const [searchParams] = useSearchParams();
   const [handleGameScoreSubmit] = useHandleGameScoreSubmitMutation({});
   const [leaderboardItems, setLeaderboardItems] = useState<any[]>([]);
   const [filter, setFilter] = useState<IFilter>({
     limit: 5,
-    page: 1
+    page: 1,
   });
   const { width, height } = useWindowSize();
   const [gameSize, setGameSize] = useState({ width: 800, height: 600 });
@@ -642,21 +648,21 @@ const MinesweeperScene: React.FC = () => {
   const navigate = useNavigate();
   const { GAMES } = routes;
   const [playGame] = usePlayGameMutation();
-// const dispatch = useAppDispatch();
-const { data, isError, isFetching } = useGetGameLeaderboardQuery({ 
-  id: searchParams.get('id') || '', 
-  page: filter.page || 1, 
-  limit: filter.limit || 5 
-});
-
+  // const dispatch = useAppDispatch();
+  const { data, isError, isFetching } = useGetGameLeaderboardQuery({
+    id: searchParams.get("id") || "",
+    page: filter.page || 1,
+    limit: filter.limit || 5,
+  });
+  console.log(data);
   const handleDifficultyChange = (act: string) => {
     let newDifficulty = difficulty;
 
-    if (act === 'left') {
-      const currentIndex = Difficulty.findIndex(diff => diff.key === difficulty);
+    if (act === "left") {
+      const currentIndex = Difficulty.findIndex((diff) => diff.key === difficulty);
       newDifficulty = Difficulty[(currentIndex - 1 + Difficulty.length) % Difficulty.length].key;
     } else {
-      const currentIndex = Difficulty.findIndex(diff => diff.key === difficulty);
+      const currentIndex = Difficulty.findIndex((diff) => diff.key === difficulty);
       newDifficulty = Difficulty[(currentIndex + 1) % Difficulty.length].key;
     }
 
@@ -664,8 +670,8 @@ const { data, isError, isFetching } = useGetGameLeaderboardQuery({
 
     if (game) {
       // Set the actual difficulty value in the registry, not 'left' or 'right'
-      game.registry.set('difficulty', newDifficulty);
-      game.scene.getScene('MinesweeperScene').scene.restart();
+      game.registry.set("difficulty", newDifficulty);
+      game.scene.getScene("MinesweeperScene").scene.restart();
     }
   };
 
@@ -675,17 +681,16 @@ const { data, isError, isFetching } = useGetGameLeaderboardQuery({
     // dispatch(playSound(SoundType.GRASS_STEP))
   };
 
-
   // Handle game end from the Phaser scene
   const handleGameEnd = async (won: boolean, finalScore: number, duration: number) => {
     setScore({ score: finalScore, duration });
     // dispatch(playSound(SoundType.END_MIXED))
-    if (!won) return;
+
     const securePayload = await generateSecurePayload({
-      gameId: searchParams.get('id') || '',
+      gameId: searchParams.get("id") || "",
       score: finalScore - 500,
       duration,
-      difficulty: "easy"
+      difficulty: "easy",
     });
     handleGameScoreSubmit(securePayload).unwrap();
   };
@@ -697,30 +702,30 @@ const { data, isError, isFetching } = useGetGameLeaderboardQuery({
     // Base dimensions
     const baseWidth = 800;
     const baseHeight = 600;
-    
+
     // Calculate available space
     const containerWidth = Math.min(width - 40, 1200); // Max width with some padding
     const containerHeight = Math.min(height - 200, 800); // Max height with space for controls
-    
+
     // Calculate scale ratio based on available space
     const widthRatio = containerWidth / baseWidth;
     const heightRatio = containerHeight / baseHeight;
     const newScaleRatio = Math.min(widthRatio, heightRatio, 1.5); // Cap at 1.5x
-    
+
     // Calculate new dimensions
     const newWidth = Math.floor(baseWidth * newScaleRatio);
     const newHeight = Math.floor(baseHeight * newScaleRatio);
-    
+
     setGameSize({ width: newWidth, height: newHeight });
     setScaleRatio(newScaleRatio);
-    
+
     // Update game config if it exists
     if (game) {
       game.scale.resize(newWidth, newHeight);
-      game.registry.set('scaleRatio', newScaleRatio);
-      
+      game.registry.set("scaleRatio", newScaleRatio);
+
       // Restart the scene to apply new scale
-      const scene = game.scene.getScene('MinesweeperScene');
+      const scene = game.scene.getScene("MinesweeperScene");
       if (scene) {
         scene.scene.restart({ scaleRatio: newScaleRatio });
       }
@@ -737,21 +742,21 @@ const { data, isError, isFetching } = useGetGameLeaderboardQuery({
       height: gameSize.height,
       scale: {
         mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH
+        autoCenter: Phaser.Scale.CENTER_BOTH,
       },
       scene: [new MinesweeperSceneClass(handleScoreChange, handleGameEnd, scaleRatio)],
       physics: {
-        default: 'arcade',
+        default: "arcade",
         arcade: {
-          gravity: { x: 0, y: 0 }
-        }
-      }
+          gravity: { x: 0, y: 0 },
+        },
+      },
     };
 
     const newGame = new Phaser.Game(config);
     // Set initial difficulty and scale ratio
-    newGame.registry.set('difficulty', difficulty);
-    newGame.registry.set('scaleRatio', scaleRatio);
+    newGame.registry.set("difficulty", difficulty);
+    newGame.registry.set("scaleRatio", scaleRatio);
     setGame(newGame);
 
     return () => {
@@ -763,22 +768,22 @@ const { data, isError, isFetching } = useGetGameLeaderboardQuery({
 
   useEffect(() => {
     if (data?.data?.items) {
-        if (filter.page === 1) {
-          setLeaderboardItems(data?.data.items);
-        } else {
-          setLeaderboardItems(prev => [...prev, ...(data?.data?.items || [])]);
-        }
+      if (filter.page === 1) {
+        setLeaderboardItems(data?.data.items);
+      } else {
+        setLeaderboardItems((prev) => [...prev, ...(data?.data?.items || [])]);
+      }
     }
-}, [filter.page, data?.data?.items]);
+  }, [filter.page, data?.data?.items]);
 
   const hasMore = leaderboardItems.length < (data?.data?.total || 0);
   const loadMore = () => {
-      if (hasMore && !isFetching) {
-          setFilter(prev => ({
-              ...prev,
-              page: (prev.page ?? 1) + 1
-          }));
-      }
+    if (hasMore && !isFetching) {
+      setFilter((prev) => ({
+        ...prev,
+        page: (prev.page ?? 1) + 1,
+      }));
+    }
   };
 
   const handlePlayGame = async (gameId: string) => {
@@ -804,21 +809,20 @@ const { data, isError, isFetching } = useGetGameLeaderboardQuery({
 
   const restartGame = () => {
     if (game) {
-      game.scene.getScene('MinesweeperScene').scene.restart();
+      game.scene.getScene("MinesweeperScene").scene.restart();
       setScore({
         score: 0,
-        duration: 0
+        duration: 0,
       });
-      handlePlayGame(searchParams.get('id') || '')
+      handlePlayGame(searchParams.get("id") || "");
     }
   };
   return (
     <div className="flex flex-col items-center">
       <div className="mb-4 flex flex-col">
-
-        <div className='flex flex-row w-auto justify-center space-x-1 items-center'>
+        <div className="flex flex-row w-auto justify-center space-x-1 items-center">
           <Button
-            variant={'ghost'}
+            variant={"ghost"}
             className=" mt-2 bg-transparent w-full border-2 border-gray-100 rounded-full text-white"
             onClick={restartGame}
           >
@@ -827,7 +831,7 @@ const { data, isError, isFetching } = useGetGameLeaderboardQuery({
           <MissionDialog
             triggerBtn={
               <Button
-                variant={'ghost'}
+                variant={"ghost"}
                 className="mt-2 bg-transparent border-2 border-gray-100 rounded-full text-white"
               >
                 <FaRankingStar />
@@ -835,14 +839,15 @@ const { data, isError, isFetching } = useGetGameLeaderboardQuery({
             }
             title={
               <div>
-                    <span>Leaderboard</span>
-                    <p className='text-gray-100 my-1 text-xs mt-2'>Your ranking: #{data?.data?.currentUserRank ?? "Unknown"}</p>
-                </div>
+                <span>Leaderboard</span>
+                <p className="text-gray-100 my-1 text-xs mt-2">
+                  Your ranking: #{data?.data?.currentUserRank ?? "Unknown"}
+                </p>
+              </div>
             }
             description={
               !isError ? (
-
-                <div id="scrollableDiv" className="h-[30vh] overflow-auto">
+                <div id="scrollableDiv" className="h-[25vh] overflow-auto">
                   <InfiniteScroll
                     dataLength={leaderboardItems.length}
                     next={loadMore}
@@ -850,32 +855,30 @@ const { data, isError, isFetching } = useGetGameLeaderboardQuery({
                     loader={<div className="text-center py-4">Loading more items...</div>}
                     endMessage={
                       <p className="text-center py-4 text-white/70">
-                        {leaderboardItems.length > 0
-                          ? "You've seen all your leaderboard!"
-                          : "Data not found"}
+                        {leaderboardItems.length > 0 ? "You've seen all your leaderboard!" : "Data not found"}
                       </p>
                     }
                     scrollableTarget="scrollableDiv"
                   >
-                    <div className='flex flex-col justify-center items-center w-full'>
-                      <table className='w-full border-collapse'>
+                    <div className="flex flex-col justify-center items-center w-full">
+                      <table className="w-full border-collapse">
                         <thead>
-                          <tr className='text-left border-b border-gray-700'>
-                            <th className='py-2 px-4 text-center'>#</th>
-                            <th className='py-2 pl-8 text-sm font-bold text-gray-400'>Name</th>
-                            <th className='py-2 px-4 text-xs font-bold text-gray-400 text-right'>Score</th>
+                          <tr className="text-left border-b border-gray-700">
+                            <th className="py-2 px-4 text-center">#</th>
+                            <th className="py-2 pl-8 text-sm font-bold text-gray-400">Name</th>
+                            <th className="py-2 px-4 text-xs font-bold text-gray-400 text-right">Score</th>
                           </tr>
                         </thead>
                         <tbody>
                           {leaderboardItems.map((item: any, index: number) => (
-                            <tr key={index} className='border-b border-gray-700'>
-                              <td className='py-2 px-4 text-center'>
-                                <div className='size-5 rounded-full bg-gray-100 flex justify-center items-center mx-auto'>
-                                  <p className='text-xs font-bold text-gray-800'>{index + 1}</p>
+                            <tr key={index} className="border-b border-gray-700">
+                              <td className="py-2 px-4 text-center">
+                                <div className="size-5 rounded-full bg-gray-100 flex justify-center items-center mx-auto">
+                                  <p className="text-xs font-bold text-gray-800">{index + 1}</p>
                                 </div>
                               </td>
-                              <td className='py-2 text-sm font-bold text-gray-400'>{item.user.firstName}</td>
-                              <td className='py-2 px-4 text-xs font-bold text-gray-400 text-right'>{item.score}</td>
+                              <td className="py-2 text-sm font-bold text-gray-400">{getDisplayName(item.user)}</td>
+                              <td className="py-2 px-4 text-xs font-bold text-gray-400 text-right">{item.score}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -883,32 +886,33 @@ const { data, isError, isFetching } = useGetGameLeaderboardQuery({
                     </div>
                   </InfiniteScroll>
                 </div>
-              ) : <div>Error get leaderboard</div>
+              ) : (
+                <div>Error get leaderboard</div>
+              )
             }
           />
         </div>
-        <div className='flex flex-row space-x-3 mt-2 w-auto justify-between items-center'>
+        <div className="flex flex-row space-x-3 mt-2 w-auto justify-between items-center">
           <FaCircleChevronRight
-            onClick={() => handleDifficultyChange('left')}
+            onClick={() => handleDifficultyChange("left")}
             className="w-fit rotate-180 h-10 bg-transparent border-2 border-gray-200 rounded-full text-white"
           />
-          <p className='uppercase'>{difficulty}</p>
+          <p className="uppercase">{difficulty}</p>
           <FaCircleChevronRight
-            onClick={() => handleDifficultyChange('right')}
+            onClick={() => handleDifficultyChange("right")}
             className="w-fit h-10 bg-transparent border-2 border-gray-200 rounded-full text-white"
           />
         </div>
       </div>
 
-
       <div
         ref={gameRef}
         className=""
-        style={{ 
-          width: `${gameSize.width}px`, 
+        style={{
+          width: `${gameSize.width}px`,
           height: `${gameSize.height}px`,
-          maxWidth: '100%',
-          maxHeight: '70vh'
+          maxWidth: "100%",
+          maxHeight: "70vh",
         }}
       />
     </div>
