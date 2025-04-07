@@ -173,7 +173,7 @@ const FriendsPage = () => {
 
     return {
       id: friend.id,
-      name: fullName || name || username || "Anonymous",
+      name: name || username || fullName || "Anonymous",
       avatar,
       rewardTree,
       pointsBalance: pointsBalance,
@@ -181,6 +181,7 @@ const FriendsPage = () => {
       createdAt: friend.createdAt,
     };
   });
+  console.log(usersListData);
 
   return (
     <motion.div

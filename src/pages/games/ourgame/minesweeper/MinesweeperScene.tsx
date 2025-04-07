@@ -654,7 +654,7 @@ const MinesweeperScene: React.FC = () => {
     page: filter.page || 1,
     limit: filter.limit || 5,
   });
-  console.log(data);
+
   const handleDifficultyChange = (act: string) => {
     let newDifficulty = difficulty;
 
@@ -692,7 +692,7 @@ const MinesweeperScene: React.FC = () => {
       duration,
       difficulty: "easy",
     });
-    handleGameScoreSubmit(securePayload).unwrap();
+    await handleGameScoreSubmit(securePayload).unwrap();
   };
 
   // Initialize the game
@@ -771,12 +771,16 @@ const MinesweeperScene: React.FC = () => {
       if (filter.page === 1) {
         setLeaderboardItems(data?.data.items);
       } else {
-        setLeaderboardItems((prev) => [...prev, ...(data?.data?.items || [])]);
+        setLeaderboardItems((prev) => {
+          const newItems = data.data.items.filter((item: any) => !prev.some((i: any) => i._id === item._id));
+          return [...prev, ...newItems];
+        });
       }
     }
   }, [filter.page, data?.data?.items]);
 
   const hasMore = leaderboardItems.length < (data?.data?.total || 0);
+  
   const loadMore = () => {
     if (hasMore && !isFetching) {
       setFilter((prev) => ({

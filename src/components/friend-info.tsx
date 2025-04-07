@@ -10,7 +10,7 @@ const FriendInfo = ({ friendInfo }: { friendInfo: IMappedFriend }) => {
         <div className="relative size-8 rounded-full flex items-center justify-center bg-white border-gradient">
           <Avatar>
             <AvatarImage src={friendInfo.avatar} alt={friendInfo.name} loading="lazy" />
-            <AvatarFallback>{friendInfo.name}</AvatarFallback>
+            <AvatarFallback>{friendInfo.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
           </Avatar>
         </div>
       </div>

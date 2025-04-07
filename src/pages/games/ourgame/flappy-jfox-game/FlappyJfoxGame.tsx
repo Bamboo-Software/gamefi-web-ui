@@ -309,7 +309,7 @@ export default function FlappyJfoxGame() {
             duration: gamePlayTime,
             difficulty: "easy"
         });
-        handleGameScoreSubmit(securePayload).unwrap();
+        await handleGameScoreSubmit(securePayload).unwrap();
 
         gameOver = true
         gameStarted = false
