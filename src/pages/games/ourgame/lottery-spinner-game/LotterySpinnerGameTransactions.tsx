@@ -53,9 +53,9 @@ const LotterySpinnerGameTransactions = () => {
     dialog: (
       <div className='flex flex-col space-y-2 items-end justify-center'>
         <p className='text-[#FFC800] font-semibold text-3xl'>
-          +{transaction.earnPoints}
+          +{transaction.earnPoints.toLocaleString()}
         </p>
-        <p className='text-sm text-gray-100'>
+        <p className='text-xs text-gray-100'>
           {new Date(transaction.createdAt).toLocaleDateString(Intl.DateTimeFormat().resolvedOptions().timeZoneName, {
             day: '2-digit',
             month: '2-digit',

@@ -189,5 +189,5 @@ export const {
   useGetMeQuery,
   useLazyGetMeQuery,
   useUnsyncSocialMutation,
-  useSyncSocialMutation
+  useSyncSocialMutation,
 } = authApi;

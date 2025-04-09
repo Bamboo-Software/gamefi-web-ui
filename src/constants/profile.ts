@@ -1,16 +1,16 @@
 import coin from "@/assets/icons/coin.svg";
 import transaction from "@/assets/icons/transaction_icon.svg";
-import achivements from "@/assets/icons/cup_icon.svg";
+import achievements from "@/assets/icons/cup_icon.svg";
 import x from "@/assets/icons/x.svg";
 import google from "@/assets/icons/google.svg";
 import facebook from "@/assets/icons/facebook.svg";
 import instagram from "@/assets/icons/instagram.svg";
 import { useTranslation } from "react-i18next";
 import wallets from "@/assets/images/profile/wallet.svg";
+import metamask from "@/assets/icons/metamask.png"
+import phantom from "@/assets/icons/phantom.png"
 import star from "@/assets/icons/star.svg";
-export const ProfileContent = () => {
-  
-}
+export const ProfileContent = () => {};
 interface IContentDialog {
   imgContent: string;
   title: string;
@@ -23,17 +23,14 @@ interface IProfileContentDialog extends IContentDialog {
   };
 }
 
-export interface IWalletContentDialog extends IContentDialog{
+export interface IWalletContentDialog extends IContentDialog {
   alert: {
-    success: string,
-    failure: string
-  }
+    success: string;
+    failure: string;
+  };
 }
 
-export const ProfileContentDialog = (): Record<
-  string,
-  IProfileContentDialog
-> => {
+export const ProfileContentDialog = (): Record<string, IProfileContentDialog> => {
   const { t } = useTranslation();
   return {
     totalCoins: {
@@ -60,59 +57,67 @@ export const ProfileContentDialog = (): Record<
         description: t("profile.friends.popup.description"),
       },
     },
-    achivements: {
-      imgContent: achivements,
-      title: t("profile.achivements.title"),
+    achievements: {
+      imgContent: achievements,
+      title: t("profile.achievements.title"),
       dialog: {
-        title: t("profile.achivements.popup.title"),
-        description: t("profile.achivements.popup.description"),
+        title: t("profile.achievements.popup.title"),
+        description: t("profile.achievements.popup.description"),
       },
-    }
+    },
   };
 };
 
-
-export const WalletContentDialog = (): Record<
-  string,
-  IWalletContentDialog
-> => {
+export const WalletContentDialog = (): Record<string, IWalletContentDialog> => {
   const { t } = useTranslation();
 
   return {
     wallets: {
       imgContent: wallets,
-      title: t("profile.wallet.title", {wallet: "wallets"}),
+      title: t("profile.wallet.title", { wallet: "wallets" }),
       alert: {
-        success: t("profile.wallet.alert.success", {wallet: "wallets"}),
-        failure: t("profile.wallet.alert.failure", {wallet: "wallets"}),
-      }
-    }
-  }
-}
+        success: t("profile.wallet.alert.success", { wallet: "MetaMask" }),
+        failure: t("profile.wallet.alert.failure", { wallet: "MetaMask" }),
+      },
+    },
+    metamask: {
+      imgContent: metamask,
+      title: t("profile.wallet.title", { wallet: "MetaMask" }),
+      alert: {
+        success: t("profile.wallet.alert.success", { wallet: "MetaMask" }),
+        failure: t("profile.wallet.alert.failure", { wallet: "MetaMask" }),
+      },
+    },
+    phantom: {
+      imgContent: phantom,
+      title: t("profile.wallet.title", { wallet: "Phantom" }),
+      alert: {
+        success: t("profile.wallet.alert.success", { wallet: "Phantom" }),
+        failure: t("profile.wallet.alert.failure", { wallet: "Phantom" }),
+      },
+    },
+  };
+};
 
-
-export const SocialContentDialog = (): Record<
-  string,
-  IWalletContentDialog
-> => {
+export const SocialContentDialog = (): Record<string, IWalletContentDialog> => {
   const { t } = useTranslation();
 
   return {
     google: {
       imgContent: google,
-      title: t("profile.wallet.title", {wallet: "Google"}),
+      title: t("profile.wallet.title", { wallet: "Google" }),
       alert: {
-        success: t("profile.wallet.alert.success", {wallet: "Google"}),
-        failure: t("profile.wallet.alert.failure", {wallet: "Google"}),
-      }
+        success: t("profile.wallet.alert.success", { wallet: "Google" }),
+        failure: t("profile.wallet.alert.failure", { wallet: "Google" }),
+      },
     },
     x: {
       imgContent: x,
-      title: t("profile.wallet.title", {wallet: "X (Twitter)"}),
+      title: t("profile.wallet.title", { wallet: "X (Twitter)" }),
       alert: {
-        success: t("profile.wallet.alert.success", {wallet: "X (Twitter)"}),
-        failure: t("profile.wallet.alert.failure", {wallet: "X (Twitter)"}),
-      }
+        success: t("profile.wallet.alert.success", { wallet: "X (Twitter)" }),
+        failure: t("profile.wallet.alert.failure", { wallet: "X (Twitter)" }),
+      },
     },
     facebook: {
       imgContent: facebook,
@@ -130,5 +135,5 @@ export const SocialContentDialog = (): Record<
         failure: t("profile.wallet.alert.failure", { wallet: "Instagram" }),
       },
     },
-  }
-}
+  };
+};

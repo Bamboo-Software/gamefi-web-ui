@@ -188,7 +188,7 @@ const LotterySpinnerGame = () => {
                             </div>
                             <button
                                 onClick={() => setTransactionOpen(true)}
-                                className="w-1/4 mt-2 h-20 relative flex flex-col justify-center items-center rounded-lg bg-cover bg-center bg-no-repeat"
+                                className="w-1/4 mt-2 h-20 relative flex flex-col justify-center items-center rounded-lg bg-cover bg-center bg-no-repeat cursor-pointer"
                                 style={{ backgroundImage: `url(${leader_board1})` }}
                             >
                                 <Image className="absolute -top-0" width={45} height={40} src={history} alt="leader board" />
@@ -207,7 +207,7 @@ const LotterySpinnerGame = () => {
                                     <IoHelpCircleSharp size={28} className="" />
                                 </motion.div>
                                 <Badge className="bg-[#21BBD880] text-gray-100flex items-center gap-1 text-xs sm:text-sm">
-                                    <img src={coin} alt="coin" className="size-4 sm:size-5" /> -{maxCoinPerSpin}
+                                    <img src={coin} alt="coin" className="size-4 sm:size-5" /> -{maxCoinPerSpin.toLocaleString()}
                                 </Badge>
                                 <motion.div className="cursor-pointer">
                                 <Trunk trunkOpen={trunkOpen} setTrunkOpen={setTrunkOpen} type={TransactionTypeEnum.SPINNER_REWARD} />
@@ -246,7 +246,7 @@ const LotterySpinnerGame = () => {
                                     <AlertCircle className="w-8 h-8 sm:w-12 sm:h-12 text-red-500 mb-3 sm:mb-4" />
                                     <h2 className="text-lg sm:text-xl font-bold text-center mb-2">Insufficient Balance</h2>
                                     <p className="text-sm sm:text-base text-gray-400 text-center mb-4">
-                                        You need {maxCoinPerSpin} coins to spin the wheel.
+                                        You need {maxCoinPerSpin.toLocaleString()} coins to spin the wheel.
                                         Current balance: {pointsBalance} coins
                                     </p>
                                     <Button

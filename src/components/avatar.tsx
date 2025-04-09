@@ -27,7 +27,7 @@ const UserAvatarDropdown = ({
   const [, , remove] = useLocalStorage("auth-token", "foo");
 
   const trigger = (
-    <div className="relative inline-block">
+    <div className="relative inline-block cursor-pointer">
       <Avatar>
         <AvatarImage src={imageUrl} alt={userName} />
         <AvatarFallback>{fallback}</AvatarFallback>
@@ -72,7 +72,7 @@ const UserAvatarDropdown = ({
       <div className="mt-2 ">
         <button
           onClick={gotoProfile}
-          className="w-full text-left px-2 py-1.5 text-sm hover:bg-gray-700/50 rounded-md font-semibold transition-colors"
+          className="w-full text-left px-2 py-1.5 text-sm hover:bg-gray-700/50 rounded-md font-semibold transition-colors cursor-pointer"
         >
           Profile
         </button>

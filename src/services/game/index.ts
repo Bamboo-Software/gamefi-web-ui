@@ -32,7 +32,7 @@ export const gamesApi = createApi({
       providesTags: [InvalidatesTagsEnum.GAME],
     }),
     getGameLeaderboard: builder.query({
-      query: ({ id, limit, page }: { id: string; limit: number; page: number }) => ({
+      query: ({ id, limit, page }: { id: string; limit?: number; page?: number }) => ({
         url: `${endpoint}/leaderboard/${id}?limit=${limit}&page=${page}`,
       }),
       providesTags: [InvalidatesTagsEnum.GAME],

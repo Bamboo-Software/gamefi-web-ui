@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Phaser from 'phaser';
 import { 
-    // useHandleGameScoreSubmitMutation, 
+    useHandleGameScoreSubmitMutation, 
     usePlayGameMutation } from '@/services/game';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -39,7 +39,7 @@ import routes from '@/constants/routes';
 // import { useAppDispatch } from '@/stores/store';
 // import { playSound } from '@/stores/sound/soundSlice';
 // import { SoundType } from '@/enums/sound';
-// import { generateSecurePayload } from '@/utils/game';
+import { generateSecurePayload } from '@/utils/game';
 
 // const { END_MIXED,JUMP } = SoundType;
 const BIRD_JUMP_VELOCITY = -800;
@@ -65,7 +65,7 @@ export default function FlappyJfoxGame() {
     const gameInstance = useRef<Phaser.Game | null>(null);
     const { width, height } = useWindowSize();
     const [searchParams] = useSearchParams();
-    // const [handleGameScoreSubmit] = useHandleGameScoreSubmitMutation({});
+    const [handleGameScoreSubmit] = useHandleGameScoreSubmitMutation({});
     // const dispatch = useAppDispatch();
 
     const [gameSize, setGameSize] = useState({ width: 0, height: 0 });
@@ -303,13 +303,13 @@ export default function FlappyJfoxGame() {
         this.physics.pause()
         // dispatch(playSound(SoundType.END_MIXED))
 
-        // const securePayload = await generateSecurePayload({
-        //     gameId: searchParams.get('id') || '',
-        //     score: score,
-        //     duration: gamePlayTime,
-        //     difficulty: "easy"
-        // });
-        // handleGameScoreSubmit(securePayload).unwrap();
+        const securePayload = await generateSecurePayload({
+            gameId: searchParams.get('id') || '',
+            score: score,
+            duration: gamePlayTime,
+            difficulty: "easy"
+        });
+        await handleGameScoreSubmit(securePayload).unwrap();
 
         gameOver = true
         gameStarted = false

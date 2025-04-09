@@ -11,7 +11,7 @@
         "title": "Lottery JuniperFox Game",
         "description": "Please wait",
         "loading": "Loading...",
-        "explore": "Explore more infomations on our channels"
+        "explore": "Explore more information on our channels"
     },
     "error": {
         "title": "Page Not Found",
@@ -24,7 +24,7 @@
             "title": "Customize Your Profile",
             "choose_avatar": "Choose Your Avatar",
             "choose_frame": "Choose Frame Color",
-            "choose_archivement": "Choose an Archivement" 
+            "choose_achievements": "Choose an Achievements" 
 
         },
         "tree_coin": {
@@ -61,7 +61,7 @@
                     "description": "Share the joy and earn rewards by inviting friends to join our platform! Each successful invite earns you a bonus, and your friends get a welcome gift too. It's a win-win situation that strengthens our community while boosting your earnings."
                 }
             },
-            "achivements":{
+            "achievements":{
                 "title": "Achievements",
                 "dialog":{
                     "title": "Achievements",
@@ -104,7 +104,7 @@
             "title": "Delete account",
             "popup": {
                 "title": "Are you sure you want to delete your account ?",
-                "description": "All your data including game progress, achivements, purchases will be permanently deleted",
+                "description": "All your data including game progress, achievements, purchases will be permanently deleted",
                 "cancel": "Cancel",
                 "delete": "Delete account"
             }
@@ -173,10 +173,10 @@
                 "description": "This shows the number of friends you’ve connected with on the platform. Having more friends enhances your experience by allowing collaboration, friendly competition, and social interactions."
             }
         },
-        "achivements": {
-            "title": "Achivements",
+        "achievements": {
+            "title": "Achievements",
             "popup": {
-                "title": "Achivements",
+                "title": "Achievements",
                 "description": "Your achievements are a visual representation of milestones you’ve reached. Collect badges by completing challenges, reaching goals, or being an active participant in the community. Display your achievements proudly to inspire others!"
             }
         },

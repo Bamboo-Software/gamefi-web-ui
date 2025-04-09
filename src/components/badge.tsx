@@ -39,7 +39,7 @@ const BadgeModal: React.FC<BadgeModalProps> = ({
             />
         </div>
         <div className="flex ml-3 flex-col items-start justify-start">
-          <p className={` text-sm ${titleClassName}`}>{title}</p>
+          <p className={`text-sm ${titleClassName}`}>{title}</p>
           {content && (
             <div className={`text-sm text-gray-300 text-justify ${contentClassName}`}>
               {content}
