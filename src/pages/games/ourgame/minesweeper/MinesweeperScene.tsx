@@ -682,7 +682,7 @@ const MinesweeperScene: React.FC = () => {
   };
 
   // Handle game end from the Phaser scene
-  const handleGameEnd = async (won: boolean, finalScore: number, duration: number) => {
+  const handleGameEnd = async (_won: boolean, finalScore: number, duration: number) => {
     setScore({ score: finalScore, duration });
     // dispatch(playSound(SoundType.END_MIXED))
 
