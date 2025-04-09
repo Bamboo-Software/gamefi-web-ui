@@ -10,7 +10,7 @@ import routes from "@/constants/routes";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { handleError } from "@/utils/apiError";
 
-const ConnectWallet = ({ refetch }: { refetch: () => void }) => {
+const ConnectWallet = ({ refetch }: { refetch?: () => void }) => {
   const [loginSocial] = useLoginSocialMutation();
   const [syncSocial] = useSyncSocialMutation();
   const { setToken, token } = useAuthToken();
@@ -32,7 +32,7 @@ const ConnectWallet = ({ refetch }: { refetch: () => void }) => {
         result = await syncSocial({
           ...data,
         }).unwrap();
-        refetch();
+        refetch?.();
       }
 
       return result;
