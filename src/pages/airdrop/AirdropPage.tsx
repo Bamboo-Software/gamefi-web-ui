@@ -1,7 +1,7 @@
 import AirdropBadge from "./components/AirdropBadge";
 import { AirdropBadgeProps } from "./components/AirdropBadge";
 import income from "@/assets/images/airdrop/income.svg";
-import achivements from "@/assets/images/airdrop/achivements.svg";
+import achievementImage from "@/assets/images/airdrop/achivements.svg";
 import friends from "@/assets/images/airdrop/friends.svg";
 import spinner from "@/assets/images/airdrop/spinner.svg";
 import tasks from "@/assets/images/airdrop/tasks.svg";
@@ -17,7 +17,6 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useGetRewardTreeQuery, useHandleWaterRewardTreeMutation } from "@/services/reward-tree";
 import { useHandleTapCoinMutation } from "@/services/airdrop";
-import { useAppSelector } from "@/stores/store";
 import { formatCompactNumber } from "@/utils/formatCompactNumber";
 import thunder from "@/assets/images/airdrop/thunder.svg";
 import bg_airdrop_header from "@/assets/images/airdrop/bg_airdrop_header.svg";
@@ -27,21 +26,17 @@ import bg_airdrop_header_r from "@/assets/images/airdrop/bg_airdrop_header_r.svg
 // import bell from "@/assets/images/airdrop/bell.svg";
 import UserInfo from "@/components/user-info";
 import group_coins from "@/assets/images/airdrop/group_coins.svg";
-import { useGetUserAirdropQuery } from "@/services/user";
+import { useGetUserAirdropQuery, useGetUserSettingQuery } from "@/services/user";
 import LoadingComponent from "@/components/loading-component";
-import { coinsBonusPerLevel, coinsPerTap } from "@/configs/config";
 import Image from "@/components/image";
 import Trunk from "../games/ourgame/lottery-spinner-game/Trunk";
-// import useFPS from "@/hooks/useFPS";
+import { SettingKeyEnum } from "@/enums/setting";
+import { SettingValueType } from "@/interfaces/ISetting";
+import { useGetMeQuery } from "@/services/auth";
 
-const maxTreeLevel = 6;
-const levelExpRequirements = [100, 250, 400, 600, 800, 1200];
 const MAX_WATERING_PER_DAY = 3;
-const MAX_TAB_COUNT = 30;
-// const POLLING_INTERVAL = 30000;
+const MAX_TAB_COUNT = 1;
 const RESET_AFTER = 3000;
-
-const coinBonusArray = new String(coinsBonusPerLevel).split(",");
 
 const AirdropPage = () => {
   const [isWatering, setIsWatering] = useState(false);
@@ -50,29 +45,26 @@ const AirdropPage = () => {
   const [tapCoins, setTapCoins] = useState(0);
   const { t } = useTranslation();
   const [trunkOpen, setTrunkOpen] = useState(false);
-  // const fps = useFPS()
+  const { data: userSettings } = useGetUserSettingQuery();
+  const getSettingValue = useCallback(
+    (key: SettingKeyEnum): SettingValueType => {
+      const setting = userSettings?.data.find((item) => item.key === key);
+      return setting?.value ?? "";
+    },
+    [userSettings]
+  );
 
   const [waterTree, { data: levelData }] = useHandleWaterRewardTreeMutation({});
   const [handleTabCoin] = useHandleTapCoinMutation();
   const { data: treeData, refetch: refetchTree } = useGetRewardTreeQuery({});
   const { data: userAirdrop, isLoading: isUserAirdropLoading } = useGetUserAirdropQuery();
   const { achievements, earnTasks, inviteFriends, lotterySpinner, passiveIncome } = userAirdrop?.data || {};
-  const { data: userInfo } = useAppSelector((state) => {
-    const response = state.authApi.queries["getMe({})"]?.data as {
-      data: {
-        achievementCount?: number;
-        pointsBalance?: number;
-        referralCount?: number;
-        transactionCount?: number;
-      };
-    };
-    return response;
-  });
+  const { data: userInfo, error: userInfoError } = useGetMeQuery({}, { refetchOnMountOrArgChange: true });
 
-  // console.log("FPS: ",fps);
-
-  const { pointsBalance = 0 } = userInfo || {};
-  const coinTabLevel = +coinsPerTap + +coinBonusArray[treeData?.data?.treeLevel || 0];
+  const { pointsBalance = 0 } = userInfo.data || {};
+  const coinsPerTap = getSettingValue(SettingKeyEnum.TAP_POINTS_PER_TAP) as number[];
+  const baseCoins = coinsPerTap[treeData?.data?.treeLevel ?? 0];
+  const coinTabLevel = userInfo.data.doublePointsActive ? baseCoins * 2 : baseCoins;
 
   const airdropContents: AirdropBadgeProps[] = [
     {
@@ -81,7 +73,7 @@ const AirdropPage = () => {
       imageUrl: income,
       color: "#E77C1B",
       bgColor: "#E77C1B95",
-      amount: formatCompactNumber(passiveIncome || 0),
+      amount: formatCompactNumber(passiveIncome ?? 0),
     },
     {
       title: "Lottery Spinner",
@@ -89,7 +81,7 @@ const AirdropPage = () => {
       imageUrl: spinner,
       color: "#65DEB8",
       bgColor: "#65DEB895",
-      amount: lotterySpinner,
+      amount: formatCompactNumber(lotterySpinner ?? 0),
     },
     {
       title: "Invite friends",
@@ -97,7 +89,7 @@ const AirdropPage = () => {
       imageUrl: friends,
       color: "#6D89FF",
       bgColor: "#6D89FF95",
-      amount: inviteFriends,
+      amount: formatCompactNumber(inviteFriends ?? 0),
     },
     {
       title: "Earn tasks",
@@ -105,15 +97,15 @@ const AirdropPage = () => {
       imageUrl: tasks,
       color: "#EB886D",
       bgColor: "#EB886D95",
-      amount: earnTasks,
+      amount: formatCompactNumber(earnTasks ?? 0),
     },
     {
-      title: "Achivements",
+      title: "Achievements",
       description: "Complete tasks to earn rewards and tokens",
-      imageUrl: achivements,
+      imageUrl: achievementImage,
       color: "#5A2DFD",
       bgColor: "#5A2DFD95",
-      amount: achievements,
+      amount: formatCompactNumber(achievements ?? 0),
     },
   ];
 
@@ -144,10 +136,19 @@ const AirdropPage = () => {
   }, [levelData, pointsBalance, refetchTree]);
 
   const progressPercent = useMemo(() => {
-    if (foxState.treeLevel >= maxTreeLevel) return 100;
-    const requirement = levelExpRequirements[foxState.treeLevel];
-    return Math.min((foxState.experience / requirement) * 100, 100);
-  }, [foxState]);
+    const maxTreeLevel = getSettingValue(SettingKeyEnum.TREE_LEVEL);
+    if (typeof maxTreeLevel === "number" && foxState.treeLevel >= maxTreeLevel) {
+      return 100;
+    }
+
+    const experienceRequirements = getSettingValue(SettingKeyEnum.LEVEL_EXPERIENCE_REQUIREMENTS);
+    if (Array.isArray(experienceRequirements)) {
+      const requirement = experienceRequirements[foxState.treeLevel];
+      return Math.min((foxState.experience / requirement) * 100, 100);
+    }
+
+    return 0;
+  }, [foxState, getSettingValue]);
 
   const handleWateringCanClick = useCallback(async () => {
     if (foxState.waterCountToday >= MAX_WATERING_PER_DAY) {
@@ -198,6 +199,9 @@ const AirdropPage = () => {
   if (isUserAirdropLoading) {
     return <LoadingComponent />;
   }
+
+  if (userInfoError) return <p>Error loading user info</p>;
+  if (!userInfo || !userInfo.data) return <p></p>;
 
   return (
     <motion.div
@@ -383,7 +387,7 @@ const AirdropPage = () => {
                   </div>
                   <div className="flex flex-row space-x-2 justify-center items-center">
                     <Image src={group_coins} className="" alt="" width={40} height={30} />
-                    <p className="text-xl font-bold">{typeof tapCoins === "number" ? tapCoins.toFixed(0) : tapCoins}</p>
+                    <p className="text-xl font-bold">{tapCoins.toLocaleString()}</p>
                   </div>
                 </div>
               </div>

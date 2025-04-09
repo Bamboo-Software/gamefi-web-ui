@@ -119,7 +119,7 @@ const FriendsPage = () => {
       title: t("friends.add.title"),
       content: (
         <p className="text-xs">
-          +{getSettingValue(SettingKeyEnum.REFERRAL_FIXED_POINTS_REFERRER)} {t("friends.add.description")}
+          +{getSettingValue(SettingKeyEnum.REFERRAL_FIXED_POINTS_REFERRER).toLocaleString()} {t("friends.add.description")}
         </p>
       ),
     },
@@ -128,7 +128,7 @@ const FriendsPage = () => {
       title: t("friends.add_premium.title"),
       content: (
         <p className="text-xs">
-          +{getSettingValue(SettingKeyEnum.REFERRAL_FIXED_POINTS_TELEGRAM_PREMIUM)} {t("friends.add.description")}
+          +{getSettingValue(SettingKeyEnum.REFERRAL_FIXED_POINTS_TELEGRAM_PREMIUM).toLocaleString()} {t("friends.add.description")}
         </p>
       ),
     },
@@ -181,7 +181,6 @@ const FriendsPage = () => {
       createdAt: friend.createdAt,
     };
   });
-  console.log(usersListData);
 
   return (
     <motion.div

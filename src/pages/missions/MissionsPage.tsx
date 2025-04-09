@@ -181,7 +181,7 @@ const MissionsPage = () => {
         content: (
           <div className='flex flex-row mt-1 justify-center items-center text-[#FFC800] font-semibold'>
             <img className="size-6" src={coin} alt="coin" />
-            <span>+{mission.pointsReward}</span>
+            <span>+{mission.pointsReward.toLocaleString()}</span>
           </div>
         ),
         dialog: (
