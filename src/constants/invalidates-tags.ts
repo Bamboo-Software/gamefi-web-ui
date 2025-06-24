@@ -9,6 +9,10 @@ export enum InvalidatesTagsEnum {
     WALLET = "Wallet",
     SETTING = "Setting",
     GAME = "Game",
-    LOTTERY_ITEMS = 'Lottery_items'
+    LOTTERY_ITEMS = 'Lottery_items',
+    SEASON = 'Season',
+    NFT = 'NFT',
+    STAKE = 'STAKE',
+    USER_NFT = 'USER_NFT',
   }
   

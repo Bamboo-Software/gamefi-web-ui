@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { useCopyToClipboard } from "react-use";
 import { useAddReferralMutation, useGetReferralListQuery, useGetReferralQuery } from "@/services/referral";
-import LoadingComponent from "@/components/loading-component";
+import LoadingPage from "@/pages/LoadingPage";
 import { toast } from "sonner";
 import { useAppSelector } from "@/stores/store";
 import { useTranslation } from "react-i18next";
@@ -68,7 +68,7 @@ const FriendsPage = () => {
   } = useGetReferralListQuery({ page: currentPage, limit: itemsPerPage });
 
   // Loading states
-  if (referralDataLoading || referralListLoading) return <LoadingComponent />;
+  if (referralDataLoading || referralListLoading) return <LoadingPage />;
 
   const handleCopy = () => {
     copyToClipboard(userInfo.referralCode);

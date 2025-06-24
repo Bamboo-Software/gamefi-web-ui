@@ -24,9 +24,9 @@ import { toast } from "sonner";
 import { SocialTypeEnum } from "@/enums/user";
 import { useNavigate } from "react-router-dom";
 import routes from "@/constants/routes";
-import { CryptoCurrencyEnum } from "@/enums/games";
 import { ITransaction } from "@/interfaces/ITransaction";
 import { FaDownload } from "react-icons/fa";
+import { CryptoCurrencyEnum } from '@/enums/blockchain';
 
 const { PROFILE } = routes;
 

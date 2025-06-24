@@ -1,207 +1,118 @@
-import AirdropBadge from "./components/AirdropBadge";
-import { AirdropBadgeProps } from "./components/AirdropBadge";
-import income from "@/assets/images/airdrop/income.svg";
-import achievementImage from "@/assets/images/airdrop/achivements.svg";
-import friends from "@/assets/images/airdrop/friends.svg";
-import spinner from "@/assets/images/airdrop/spinner.svg";
-import tasks from "@/assets/images/airdrop/tasks.svg";
-import CoinFox from "./components/CoinFox";
-import { IoHelpCircleSharp } from "react-icons/io5";
-import AirdropDialog from "./components/AirdropDialog";
-// import { Progress } from "@/components/ui/progress";
-import WateringCan from "./components/WateringCan";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-// import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import { motion } from "framer-motion";
-import { useTranslation } from "react-i18next";
-import { useGetRewardTreeQuery, useHandleWaterRewardTreeMutation } from "@/services/reward-tree";
-import { useHandleTapCoinMutation } from "@/services/airdrop";
-import { formatCompactNumber } from "@/utils/formatCompactNumber";
-import thunder from "@/assets/images/airdrop/thunder.svg";
-import bg_airdrop_header from "@/assets/images/airdrop/bg_airdrop_header.svg";
-import bg_airdrop_header1 from "@/assets/images/airdrop/bg_airdrop_header1.svg";
-import bg_airdrop_header_l from "@/assets/images/airdrop/bg_airdrop_header_l.svg";
-import bg_airdrop_header_r from "@/assets/images/airdrop/bg_airdrop_header_r.svg";
-// import bell from "@/assets/images/airdrop/bell.svg";
-import UserInfo from "@/components/user-info";
-import group_coins from "@/assets/images/airdrop/group_coins.svg";
-import { useGetUserAirdropQuery, useGetUserSettingQuery } from "@/services/user";
-import LoadingComponent from "@/components/loading-component";
-import Image from "@/components/image";
-import Trunk from "../games/ourgame/lottery-spinner-game/Trunk";
-import { SettingKeyEnum } from "@/enums/setting";
-import { SettingValueType } from "@/interfaces/ISetting";
-import { useGetMeQuery } from "@/services/auth";
+import { motion, AnimatePresence } from "framer-motion";
+import { socialLinks, webLinks } from "@/constants/social-links";
+import projectLogo from "@/assets/images/airdrop/jupiter.svg";
+import featureImage1 from "@/assets/images/airdrop/income.svg";
+import featureImage2 from "@/assets/images/airdrop/achivements.svg";
+import featureImage3 from "@/assets/images/airdrop/friends.svg";
+import featureImage4 from "@/assets/images/airdrop/tasks.svg";
+import featureImage5 from "@/assets/images/airdrop/spinner.svg";
+import { useEffect, useState } from "react";
 
-const MAX_WATERING_PER_DAY = 3;
-const MAX_TAB_COUNT = 1;
-const RESET_AFTER = 3000;
+interface FeatureCardProps {
+  title: string;
+  description: string;
+  imageUrl: string;
+  color: string;
+  bgColor: string;
+}
 
-const AirdropPage = () => {
-  const [isWatering, setIsWatering] = useState(false);
-  const [tapCount, setTapCount] = useState<number>(1);
-  const tapTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const [tapCoins, setTapCoins] = useState(0);
-  const { t } = useTranslation();
-  const [trunkOpen, setTrunkOpen] = useState(false);
-  const { data: userSettings } = useGetUserSettingQuery();
-  const getSettingValue = useCallback(
-    (key: SettingKeyEnum): SettingValueType => {
-      const setting = userSettings?.data.find((item) => item.key === key);
-      return setting?.value ?? "";
-    },
-    [userSettings]
+const FeatureCard = ({ title, description, imageUrl, color, bgColor }: FeatureCardProps) => {
+  return (
+    <motion.div
+      className={`overflow-hidden rounded-2xl relative shadow-lg border-2 border-solid p-6`}
+      style={{ borderColor: color, backgroundColor: bgColor }}
+      whileHover={{ y: -10, boxShadow: `0 10px 25px -5px ${color}50` }}
+      initial={{ opacity: 0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.4 }}
+    >
+      <motion.div 
+        className="absolute -right-10 -top-10 w-32 h-32 rounded-full"
+        style={{ backgroundColor: `${color}20` }}
+        animate={{ 
+          scale: [1, 1.2, 1],
+        }}
+        transition={{ 
+          duration: 3, 
+          repeat: Infinity,
+          repeatType: "reverse" 
+        }}
+      />
+      <div className="flex items-center mb-4 relative z-10">
+        <motion.div 
+          className="bg-white/10 p-3 rounded-full mr-4 backdrop-blur-sm"
+          whileHover={{ rotate: 360 }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.img 
+            src={imageUrl} 
+            alt={title} 
+            className="w-10 h-10" 
+            animate={{ rotate: 360 }}
+            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+          />
+        </motion.div>
+        <h3 
+          className="text-xl font-bold" 
+          style={{ 
+            background: `linear-gradient(90deg, white, ${color})`,
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent"
+          }}
+        >
+          {title}
+        </h3>
+      </div>
+      <p className="text-gray-100 relative z-10">{description}</p>
+    </motion.div>
   );
+};
 
-  const [waterTree, { data: levelData }] = useHandleWaterRewardTreeMutation({});
-  const [handleTabCoin] = useHandleTapCoinMutation();
-  const { data: treeData, refetch: refetchTree } = useGetRewardTreeQuery({});
-  const { data: userAirdrop, isLoading: isUserAirdropLoading } = useGetUserAirdropQuery();
-  const { achievements, earnTasks, inviteFriends, lotterySpinner, passiveIncome } = userAirdrop?.data || {};
-  const { data: userInfo, error: userInfoError } = useGetMeQuery({}, { refetchOnMountOrArgChange: true });
-
-  const { pointsBalance = 0 } = userInfo.data || {};
-  const coinsPerTap = getSettingValue(SettingKeyEnum.TAP_POINTS_PER_TAP) as number[];
-  const baseCoins = coinsPerTap[treeData?.data?.treeLevel ?? 0];
-  const coinTabLevel = userInfo.data.doublePointsActive ? baseCoins * 2 : baseCoins;
-
-  const airdropContents: AirdropBadgeProps[] = [
-    {
-      title: "Passive Income",
-      description: "Complete tasks to earn rewards and tokens",
-      imageUrl: income,
-      color: "#E77C1B",
-      bgColor: "#E77C1B95",
-      amount: formatCompactNumber(passiveIncome ?? 0),
-    },
-    {
-      title: "Lottery Spinner",
-      description: "Complete tasks to earn rewards and tokens",
-      imageUrl: spinner,
-      color: "#65DEB8",
-      bgColor: "#65DEB895",
-      amount: formatCompactNumber(lotterySpinner ?? 0),
-    },
-    {
-      title: "Invite friends",
-      description: "Complete tasks to earn rewards and tokens",
-      imageUrl: friends,
-      color: "#6D89FF",
-      bgColor: "#6D89FF95",
-      amount: formatCompactNumber(inviteFriends ?? 0),
-    },
-    {
-      title: "Earn tasks",
-      description: "Complete tasks to earn rewards and tokens",
-      imageUrl: tasks,
-      color: "#EB886D",
-      bgColor: "#EB886D95",
-      amount: formatCompactNumber(earnTasks ?? 0),
-    },
-    {
-      title: "Achievements",
-      description: "Complete tasks to earn rewards and tokens",
-      imageUrl: achievementImage,
-      color: "#5A2DFD",
-      bgColor: "#5A2DFD95",
-      amount: formatCompactNumber(achievements ?? 0),
-    },
-  ];
-
-  const foxState = useMemo(() => {
-    if (!treeData?.data) {
-      return {
-        treeLevel: 0,
-        experience: 0,
-        waterCountToday: 0,
-        shakeCountToday: 0,
-      };
-    }
-
-    return {
-      ...treeData.data,
-      treeLevel: treeData.data.treeLevel,
-      experience: treeData.data.experience,
-      waterCountToday: treeData.data.waterCountToday,
-      shakeCountToday: treeData.data.shakeCountToday,
-    };
-  }, [treeData]);
+const ProjectIntroPage = () => {
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    setTapCoins(pointsBalance);
-    if (levelData?.data) {
-      refetchTree();
-    }
-  }, [levelData, pointsBalance, refetchTree]);
+    setIsLoaded(true);
+  }, []);
 
-  const progressPercent = useMemo(() => {
-    const maxTreeLevel = getSettingValue(SettingKeyEnum.TREE_LEVEL);
-    if (typeof maxTreeLevel === "number" && foxState.treeLevel >= maxTreeLevel) {
-      return 100;
-    }
-
-    const experienceRequirements = getSettingValue(SettingKeyEnum.LEVEL_EXPERIENCE_REQUIREMENTS);
-    if (Array.isArray(experienceRequirements)) {
-      const requirement = experienceRequirements[foxState.treeLevel];
-      return Math.min((foxState.experience / requirement) * 100, 100);
-    }
-
-    return 0;
-  }, [foxState, getSettingValue]);
-
-  const handleWateringCanClick = useCallback(async () => {
-    if (foxState.waterCountToday >= MAX_WATERING_PER_DAY) {
-      toast.error("Hekko");
-      return;
-    }
-
-    try {
-      setIsWatering(true);
-      // dispatch(playSound(SoundType.EATING_SOUND));
-
-      await waterTree({}).unwrap();
-      await refetchTree();
-
-      toast.success(t("airdrop.success.water"));
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      toast.error(t("airdrop.errors.water_failed", { hours: 4 }));
-    } finally {
-      setIsWatering(false);
-    }
-  }, [foxState.waterCountToday, refetchTree, t, waterTree]);
-
-  const handleCoinTreeClick = useCallback(async () => {
-    try {
-      if (tapCount < MAX_TAB_COUNT) {
-        setTapCount((prev) => prev + 1);
-      } else {
-        setTapCount(MAX_TAB_COUNT);
-      }
-      handleTabCoin({ tapCount }).unwrap();
-      // getUserInfo({}).unwrap();
-      setTapCoins(tapCoins + coinTabLevel);
-      if (tapTimeoutRef.current) {
-        clearTimeout(tapTimeoutRef.current);
-      }
-
-      tapTimeoutRef.current = setTimeout(() => {
-        setTapCount(1);
-      }, RESET_AFTER);
-      // toast.success(t('airdrop.success.shake'));
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
-      toast.error(t("airdrop.errors.shake_failed", { hours: 6 }));
-    }
-  }, [coinTabLevel, handleTabCoin, t, tapCoins, tapCount]);
-
-  if (isUserAirdropLoading) {
-    return <LoadingComponent />;
-  }
-
-  if (userInfoError) return <p>Error loading user info</p>;
-  if (!userInfo || !userInfo.data) return <p></p>;
+  const features: FeatureCardProps[] = [
+    {
+      title: "NFT Marketplace",
+      description: "Browse, buy, and sell unique digital collectibles on our secure NFT marketplace",
+      imageUrl: featureImage1,
+      color: "#E77C1B",
+      bgColor: "#E77C1B30",
+    },
+    {
+      title: "Staking Rewards",
+      description: "Earn passive income by staking your tokens and participating in our reward system",
+      imageUrl: featureImage2,
+      color: "#65DEB8",
+      bgColor: "#65DEB830",
+    },
+    {
+      title: "Community",
+      description: "Join our vibrant community of collectors, creators, and crypto enthusiasts",
+      imageUrl: featureImage3,
+      color: "#6D89FF",
+      bgColor: "#6D89FF30",
+    },
+    {
+      title: "Gaming Integration",
+      description: "Experience seamless integration with popular games and earn rewards while playing",
+      imageUrl: featureImage4,
+      color: "#EB886D",
+      bgColor: "#EB886D30",
+    },
+    {
+      title: "Tokenomics",
+      description: "Understand our token economy, distribution, and long-term value proposition",
+      imageUrl: featureImage5,
+      color: "#5A2DFD",
+      bgColor: "#5A2DFD30",
+    },
+  ];
 
   return (
     <motion.div
@@ -211,220 +122,522 @@ const AirdropPage = () => {
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <div className="w-full h-full overflow-hidden">
-        <div className="flex flex-col lg:flex-row gap-16 h-full">
-          {/* Left Section - Fox Game */}
-          <div className="w-full lg:w-1/2 mb-6 rounded-2xl overflow-auto">
-            <div className="flex flex-col w-full bg-opacity-70 rounded-xl px-4">
-              <motion.div
-                initial={{ y: -100, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{
-                  duration: 0.5,
-                  ease: "easeOut",
-                }}
-                className="w-full h-14 bg-cover bg-center bg-no-repeat"
-                style={{
-                  backgroundImage: `url(${bg_airdrop_header1})`,
+        {/* Hero Section */}
+        <motion.div 
+          className="w-full bg-gradient-to-r  from-[#1594B8]/80 to-[#24E6F3]/80 rounded-2xl p-12 mb-12 relative overflow-hidden"
+          style={{ minHeight: "60vh" }}
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          transition={{ duration: 0.8 }}
+        >
+          {/* Background Animation Elements */}
+          <motion.div 
+            className="absolute top-0 left-0 w-full h-full opacity-20"
+            style={{ 
+              background: "radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%)",
+              backgroundSize: "150% 150%"
+            }}
+            animate={{ 
+              backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
+            }}
+            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          />
+          
+          <motion.div 
+            className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-white/10 blur-3xl"
+            animate={{ 
+              scale: [1, 1.2, 1],
+              x: [0, 50, 0],
+              y: [0, 30, 0]
+            }}
+            transition={{ duration: 10, repeat: Infinity }}
+          />
+          
+          <motion.div 
+            className="absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-white/10 blur-3xl"
+            animate={{ 
+              scale: [1, 1.3, 1],
+              x: [0, 40, 0],
+              y: [0, -20, 0]
+            }}
+            transition={{ duration: 12, repeat: Infinity, delay: 1 }}
+          />
+          
+          <div className="flex flex-col lg:flex-row items-center justify-between h-full relative z-10">
+            <div className="lg:w-1/2 mb-8 lg:mb-0 flex flex-col justify-center">
+              <AnimatePresence>
+                {isLoaded && (
+                  <motion.h1 
+                    className="text-5xl md:text-6xl font-bold mb-6 leading-tight"
+                    initial={{ opacity: 0, y: -50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2, duration: 0.7, type: "spring" }}
+                  >
+                    <span className="inline-block">
+                      <motion.span 
+                        className="inline-block"
+                        style={{ 
+                          background: "linear-gradient(90deg, white, #24E6F3)",
+                          WebkitBackgroundClip: "text",
+                          WebkitTextFillColor: "transparent",
+                          textShadow: "0 0 30px rgba(36, 230, 243, 0.5)"
+                        }}
+                        animate={{ 
+                          textShadow: ["0 0 20px rgba(36, 230, 243, 0.3)", "0 0 40px rgba(36, 230, 243, 0.7)", "0 0 20px rgba(36, 230, 243, 0.3)"]
+                        }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      >
+                        JuniperFOX
+                      </motion.span>
+                    </span>
+                    <br />
+                    <motion.span 
+                      className="inline-block text-white"
+                      initial={{ opacity: 0, x: -30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.5, duration: 0.5 }}
+                    >
+                      NFT Marketplace
+                    </motion.span>
+                  </motion.h1>
+                )}
+              </AnimatePresence>
+              
+              <motion.p 
+                className="text-xl text-gray-100 mb-8 max-w-xl"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.6, duration: 0.5 }}
+              >
+                Discover, collect, and trade unique digital assets in our secure and user-friendly NFT marketplace.
+                <motion.span 
+                  className="block mt-4 text-white/80"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1, duration: 0.5 }}
+                >
+                  Join the future of digital ownership today.
+                </motion.span>
+              </motion.p>
+              
+              <motion.div 
+                className="flex flex-wrap gap-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8, duration: 0.5 }}
+              >
+                <motion.a 
+                  href="#features" 
+                  className="bg-white text-[#1594B8] px-8 py-4 rounded-full font-bold hover:bg-gray-100 transition-colors relative overflow-hidden group"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <motion.span 
+                    className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0"
+                    initial={{ x: "-100%" }}
+                    whileHover={{ x: "200%" }}
+                    transition={{ duration: 0.8 }}
+                  />
+                  Explore Features
+                </motion.a>
+                
+                <motion.a 
+                  href={webLinks} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-white/10 transition-colors relative overflow-hidden group"
+                  whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(255,255,255,0.5)" }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <motion.span 
+                    className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0"
+                    initial={{ x: "-100%" }}
+                    whileHover={{ x: "200%" }}
+                    transition={{ duration: 0.8 }}
+                  />
+                  Visit Website
+                </motion.a>
+              </motion.div>
+            </div>
+            
+            <motion.div 
+              className="lg:w-1/2 flex justify-center items-center"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.4, duration: 0.7, type: "spring" }}
+            >
+              <motion.div className="relative">
+                {/* Glow effect behind logo */}
+                <motion.div 
+                  className="absolute inset-0 rounded-full blur-3xl"
+                  style={{ backgroundColor: "rgba(36, 230, 243, 0.3)" }}
+                  animate={{ 
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                />
+                
+                <motion.img 
+                  src={projectLogo} 
+                  alt="JuniperFOX NFT" 
+                  className="w-80 h-80 object-contain relative z-10"
+                  animate={{ 
+                    y: [0, -15, 0],
+                  }}
+                  transition={{ 
+                    duration: 4, 
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                    ease: "easeInOut" 
+                  }}
+                  drag
+                  dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+                  dragElastic={0.1}
+                  whileDrag={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                />
+                
+                {/* Floating particles around logo */}
+                {[...Array(6)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute w-4 h-4 rounded-full bg-white/80"
+                    style={{ 
+                      left: `${Math.random() * 100}%`,
+                      top: `${Math.random() * 100}%`,
+                    }}
+                    animate={{ 
+                      x: [0, Math.random() * 40 - 20, 0],
+                      y: [0, Math.random() * 40 - 20, 0],
+                      opacity: [0.4, 0.8, 0.4],
+                      scale: [0.8, 1.2, 0.8]
+                    }}
+                    transition={{ 
+                      duration: 3 + Math.random() * 3, 
+                      repeat: Infinity,
+                      delay: Math.random() * 2
+                    }}
+                  />
+                ))}
+              </motion.div>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Features Section */}
+        <div id="features" className="mb-12 pt-10">
+          <motion.div 
+            className="text-center mb-10"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <motion.h2 
+              className="text-3xl font-bold mb-4 text-white"
+              initial={{ y: 30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <span
+                style={{ 
+                  background: "linear-gradient(90deg, #1594B8, #24E6F3)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent"
                 }}
               >
-                <div
-                  className="w-full h-15 bg-cover z-10 bg-center bg-no-repeat"
-                  style={{
-                    backgroundImage: `url(${bg_airdrop_header})`,
-                  }}
-                >
-                  <div className="flex w-full flex-row justify-between items-center px-2">
-                    <button
-                      className="h-12 flex flex-row rounded-md bg-cover bg-center z-20 bg-no-repeat w-1/4 mt-2"
-                      style={{
-                        backgroundImage: `url(${bg_airdrop_header_l})`,
-                      }}
-                    >
-                      <div className="flex flex-row items-center justify-center w-full h-full">
-                        <Trunk trunkOpen={trunkOpen} setTrunkOpen={setTrunkOpen} />
-                      </div>
-                    </button>
-                    <button>
-                      <UserInfo type="default" />
-                    </button>
-                    <button
-                      className="h-12 rounded-md bg-cover bg-center z-20 flex flex-row justify-center items-center bg-no-repeat w-1/4 mt-2"
-                      style={{
-                        backgroundImage: `url(${bg_airdrop_header_r})`,
-                      }}
-                    >
-                      <div>
-                        <div
-                          className=" flex w-12 h-10 relative flex-row rounded-md bg-cover bg-center z-20 bg-no-repeat "
-                          style={{}}
-                        >
-                          <div className="translate-x-1/2">
-                            <WateringCan onClick={handleWateringCanClick} />
-                          </div>
-                        </div>
-                      </div>
-                    </button>
-                  </div>
-                </div>
+                Key Features
+              </span>
+            </motion.h2>
+            <motion.p 
+              className="text-xl text-gray-300 max-w-3xl mx-auto"
+              initial={{ y: 30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              Our platform offers a comprehensive suite of features designed to enhance your NFT experience
+            </motion.p>
+          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {features.map((feature, index) => (
+              <motion.div 
+                key={index}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ delay: 0.1 * index, duration: 0.5 }}
+              >
+                <FeatureCard {...feature} />
               </motion.div>
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full ">
-                {/* Progress Section */}
-                <div className="flex flex-col space-y-2 w-full ">
-                  <div className="relative w-full h-2.5 mt-2 bg-[#1D2C42] rounded-full overflow-hidden">
-                    {/* Animated gradient progress */}
-                    <motion.div
-                      className="absolute w-full top-0 left-0 h-full rounded-r-full"
-                      style={{
-                        background: "repeating-linear-gradient(45deg, #24E5F3 5px, #24E5F390 10px, #24E5F3 20px)",
-                      }}
-                      animate={{
-                        width: `${progressPercent}%`,
-                        backgroundPosition: ["0px", "20rem"],
-                      }}
-                      initial={{ width: "0%" }}
-                      transition={{
-                        width: { duration: 8, ease: "easeInOut" },
-                        backgroundPosition: {
-                          duration: 5,
-                          repeat: Infinity,
-                          ease: "linear",
-                        },
-                      }}
-                    />
-
-                    {/* Animated circle indicator */}
-                    <motion.div
-                      className="absolute top-0 h-full bg-[#1E2C42] rounded-full w-3"
-                      animate={{
-                        left: `${progressPercent}%`,
-                        scale: [1, 1.2, 1],
-                      }}
-                      initial={{ left: "0%" }}
-                      transition={{
-                        left: { duration: 0.8, ease: "easeInOut" },
-                        scale: {
-                          duration: 1.5,
-                          repeat: Infinity,
-                          repeatType: "reverse",
-                        },
-                      }}
-                    />
-                  </div>
-                  <div className="flex flex-row space-x-2 justify-center items-center">
-                    <img src={thunder} alt="" />
-                    <p className="text-md font-medium">+{coinTabLevel} / per tap</p>
-                    <AirdropDialog
-                      title={"How to earn coins?"}
-                      icon={<IoHelpCircleSharp className="size-6" />}
-                      description={
-                        <div className="space-y-6 h-[80vh] overflow-y-auto p-4">
-                          <h1 className="text-3xl font-bold text-orange-400 mb-4 text-center">Lottery JFox</h1>
-                          <p className="text-gray-300 text-lg mb-6 text-center">
-                            Welcome to <span className="font-semibold text-orange-400">Lottery JFox</span>, a fun and
-                            rewarding game where your friendly fox companion brings you wealth and joy!
-                          </p>
-                          <h2 className="text-2xl font-semibold mb-4">How to Play:</h2>
-                          <ul className="space-y-4">
-                            <li className="flex items-start">
-                              <span className="text-orange-400 font-bold mr-2">•</span>
-                              <span>
-                                <strong>Tap the Fox:</strong> Every time you tap on the fox, you will receive a certain
-                                amount of coins as a reward. But there’s a catch! The fox can only give you coins once
-                                every <strong>4 hours</strong>, so make sure to come back and collect your fortune.
-                              </span>
-                            </li>
-                            <li className="flex items-start">
-                              <span className="text-orange-400 font-bold mr-2">•</span>
-                              <span>
-                                <strong>Feed the Fox:</strong> To help your fox grow stronger and more generous, feed it
-                                with fish! Each feeding increases the fox’s level, unlocking greater rewards.
-                              </span>
-                            </li>
-                            <li className="flex items-start">
-                              <span className="text-orange-400 font-bold mr-2">•</span>
-                              <span>
-                                <strong>Level Up:</strong> The fox has <strong>6 levels</strong>, and with every new
-                                level, the amount of coins you earn will significantly increase.
-                              </span>
-                            </li>
-                          </ul>
-                          <h2 className="text-2xl font-semibold mt-6 mb-4">Features:</h2>
-                          <ul className="space-y-4">
-                            <li className="flex items-start">
-                              <span className="text-orange-400 font-bold mr-2">•</span>
-                              <span>
-                                <strong>Adorable Companion:</strong> Watch your fox become cuter and livelier as it
-                                levels up.
-                              </span>
-                            </li>
-                            <li className="flex items-start">
-                              <span className="text-orange-400 font-bold mr-2">•</span>
-                              <span>
-                                <strong>Progressive Rewards:</strong> Higher levels mean bigger rewards! Work hard to
-                                level up your fox and maximize your earnings.
-                              </span>
-                            </li>
-                            <li className="flex items-start">
-                              <span className="text-orange-400 font-bold mr-2">•</span>
-                              <span>
-                                <strong>Simple Gameplay:</strong> Easy to play and fun for all ages. Just tap, feed, and
-                                collect!
-                              </span>
-                            </li>
-                          </ul>
-                          <div className="mt-6 text-center">
-                            <p className="text-lg font-semibold">
-                              Are you ready to take care of your fox and grow your fortune?
-                            </p>
-                            <p className="text-lg font-semibold text-orange-400">
-                              Start playing Lottery JFox now and enjoy the thrill of earning coins while bonding with
-                              your virtual pet! 🦊💰
-                            </p>
-                          </div>
-                        </div>
-                      }
-                    />
-                  </div>
-                  <div className="flex flex-row space-x-2 justify-center items-center">
-                    <Image src={group_coins} className="" alt="" width={40} height={30} />
-                    <p className="text-xl font-bold">{tapCoins.toLocaleString()}</p>
-                  </div>
-                </div>
-              </div>
-              {/* Fox Section */}
-              <div className="flex justify-center items-center flex-1 p-4">
-                <CoinFox
-                  isWatering={isWatering}
-                  foxLevel={foxState.treeLevel}
-                  onClick={handleCoinTreeClick}
-                  coinTabLevel={coinTabLevel}
-                  targetId="wallet-icon"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Right Section - Badges Grid */}
-          <div className="w-full lg:w-1/2 mt-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
-              {airdropContents.map((airdrop, index) => (
-                <motion.div key={index} whileHover={{ y: -4 }} transition={{ duration: 0.2 }}>
-                  <AirdropBadge
-                    title={airdrop.title}
-                    description={airdrop.description}
-                    imageUrl={airdrop.imageUrl}
-                    color={airdrop.color}
-                    bgColor={airdrop.bgColor}
-                    amount={airdrop.amount}
-                  />
-                </motion.div>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
+
+        {/* About Section */}
+        <motion.div 
+          className="bg-gradient-to-r from-[#1594B8]/30 to-[#24E6F3]/30 rounded-2xl p-8 mb-12 relative overflow-hidden"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+        >
+          {/* Background animation */}
+          <motion.div 
+            className="absolute inset-0 opacity-30"
+            style={{ 
+              backgroundImage: "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2) 0%, transparent 50%)",
+              backgroundSize: "150% 150%"
+            }}
+            animate={{ 
+              backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          />
+          
+          <div className="flex flex-col lg:flex-row items-center relative z-10">
+            <div className="lg:w-1/2 mb-8 lg:mb-0">
+              <motion.h2 
+                className="text-3xl font-bold mb-4"
+                initial={{ x: -30, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
+                <span
+                  style={{ 
+                    background: "linear-gradient(90deg, white, #24E6F3)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent"
+                  }}
+                >
+                  About JuniperFOX
+                </span>
+              </motion.h2>
+              <motion.p 
+                className="text-gray-100 mb-4"
+                initial={{ x: -30, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                JuniperFOX is a next-generation NFT marketplace built on blockchain technology, offering a secure, transparent, and user-friendly platform for digital asset trading.
+              </motion.p>
+              <motion.p 
+                className="text-gray-100 mb-4"
+                initial={{ x: -30, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                Our mission is to democratize access to digital collectibles and empower creators and collectors in the growing NFT ecosystem.
+              </motion.p>
+              <motion.p 
+                className="text-gray-100"
+                initial={{ x: -30, opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                With advanced features, low fees, and a commitment to sustainability, JuniperFOX is setting new standards in the NFT space.
+              </motion.p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Community Section */}
+        <motion.div 
+          className="mb-12"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.div 
+            className="text-center mb-10"
+            initial={{ y: 30, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <motion.h2 
+              className="text-3xl font-bold mb-4"
+              initial={{ y: 30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <span
+                style={{ 
+                  background: "linear-gradient(90deg, #1594B8, #24E6F3)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  textShadow: "0 0 20px rgba(36, 230, 243, 0.3)"
+                }}
+              >
+                Join Our Community
+              </span>
+            </motion.h2>
+            <motion.p 
+              className="text-xl text-gray-300 max-w-3xl mx-auto"
+              initial={{ y: 30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              Connect with fellow collectors and creators in our growing community
+            </motion.p>
+          </motion.div>
+          
+          <motion.div 
+            className="flex flex-wrap justify-center gap-6"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            {Object.entries(socialLinks).map(([platform, link], index) => (
+              <motion.a
+                key={platform}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white/10 p-4 rounded-full backdrop-blur-sm hover:bg-white/20 transition-all"
+                whileHover={{ 
+                  scale: 1.1, 
+                  boxShadow: "0 0 20px rgba(36, 230, 243, 0.5)",
+                  backgroundColor: "rgba(255, 255, 255, 0.2)"
+                }}
+                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.1 * index, duration: 0.5 }}
+              >
+                <motion.div
+                  animate={{ 
+                    rotate: [0, 10, 0, -10, 0],
+                  }}
+                  transition={{ 
+                    duration: 2, 
+                    repeat: Infinity,
+                    repeatType: "loop",
+                    ease: "easeInOut",
+                    delay: index * 0.2
+                  }}
+                >
+                  {/* social icon */}
+                </motion.div>
+              </motion.a>
+            ))}
+          </motion.div>
+        </motion.div>
+
+        {/* Newsletter Section */}
+        <motion.div 
+          className="bg-gradient-to-r from-[#1594B8]/20 to-[#24E6F3]/20 rounded-2xl p-8 mb-12 relative overflow-hidden"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+        >
+          {/* Background animation */}
+          <motion.div 
+            className="absolute inset-0 opacity-20"
+            style={{ 
+              backgroundImage: "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.3) 0%, transparent 70%)",
+              backgroundSize: "150% 150%"
+            }}
+            animate={{ 
+              backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
+            }}
+            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          />
+          
+          <div className="flex flex-col items-center relative z-10">
+            <motion.h2 
+              className="text-3xl font-bold mb-4 text-center"
+              initial={{ y: -30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <span
+                style={{ 
+                  background: "linear-gradient(90deg, white, #24E6F3)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  textShadow: "0 0 20px rgba(36, 230, 243, 0.3)"
+                }}
+              >
+                Stay Updated
+              </span>
+            </motion.h2>
+            <motion.p 
+              className="text-gray-100 mb-6 text-center max-w-2xl"
+              initial={{ y: -20, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              Subscribe to our newsletter to receive the latest updates, exclusive offers, and early access to new features.
+            </motion.p>
+            
+            <motion.form 
+              className="w-full max-w-md"
+              initial={{ y: 20, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <div className="flex flex-col sm:flex-row gap-4">
+                <motion.input 
+                  type="email" 
+                  placeholder="Your email address" 
+                  className="flex-grow px-4 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-[#24E6F3]/50"
+                  whileFocus={{ scale: 1.02, boxShadow: "0 0 15px rgba(36, 230, 243, 0.3)" }}
+                  transition={{ duration: 0.2 }}
+                />
+                <motion.button 
+                  type="submit" 
+                  className="px-6 py-3 rounded-full bg-white text-[#1594B8] font-bold hover:bg-opacity-90 transition-colors relative overflow-hidden"
+                  whileHover={{ 
+                    scale: 1.05,
+                    boxShadow: "0 0 20px rgba(36, 230, 243, 0.5)"
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <motion.span 
+                    className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0"
+                    initial={{ x: "-100%" }}
+                    whileHover={{ x: "200%" }}
+                    transition={{ duration: 0.8 }}
+                  />
+                  Subscribe
+                </motion.button>
+              </div>
+              <motion.p 
+                className="text-sm text-white/60 mt-3 text-center"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
+                We respect your privacy. Unsubscribe at any time.
+              </motion.p>
+            </motion.form>
+          </div>
+        </motion.div>
+
+
       </div>
     </motion.div>
   );
 };
 
-export default AirdropPage;
+
+
+export default ProjectIntroPage;
+

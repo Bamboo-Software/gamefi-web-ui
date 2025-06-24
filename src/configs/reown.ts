@@ -5,6 +5,8 @@ import {
   solana,
   optimism,
   polygon,
+  avalancheFuji,
+  sepolia,
 } from "@reown/appkit/networks";
 import type { AppKitNetwork } from "@reown/appkit/networks";
 import { SolanaAdapter } from "@reown/appkit-adapter-solana/react";
@@ -37,6 +39,8 @@ export const networks = [
   optimism,
   polygon,
   solana,
+  avalancheFuji,
+  sepolia
 ] as [AppKitNetwork, ...AppKitNetwork[]];
 
 //Set up the Wagmi Adapter (Config)

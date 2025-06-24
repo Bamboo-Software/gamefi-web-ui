@@ -20,6 +20,10 @@ const routes = {
     NOTIFICATIONS: '/notifications',
     TERMS_AND_POLICY: '/terms-and-policy',
 
+    MARKETPLACE: '/marketplace',
+    STAKING: '/staking',
+    NFT: ':seasonId/nfts',
+    USER_NFT: '/user-nft',
 };
 
 export default routes;

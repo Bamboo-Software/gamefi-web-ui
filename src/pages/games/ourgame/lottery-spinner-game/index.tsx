@@ -1,5 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import UserProfile from '@/pages/airdrop/components/UserProfile';
+// import UserProfile from '@/pages/airdrop/components/UserProfile';
 import { IoHelpCircleSharp } from 'react-icons/io5';
 import coin from '@/assets/icons/coin.svg';
 import { motion } from 'framer-motion';
@@ -9,14 +9,16 @@ import { Button } from '@/components/ui/button';
 import { GiTakeMyMoney } from "react-icons/gi";
 import { TbBulbFilled } from "react-icons/tb";
 import { Link, useNavigate } from 'react-router-dom';
-import AvatarModal from '@/components/user-avatar';
+// import AvatarModal from '@/components/user-avatar';
 import rank_icons from '@/assets/icons/lottery_game';
 // import thumb_lottery from "@/assets/images/games/thumb_lottery.jpg";
 import { useTranslation } from 'react-i18next';
 import { faker } from '@faker-js/faker';
 import { useGetMeQuery } from '@/services/auth';
-import LoadingComponent from '@/components/loading-component';
-import { useGetLotteryLeaderboardQuery, useHandleLotterySpinMutation } from '@/services/lottery';
+import LoadingPage from '@/pages/LoadingPage';
+import { 
+    // useGetLotteryLeaderboardQuery,
+     useHandleLotterySpinMutation } from '@/services/lottery';
 import { toast } from 'sonner';
 import { AlertCircle } from 'lucide-react';
 import LotterySpinnerGameTransactions from './LotterySpinnerGameTransactions';
@@ -27,13 +29,13 @@ import bg_leader_board from "@/assets/images/airdrop/bg_leaderboad.svg";
 import leader_board1 from "@/assets/images/airdrop/leader_board1.svg";
 import history from "@/assets/images/games/history.svg";
 import Image from '@/components/image';
-import {
-    Avatar,
-    AvatarFallback,
-    AvatarImage,
-} from "@/components/ui/avatar";
-import { getRankDisplay } from '@/components/display-rank';
-import { formatCompactUser } from '@/utils/formatCompactNumber';
+// import {
+//     Avatar,
+//     AvatarFallback,
+//     AvatarImage,
+// } from "@/components/ui/avatar";
+// import { getRankDisplay } from '@/components/display-rank';
+// import { formatCompactUser } from '@/utils/formatCompactNumber';
 import { useGetUserSettingQuery } from '@/services/user';
 import { SettingKeyEnum } from '@/enums/setting';
 import { SettingValueType } from '@/interfaces/ISetting';
@@ -44,16 +46,16 @@ import { TransactionTypeEnum } from '@/enums/transactions';
 
 
 const { GAMES } = routes;
-interface Player {
-    points?: number,
-    rank?: number,
-    user?: {
-        avatar?: string,
-        firstName?: string,
-        lastName?: string,
-        username?: string
-    }
-}
+// interface Player {
+//     points?: number,
+//     rank?: number,
+//     user?: {
+//         avatar?: string,
+//         firstName?: string,
+//         lastName?: string,
+//         username?: string
+//     }
+// }
 
 interface FakeData {
     name: string;
@@ -80,10 +82,10 @@ const LotterySpinnerGame = () => {
     );
     const [names, setNames] = useState<FakeData[]>([]);
     const maxCoinPerSpin = getSettingValue(SettingKeyEnum.LOTTERY_ENTRY_FEE);
-    const { data: leaderboardData, isLoading: isLoadingLotteryLeaderboard, error: errorGetLeaderboardData } = useGetLotteryLeaderboardQuery({});
+    // const { data: leaderboardData, isLoading: isLoadingLotteryLeaderboard, error: errorGetLeaderboardData } = useGetLotteryLeaderboardQuery({});
     // const { data: lotteryPoints, isLoading: isLoadingLotteryPoints,  error: errorGetLotteryPoints} = useGetLotteryPointsQuery({});
     const [handleLotterySpin] = useHandleLotterySpinMutation({});
-    const topPlayers = leaderboardData?.data?.items || [];
+    // const topPlayers = leaderboardData?.data?.items || [];
     // const spinnerItemsTemp: number[] = lotteryPoints?.data?.items.map((item: { pointsAwarded: number }) => item.pointsAwarded) || []
 
 
@@ -138,7 +140,7 @@ const LotterySpinnerGame = () => {
         setNames(fakeData);
     }, [handleRefeshUserInfo]);
 
-    if (userInfoLoading) return <LoadingComponent />;
+    if (userInfoLoading) return <LoadingPage />;
     if (userInfoError) return <p>Error loading user info</p>;
     if (!userInfo || !userInfo.data) return <p>No user data available</p>;
 
@@ -282,7 +284,7 @@ const LotterySpinnerGame = () => {
                             <p className='text-base sm:text-lg font-semibold my-4 sm:my-8'>{t("game.our_game.lottery_game.top_player", { players: 10 })}</p>
                         </div>
 
-                        {isLoadingLotteryLeaderboard && (
+                        {/* {isLoadingLotteryLeaderboard && (
                             <div className='w-full my-2'>
                                 <UserProfile
                                     avatar={<AvatarModal isUserAvatar={true} userName="Loading..." userImage={coin} />}
@@ -290,9 +292,9 @@ const LotterySpinnerGame = () => {
                                     content={<p className='text-gray-400 text-sm'>Loading...</p>}
                                     subContent={<div className='flex text-[#FFC800] font-semibold'><img className='size-5 sm:size-6' src={coin} alt="Coin" />0</div>} />
                             </div>
-                        )}
-                        {errorGetLeaderboardData && (<p className='font-semibold'>Error loading leaderboard</p>)}
-                        {!isLoadingLotteryLeaderboard && !errorGetLeaderboardData && topPlayers.map((topPlayer: Player, index: number) => (
+                        )} */}
+                        {/* {errorGetLeaderboardData && (<p className='font-semibold'>Error loading leaderboard</p>)} */}
+                        {/* {!isLoadingLotteryLeaderboard && !errorGetLeaderboardData && topPlayers.map((topPlayer: Player, index: number) => (
                             <div key={index} className='w-full my-2'>
                                 <UserProfile
                                     avatar={
@@ -311,7 +313,7 @@ const LotterySpinnerGame = () => {
                                     handleBtn={getRankDisplay(index + 1, "mr-3")}
                                     className='border-t-2  bottom-0 border-[#24E6F3] bg-gradient-to-t from-[#24E6F3] via-[#05A2C6CC] to-[#54a2c9] bg-white/50 text-gray-50 text-lg' />
                             </div>
-                        ))}
+                        ))} */}
 
                     </div>
                 </div>

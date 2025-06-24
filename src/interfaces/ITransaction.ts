@@ -1,9 +1,9 @@
 import { PaymentProviderEnum } from "@/constants/wallet";
-import { BlockchainNameEnum, CryptoCurrencyEnum, PrizeTypeEnum } from "@/enums/games";
+import { PrizeTypeEnum } from "@/enums/games";
 import { TransactionStatusEnum, TransactionTypeEnum } from "@/enums/transactions";
 import { IUser } from "./IUser";
 import { IGame } from "@/services/game";
-
+import { BlockchainNameEnum, CryptoCurrencyEnum } from '@/enums/blockchain';
 export interface ITransaction {
   _id: string;
   userId: string;

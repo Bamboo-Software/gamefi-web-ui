@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import coin from '@/assets/icons/coin.svg'
 import { useTranslation } from 'react-i18next'
 import { useGetLotteryHistoryQuery } from '@/services/lottery'
-import LoadingComponent from '@/components/loading-component'
+import LoadingPage from '@/pages/LoadingPage'
 import LotterySpinnerHistory from './LotterySpinnerHistory'
 
 const PAGE_SIZE = 10
@@ -44,7 +44,7 @@ const LotterySpinnerGameTransactions = () => {
     }
   }
 
-  if (isLoading && page === 1) return <LoadingComponent />
+  if (isLoading && page === 1) return <LoadingPage />
   if (error) return <div>{t('error.loading_data')}</div>
 
   const transactionsList = combinedData.map((transaction) => ({
@@ -84,7 +84,7 @@ const LotterySpinnerGameTransactions = () => {
           dataLength={combinedData.length}
           next={loadMore}
           hasMore={hasMore}
-          loader={isFetching && <LoadingComponent />}
+          loader={isFetching && <LoadingPage />}
           endMessage={
             <p className="text-center  text-gray-100">
               {/* {t('common.no_more_data')} */}

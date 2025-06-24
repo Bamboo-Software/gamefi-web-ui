@@ -8,16 +8,16 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { IFilter } from "@/interfaces/IFilter";
 import { useGetWonItemQuery } from "@/services/lottery";
 import { IWonItem } from "@/interfaces/IWonItems";
-import { CryptoCurrencyEnum } from "@/enums/games";
 import usdc from "@/assets/images/lottery_game/usdc.svg";
 import usdt from "@/assets/images/lottery_game/usdt.svg";
 import solana from "@/assets/images/lottery_game/sol.svg";
 import group_coins from "@/assets/images/lottery_game/group_coins.svg";
 import InfiniteScroll from "react-infinite-scroll-component";
-import LoadingComponent from "@/components/loading-component";
+import LoadingPage from "@/pages/LoadingPage";
 import ShareDialog from "./ShareDialog";
 import { useGetMeQuery } from "@/services/auth";
 import { TransactionTypeEnum } from "@/enums/transactions";
+import { CryptoCurrencyEnum } from '@/enums/blockchain';
 
 dayjs.extend(relativeTime);
 interface ITrunkProps {
@@ -112,7 +112,7 @@ const Trunk = ({ setTrunkOpen, trunkOpen, type }: ITrunkProps) => {
   };
 
   if (isLoadingWonItems) {
-    return <LoadingComponent />;
+    return <LoadingPage />;
   }
 
   if (errorGetWonItems) {

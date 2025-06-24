@@ -16,3 +16,9 @@ export interface ApiErrorResponse {
   status: number;
   data: ApiErrorResponseDetail;
 }
+export interface PaginatedResponse<T> {
+  items: T
+  total: number;
+  page: number;
+  limit: number;
+  }

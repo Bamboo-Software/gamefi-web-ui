@@ -6,16 +6,3 @@ export enum PrizeTypeEnum {
   DOUBLE_POINTS_24H = 'DOUBLE_POINTS_24H',
 }
 
-  export enum CryptoCurrencyEnum {
-    JFOX = 'JFOX',
-    SOL = 'SOL',
-    USDT = 'USDT',
-    USDC = 'USDC',
-    //...
-  }
-  
-  export enum BlockchainNameEnum {
-    ethereum = 'ethereum',
-    solana = 'solana',
-    //...
-  }

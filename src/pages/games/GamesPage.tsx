@@ -11,11 +11,11 @@ import jupiter_fox from "@/assets/images/games/minesweeper.svg";
 import wheel from "@/assets/images/games/spinner.svg";
 import starship from "@/assets/images/games/starship.png";
 import sudoku from "@/assets/images/games/sudoku.svg";
-import bg_badge from "@/assets/images/games/bg-badge.png";import { IoIosTimer } from "react-icons/io";
+import { IoIosTimer } from "react-icons/io";
 import { FaGamepad } from "react-icons/fa6";
+import { FaTrophy } from "react-icons/fa";
 import GameDialog from "./components/GameDialog";
 import LeaderboardDialog from "./ourgame/leaderboard";
-import LoadingComponent from "@/components/loading-component";
 import { useGetGameListQuery, useGetGamesPeriodQuery, usePlayGameMutation } from "@/services/game";
 import { SettingKeyEnum } from "@/enums/setting";
 import { useGetUserSettingQuery } from "@/services/user";
@@ -25,22 +25,7 @@ import { handleError } from "@/utils/apiError";
 import coin from "@/assets/icons/coin.png";
 import CountdownTimer from "@/components/countdown";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-
-// interface IGame {
-//   img: string;
-//   gameId?: string;
-//   title: string;
-//   color: string;
-//   handle?: (id: string) => void;
-//   intro?: string;
-//   active: boolean;
-//   spent: string;
-//   period?: string;
-//   startDate?: Date;
-//   endDate?: Date;
-//   prizeTable?: React.ReactNode; 
-//   prizes?: {id: string, minRank: number, maxRank: number, prizeName: string}[];
-// }
+import LoadingPage from "../LoadingPage";
 
 enum GameEnum {
   LOTTERY_SPINNER = "Lottery Spinner",
@@ -57,7 +42,6 @@ const {
 } = routesPath;
 
 const GamesPage = () => {
-
   const {t} = useTranslation(); 
   const navigate = useNavigate();
   const { data: userSettings } = useGetUserSettingQuery();
@@ -74,38 +58,42 @@ const GamesPage = () => {
   const { data, isLoading, isError } = useGetGameListQuery();
   const { data: allGamesPeriod } = useGetGamesPeriodQuery();
   const [playGame] = usePlayGameMutation();
-  if (isLoading) return <LoadingComponent />;
+  if (isLoading) return <LoadingPage />;
   if (isError) return <div>Error getting game</div>;
-  // const handleExplore = () => {
-  //   toast.error(t('game.alerts.coming_soon_alert'));
-  // }
 
   const awardsTable = (prizes: any) => {
     return (
       <div className="flex flex-col justify-center items-center w-full">
-        <p className="text-xl my-2 text-gray-100 font-semibold">Awards Season</p>
-        <div className="max-h-[30vh] w-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
-          <Table className="text-gray-100">
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <FaTrophy className="text-yellow-400 text-xl animate-pulse" />
+          <p className="text-xl text-white font-bold bg-gradient-to-r from-yellow-200 to-yellow-500 bg-clip-text text-transparent">Awards Season</p>
+        </div>
+        <div className="max-h-[30vh] w-full overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-400 scrollbar-track-indigo-100 rounded-lg border border-indigo-300/30">
+          <Table className="text-white">
             <TableHeader className="sticky top-0">
-              <TableRow className="border border-gray-100 sticky top-0">
-                <TableHead className="text-gray-100 text-center bg-[#1594B8]/95 z-10 font-semibold">Rank</TableHead>
-                <TableHead className="text-gray-100 text-center bg-[#1594B8]/95 z-10 font-semibold">Prize Name</TableHead>
-                {/* <TableHead className="text-gray-100">Note</TableHead> */}
+              <TableRow className="border-b border-indigo-300/30 sticky top-0">
+                <TableHead className="text-white text-center bg-gradient-to-r from-indigo-600/90 to-purple-600/90 z-10 font-bold">Rank</TableHead>
+                <TableHead className="text-white text-center bg-gradient-to-r from-indigo-600/90 to-purple-600/90 z-10 font-bold">Prize Name</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className="border border-gray-100">
-              {prizes?.map((prize: any) => (
-                <TableRow key={prize.id} className="border border-gray-100">
-                  <TableCell>{prize.minRank == prize.maxRank ? (`#${prize.minRank}`) : (`#${prize.minRank} - #${prize.maxRank}`)}</TableCell>
+            <TableBody>
+              {prizes?.map((prize: any, index: number) => (
+                <TableRow 
+                  key={prize.id} 
+                  className={`border-b border-indigo-300/30 hover:bg-indigo-500/20 transition-colors ${index % 2 === 0 ? 'bg-indigo-800/10' : 'bg-indigo-900/10'}`}
+                >
+                  <TableCell className="font-medium">
+                    {prize.minRank == prize.maxRank ? 
+                      (<span className="font-bold text-amber-400">#{prize.minRank}</span>) : 
+                      (<span><span className="font-bold text-amber-400">#{prize.minRank}</span> - <span className="font-bold text-amber-400">#{prize.maxRank}</span></span>)}
+                  </TableCell>
                   <TableCell>{prize.prizeName}</TableCell>
-                  {/* <TableCell>{user.email}</TableCell> */}
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </div>
       </div>
-
     )
   }
 
@@ -114,7 +102,7 @@ const GamesPage = () => {
       img: wheel,
       gameId: data?.data?.[0]?.id,
       title: GameEnum.LOTTERY_SPINNER,
-      color: "#05A2C6",
+      color: "#6366f1", // indigo-500
       handle: async (id: string) => {
         toast.success(`You have joined the game! Note: A Lottery spin ticket costs ${lotteryPointRequired} points.`);
         navigate(`${GAMES_LOTTERY_SPINNER}?id=${id}`);
@@ -127,7 +115,7 @@ const GamesPage = () => {
       img: starship,
       gameId: data?.data?.[1]?.id,
       title: GameEnum.FLAPPY_JFOX,
-      color: "#05A2C6",
+      color: "#8b5cf6", // violet-500
       handle: async (id: string) => {
         const success = await handlePlayGame(id);
         if (success) {
@@ -143,7 +131,7 @@ const GamesPage = () => {
       img: jupiter_fox,
       gameId: data?.data?.[2]?.id,
       title: GameEnum.MINESWEEPER,
-      color: "#05A2C6",
+      color: "#ec4899", // pink-500
       handle: async (id: string) => {
         const success = await handlePlayGame(id);
         if (success) {
@@ -159,9 +147,8 @@ const GamesPage = () => {
       img: sudoku,
       gameId: data?.data?.[3]?.id,
       title: GameEnum.SUDOKU,
-      color: "#05A2C6",
+      color: "#f59e0b", // amber-500
       handle: (id?: string) => {
-        // navigate(`${GAMES_MINESWEEPER}?id=${id}`);
         console.log(id);
         toast.warning("Coming Soon");
       },
@@ -186,26 +173,22 @@ const GamesPage = () => {
     try {
       const response = await playGame({ gameId }).unwrap();
       if (response.success) {
-        // Show success message with the correct points based on game type
-        // const gameInfo = games.find((game) => game.gameId === gameId);
-        // const pointsDeducted = gameInfo?.spent || 2000;
         const pointRequired = getSettingValue(SettingKeyEnum.PLAY_GAME_ENTRY_FEE);
         toast.success(`You have joined the game! ${pointRequired.toLocaleString()} points deducted.`);
         return true;
       }
       return false;
     } catch (error: any) {
-      // Check for the specific error message about insufficient points
       if (error?.data?.message === "Insufficient points to play game") {
         toast.error("You don't have enough points to play this game!");
         return false;
       } else {
-        // Handle other errors
         handleError(error);
         return false;
       }
     }
   };
+  
   return (
     <motion.div
       className="w-full flex flex-col"
@@ -214,118 +197,196 @@ const GamesPage = () => {
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <div className="px-8">
-        <p className="border-l-4 border-[#E77C1B] text-gray-50 font-semibold text-xl pl-5">Games</p>
-        <div
-            className="rounded-t-2xl w-full h-12 bg-cover bg-center bg-no-repeat"
-          >
-            <div className="flex  flex-col justify-center items-center text-center px-4">
-            <Image src={bg_games} className="size-32" alt="game_bg" width={270} height={180} loading={'lazy'} />
-              <p className="text-2xl font-bold text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.2)] [-webkit-text-stroke:1px_#000]">
-                Explore Exciting Games
-              </p>
-            </div>
-          </div>
-        <div className="w-full relative mt-52 rounded-2xl gap-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center items-center">
-          {games.map((game, index) => (
-          <motion.div
-            key={index}
-            className={`relative px-1 rounded-xl flex flex-row justify-between items-center h-28 bg-[#05A2C6CC] border-1 border-[#24E6F399] `}
-            initial={{
-              boxShadow: `0 0 10px ${game.color}, 0 0 10px ${game.color}, 0 0 40px ${game.color}`,
-            }}
-            animate={{
-              boxShadow: [
-                `0 0 5px ${game.color}, 0 0 10px ${game.color}`,
-                `0 0 15px ${game.color}, 0 0 30px ${game.color}`,
-                `0 0 5px ${game.color}, 0 0 10px ${game.color}`,
-              ],
-            }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              repeatType: "reverse",
-            }}
-          >
-            <div className="w-1/4">
-              <Image className="w-20" src={game.img} alt="" animationVariant="bounce" />
-            </div>
-            <div className="flex w-3/4 flex-row justify-between items-center px-2">
-              <div className="text-white py-1 rounded-md max-w-[60%] flex flex-col space-y-2">
-                <p className={`font-semibold truncate ${game.active === true ? "text-md" : ""}`}>{game.title}</p>
-                <div className="flex flex-row">
-                  <div
-                    className="w-fit px-2 h-5 flex justify-center space-x-0.5 items-center rounded-xl bg-cover bg-center bg-no-repeat"
-                    style={{ backgroundImage: `url(${bg_badge})` }}
-                  >
-                    <span className="text-xs">-{game.spent}</span>
-                    <Image src={coin} height={16} width={16} loading={"lazy"} alt="coin" />
-                  </div>
-                </div>
-              </div>
-              {game.active === true ? (
-                <div className="flex flex-col items-end">
-                  <GameDialog
-                    title={<p className="text-xl">{game.title}</p>}
-                    dialogClassName={`border-4 w-[90%] bg-gradient-to-b from-[#1594B8]/95 via-[#47C3E6]/95 via-[#32BAE0]/95 via-[#1594B8]/95 via-[#13A0C8]/95 to-[#24E6F3]/95 rounded-xl`}
-                    description={
-                      <div className="w-full text-center">
-                        <article className="text-justify mb-5 text-gray-100">{game?.intro}</article>
-                        <div className="my-4">
-                        {game?.prizeTable}
-                        </div>
-                        <div className="flex flex-row justify-center items-center space-x-2">
-                          {game.title !== GameEnum.LOTTERY_SPINNER && (
-                            <LeaderboardDialog id={game.gameId || ""} title={`${game.title} Leaderboard`} endDate={game.endDate} />
-                          )}
-                          <Button
-                            onClick={() => {
-                              game.handle?.(game.gameId ?? "");
-                            }}
-                            className="rounded-full text-xs  border-2 border-[#50D7EE] text-black font-sans w-fit py-5 bg-gradient-to-tr from-[#9CFF8F] via-[#92FDB9] to-[#83FEE4]"
-                            variant={"outline"}
-                            animation="bounce"
-                          >
-                            {t("game.our_game.play_btn")}
-                            <FaGamepad />
-                          </Button>
-                        </div>
-                      </div>
-                    }
-                    triggerBtn={
-                      <Button
-                        className="rounded-full right-0 text-xs  border-2 my-2 border-[#50D7EE] text-black font-sans w-fit bg-gradient-to-tr from-[#9CFF8F] via-[#92FDB9] to-[#83FEE4]"
-                        variant={"outline"}
-                        animation="bounce"
-                      >
-                        {t("game.our_game.play_btn")}
-                        <FaGamepad />
-                      </Button>
-                    }
-                  />
-                  <div className="absolute -bottom-4 right-3">
-                  {game.endDate && new Date(game.endDate) > new Date() && <CountdownTimer endDate={game.endDate} />}
-                  </div>
-                </div>
-              ) : (
-                <Button
-                  onClick={() => game.handle?.(game.gameId ?? "")}
-                  className="rounded-full text-xs space-y-1 border-2 my-2 border-[#50D7EE] text-black font-sans w-fit py-5 bg-gradient-to-tr from-[#9CFF8F] via-[#92FDB9] to-[#83FEE4]"
-                  variant={"outline"}
-                  animation="bounce"
-                >
-                  {t("game.our_game.coming_soon_btn")}
-                  <IoIosTimer />
-                </Button>
-              )}
-            </div>
-          </motion.div>
-        ))}
-        
-
+        {/* Header Section */}
+        <div className="flex items-center space-x-2 mb-6">
+          <div className="w-1 h-8 bg-gradient-to-b from-indigo-500 to-purple-600 rounded-full"></div>
+          <h1 className="text-2xl font-bold text-white">Games</h1>
         </div>
-
+        
+        {/* Hero Section */}
+        <div className="relative w-full rounded-2xl overflow-hidden mb-16">
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/80 to-purple-600/80 z-10"></div>
+          <div className="absolute inset-0 bg-[url('@/assets/images/games/bg-games.png')] bg-cover bg-center opacity-40"></div>
+          
+          <div className="relative z-20 py-16 px-8 flex flex-col md:flex-row items-center justify-between">
+            <div className="md:w-1/2 text-center md:text-left mb-8 md:mb-0">
+              <motion.h2 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="text-4xl font-bold text-white mb-4"
+              >
+                Explore Exciting Games
+              </motion.h2>
+              <motion.p 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-lg text-gray-100 mb-6"
+              >
+                Play, compete, and win amazing rewards in our collection of engaging games.
+              </motion.p>
+            </div>
+            
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="md:w-1/3 flex justify-center"
+            >
+              <Image 
+                src={bg_games} 
+                className="w-64 h-64 object-contain" 
+                alt="game_bg" 
+                animationVariant="bounce" 
+              />
+            </motion.div>
+          </div>
+        </div>
+        
+        {/* Games Grid */}
+        <div className="w-full relative rounded-2xl gap-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 justify-center items-stretch">
+          {games.map((game, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
+              className="h-full"
+            >
+              <motion.div
+                className={`relative rounded-xl overflow-hidden h-full bg-gradient-to-br from-indigo-900/60 to-purple-900/60 border border-${game.color}/30 shadow-lg hover:shadow-xl transition-all duration-300`}
+                whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+                initial={{
+                  boxShadow: `0 0 10px ${game.color}40, 0 0 10px ${game.color}40`,
+                }}
+                animate={{
+                  boxShadow: [
+                    `0 0 5px ${game.color}40, 0 0 10px ${game.color}40`,
+                    `0 0 15px ${game.color}40, 0 0 20px ${game.color}40`,
+                    `0 0 5px ${game.color}40, 0 0 10px ${game.color}40`,
+                  ],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                }}
+              >
+                {/* Game Header */}
+                <div className={`p-4 bg-gradient-to-r from-${game.color}/80 to-${game.color}/60`}>
+                  <h3 className="text-xl font-bold text-white">{game.title}</h3>
+                </div>
+                
+                {/* Game Content */}
+                <div className="p-5 flex flex-col md:flex-row gap-4 items-center">
+                  <div className="md:w-1/3 flex justify-center relative">
+                    <div className="absolute inset-0 bg-gradient-to-r from-${game.color}/10 to-transparent rounded-full blur-xl"></div>
+                    <Image 
+                      className="w-24 h-24 object-contain relative z-10" 
+                      src={game.img} 
+                      alt={game.title} 
+                      animationVariant="bounce" 
+                    />
+                  </div>
+                  
+                  <div className="md:w-2/3 flex flex-col space-y-4">
+                    <div className="relative">
+                      <p className="text-gray-200 text-sm leading-relaxed line-clamp-2 italic">
+                        {game.intro?.substring(0, 100)}...
+                        <span className="text-${game.color} font-semibold ml-1 hover:underline cursor-pointer">Xem thêm</span>
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <div
+                          className="px-3 py-1.5 flex items-center space-x-1 rounded-full bg-gradient-to-r from-indigo-600/80 to-purple-600/80 shadow-md border border-indigo-400/30 backdrop-blur-sm"
+                        >
+                          <span className="text-xs font-medium text-white">{game.spent}</span>
+                          <Image src={coin} height={16} width={16} loading={"lazy"} alt="coin" className="animate-pulse" />
+                        </div>
+                        
+                        {game.endDate && new Date(game.endDate) > new Date() && (
+                          <div className="px-3 py-1.5 text-xs text-gray-300 flex items-center space-x-1 rounded-full bg-gradient-to-r from-gray-800/80 to-gray-700/80 shadow-md border border-gray-600/30">
+                            <span className="text-amber-400 mr-1">Kết thúc:</span>
+                            <CountdownTimer endDate={game.endDate} />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <div className="flex justify-end space-x-2">
+                      {game.active === true ? (
+                        <>
+                          {game.title !== GameEnum.LOTTERY_SPINNER && (
+                            <LeaderboardDialog 
+                              id={game.gameId || ""} 
+                              title={`${game.title} Leaderboard`} 
+                              endDate={game.endDate} 
+                            />
+                          )}
+                          
+                          <GameDialog
+                            title={<p className="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">{game.title}</p>}
+                            dialogClassName={`border-2 border-${game.color} w-[90%] bg-gradient-to-b from-indigo-900/95 via-indigo-800/95 to-purple-900/95 rounded-xl shadow-2xl backdrop-blur-sm`}
+                            description={
+                              <div className="w-full text-center">
+                                <article className="text-justify mb-5 text-gray-100 leading-relaxed">
+                                  {game?.intro}
+                                </article>
+                                <div className="my-4">
+                                  {game?.prizeTable}
+                                </div>
+                                <div className="flex flex-row justify-center items-center space-x-2 mt-6">
+                                  {game.title !== GameEnum.LOTTERY_SPINNER && (
+                                    <LeaderboardDialog id={game.gameId || ""} title={`${game.title} Leaderboard`} endDate={game.endDate} />
+                                  )}
+                                  <Button
+                                    onClick={() => {
+                                      game.handle?.(game.gameId ?? "");
+                                    }}
+                                    className={`rounded-full text-sm font-bold border-2 border-${game.color} text-white w-fit py-5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg shadow-${game.color}/20`}
+                                    variant={"outline"}
+                                    animation="bounce"
+                                  >
+                                    {t("game.our_game.play_btn")}
+                                    <FaGamepad className="ml-2 text-${game.color}" />
+                                  </Button>
+                                </div>
+                              </div>
+                            }
+                            triggerBtn={
+                              <Button
+                                className={`rounded-full text-sm font-bold border-2 border-${game.color} text-white w-fit bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg shadow-${game.color}/20`}
+                                variant={"outline"}
+                                animation="bounce"
+                              >
+                                {t("game.our_game.play_btn")}
+                                <FaGamepad className="ml-2 text-${game.color}" />
+                              </Button>
+                            }
+                          />
+                        </>
+                      ) : (
+                        <Button
+                          onClick={() => game.handle?.(game.gameId ?? "")}
+                          className="rounded-full text-sm font-bold border-2 border-amber-500 text-white w-fit py-2 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 shadow-lg shadow-amber-500/20"
+                          variant={"outline"}
+                          animation="bounce"
+                        >
+                          {t("game.our_game.coming_soon_btn")}
+                          <IoIosTimer className="ml-2 text-amber-300" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          ))}
+        </div>
       </div>
-
     </motion.div>
   )
 }

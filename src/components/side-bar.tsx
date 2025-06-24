@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 export interface INavbar {
   title: string | React.ReactNode;
   path: string;
-  icon: string;
+  icon: string | React.ReactNode;
 }
 
 interface SidebarProps {

@@ -4,7 +4,7 @@ import { IWalletContentDialog, SocialContentDialog, WalletContentDialog } from "
 import { TbPlugConnectedX } from "react-icons/tb";
 import { PiPlugsConnectedFill } from "react-icons/pi";
 import { useGetMeQuery, useUnsyncSocialMutation } from "@/services/auth";
-import LoadingComponent from "@/components/loading-component";
+import LoadingPage from "@/pages/LoadingPage";
 import {
   ProfileContentDialog,
   // WalletContentDialog
@@ -16,7 +16,7 @@ import { LoginSocialActionTypeEnum, SocialTypeEnum } from "@/enums/social-type.e
 import routes from "@/constants/routes";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ConfirmDialog } from "@/components/ui/dialog";
 import ConnectWallet from "../wallet/components/ConnectWallet";
 import ConnectWalletDialog from "../auth/components/ConnectWalletDialog";
@@ -27,6 +27,7 @@ import wallets_img from "@/assets/images/profile/wallet.svg";
 import social_icon from "@/assets/icons/social_icon.png";
 import { getDisplayName } from "@/utils/user";
 import WalletButtons from "./components/WalletDialog";
+import { useAuthSocial } from '@/contexts/AuthSocialContext';
 
 interface IConnectedButtonProps {
   walletContent: IWalletContentDialog;
@@ -41,34 +42,41 @@ const profileBgColors = [
 ];
 
 const ConnectedButton = ({ isConnected }: IConnectedButtonProps) => {
-  // const handleClick = () => {
-  // const message = isConnected ? walletContent.alert.success : walletContent.alert.failure;
-  // toast.info(message);
-  // };
-  const buttonStyles = isConnected ? "border-green-300 bg-green-600" : "border-red-300 bg-red-600";
+  const buttonStyles = isConnected 
+    ? "border-green-300 bg-green-600 shadow-lg shadow-green-500/50" 
+    : "border-red-300 bg-red-600 shadow-lg shadow-red-500/50";
 
   return (
-    <button className={`${buttonStyles} rounded-full border-1 text-white p-1.5`}>
-      {isConnected ? <PiPlugsConnectedFill /> : <TbPlugConnectedX />}
+    <button className={`${buttonStyles} rounded-full border-1 text-white p-1.5 transition-all duration-300 hover:scale-110`}>
+      {isConnected ? <PiPlugsConnectedFill className="animate-pulse" /> : <TbPlugConnectedX />}
     </button>
   );
 };
+
 const ProfilePage = () => {
   const { totalCoins, transactions, friends, achievements } = ProfileContentDialog();
   const { google, x, facebook, instagram } = SocialContentDialog();
   const { wallets, metamask, phantom } = WalletContentDialog();
   const { data, error, isLoading, refetch } = useGetMeQuery({}, { refetchOnMountOrArgChange: true });
-  const userInfo = data.data as IUser;
+  const userInfo = data?.data as IUser;
   const { token } = useAuthToken();
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [selectedProvider, setSelectedProvider] = useState<SocialTypeEnum | null>(null);
   const [unsyncSocial] = useUnsyncSocialMutation();
+  const { justAuthenticated, clearJustAuthenticated } = useAuthSocial();
+
+  useEffect(() => {
+    if (justAuthenticated) {
+      refetch?.();
+      clearJustAuthenticated();
+    }
+  }, [justAuthenticated, refetch, clearJustAuthenticated]);
 
   const isSocialConnected = (socialType: SocialTypeEnum): boolean => {
     return !!userInfo?.socials?.some((s) => s.socialType === socialType);
   };
 
-  if (isLoading) return <LoadingComponent />;
+  if (isLoading) return <LoadingPage />;
   if (error) return <p>Error loading user info</p>;
   const { avatar, firstName, lastName, pointsBalance, transactionCount, referralCount, achievementCount, socials } =
     data.data;
@@ -130,7 +138,7 @@ const ProfilePage = () => {
       imgContent: google.imgContent,
       title: google.title,
       dialog: <ConnectedButton walletContent={google} isConnected={isSocialConnected(SocialTypeEnum.Google)} />,
-      className: "bg-white hover:bg-gray-100 border-gray-300 text-gray-800",
+      className: "bg-white hover:bg-gray-100 border-gray-300 text-gray-800 transform transition-transform hover:scale-105",
       titleClassName: "text-gray-800 font-semibold text-md",
     },
     {
@@ -138,7 +146,7 @@ const ProfilePage = () => {
       imgContent: x.imgContent,
       title: x.title,
       dialog: <ConnectedButton walletContent={x} isConnected={isSocialConnected(SocialTypeEnum.X)} />,
-      className: "bg-black hover:bg-gray-800 border-gray-700",
+      className: "bg-black hover:bg-gray-800 border-gray-700 transform transition-transform hover:scale-105",
       titleClassName: "text-gray-50 font-semibold text-md",
     },
     {
@@ -146,7 +154,7 @@ const ProfilePage = () => {
       imgContent: facebook.imgContent,
       title: facebook.title,
       dialog: <ConnectedButton walletContent={facebook} isConnected={isSocialConnected(SocialTypeEnum.Facebook)} />,
-      className: "bg-[#0e6edf] hover:bg-[#0e6edf] border-[#0e6edf]",
+      className: "bg-[#0e6edf] hover:bg-[#0e6edf] border-[#0e6edf] transform transition-transform hover:scale-105",
       titleClassName: "text-gray-50 font-semibold text-md",
     },
     {
@@ -155,7 +163,7 @@ const ProfilePage = () => {
       title: instagram.title,
       dialog: <ConnectedButton walletContent={instagram} isConnected={isSocialConnected(SocialTypeEnum.Instagram)} />,
       className:
-        "bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 border-pink-400",
+        "bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 border-pink-400 transform transition-transform hover:scale-105",
       titleClassName: "text-gray-50 font-semibold text-md",
     },
   ];
@@ -211,67 +219,101 @@ const ProfilePage = () => {
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <div className="px-8">
-        <p className="border-l-4 border-[#E77C1B] text-gray-50 font-semibold text-xl pl-5">Profile</p>
+        <div className="flex items-center space-x-2 mb-6">
+          <div className="w-1 h-8 bg-gradient-to-b from-indigo-500 to-purple-600 rounded-full"></div>
+          <h1 className="text-2xl font-bold text-white">Profile</h1>
+        </div>
 
-        <div className="w-full flex flex-row relative mt-6">
-          <div className="w-1/2">
-            <div className="rounded-t-2xl w-full h-48 bg-cover bg-center bg-no-repeat">
+        <div className="w-full flex flex-col md:flex-row gap-6 relative mt-6">
+          {/* Left Column - Profile Info */}
+          <div className="w-full md:w-1/2 bg-gradient-to-br from-indigo-900/40 to-purple-900/40 rounded-2xl shadow-xl overflow-hidden border border-indigo-500/30">
+            <div className="rounded-t-2xl w-full h-48 bg-cover bg-center bg-no-repeat bg-gradient-to-r from-indigo-600/80 to-purple-600/80">
               <div className="flex pt-10 flex-col justify-center items-center text-center px-4">
-                <Avatar className="size-24">
-                  <AvatarImage src={avatar} alt="Username" />
-                  <AvatarFallback className="">
-                    {String(firstName).charAt(0) + String(lastName).charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="mt-2 text-xl font-semibold text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] [-webkit-text-stroke:0.5px_#000]">
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <Avatar className="size-24 border-4 border-white/30 shadow-lg">
+                    <AvatarImage src={avatar} alt="Username" />
+                    <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-xl">
+                      {String(firstName).charAt(0) + String(lastName).charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                </motion.div>
+                <motion.div 
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2, duration: 0.4 }}
+                  className="mt-3 text-xl font-bold text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
                   {getDisplayName(data.data)}
-                </div>
+                </motion.div>
               </div>
             </div>
 
             <div className="flex flex-col p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                 {profileContents.map((profile, index) => (
-                  <div
+                  <motion.div
                     key={index}
-                    className={`relative min-h-28 p-4 flex flex-col  items-start rounded-xl ${profileBgColors[index]}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 * index, duration: 0.4 }}
+                    whileHover={{ scale: 1.03, transition: { duration: 0.2 } }}
+                    className={`relative min-h-28 p-4 flex flex-col items-start rounded-xl shadow-lg ${profileBgColors[index]} backdrop-blur-sm hover:shadow-xl transition-all duration-300`}
                   >
                     <div className="flex w-full flex-row h-1/2 justify-between items-center">
                       <p className="font-semibold text-xl">{profile.title}</p>
-                      <Image className="size-12 " src={profile.imgContent} alt="" />
+                      <Image className="size-12" src={profile.imgContent} alt="" animationVariant="bounce" />
                     </div>
-                    <p className="text-2xl font-bold">{profile.content}</p>
-                  </div>
+                    <p className="text-2xl font-bold mt-2">{profile.content}</p>
+                  </motion.div>
                 ))}
               </div>
             </div>
           </div>
 
-          <div className="w-1/2">
-            <div className="flex flex-col md:flex-col w-full gap-4 p-6">
-              <div className="w-full p-4">
-                <div className="flex flex-row items-center justify-start">
-                  <Image src={social_icon} alt="icon" width={25} height={25} />
-                  <p className="text-gray-50 font-semibold text-md pl-3">Link to social</p>
+          {/* Right Column - Social & Wallets */}
+          <div className="w-full md:w-1/2 bg-gradient-to-br from-indigo-900/40 to-purple-900/40 rounded-2xl shadow-xl border border-indigo-500/30">
+            <div className="flex flex-col w-full gap-6 p-6">
+              {/* Social Links Section */}
+              <motion.div 
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+                className="w-full p-4 bg-gradient-to-br from-indigo-800/30 to-purple-800/30 rounded-xl border border-indigo-500/20 shadow-md"
+              >
+                <div className="flex flex-row items-center justify-start mb-4">
+                  <div className="bg-indigo-600 p-2 rounded-full">
+                    <Image src={social_icon} alt="icon" width={25} height={25} />
+                  </div>
+                  <p className="text-white font-bold text-lg pl-3">Link to Social</p>
                 </div>
-                <div className="grid grid-cols-1 gap-4 mt-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                   {socialsContents.map((social, index) => (
-                    <BadgeModal
+                    <motion.div
                       key={index}
-                      imgContent={social.imgContent}
-                      title={social.title}
-                      dialog={social.dialog}
-                      onClick={() => {
-                        if (isSocialConnected(social.type)) {
-                          setSelectedProvider(social.type);
-                          setIsConfirmDialogOpen(true);
-                        } else {
-                          handleSyncSocial(social.type);
-                        }
-                      }}
-                      className={`cursor-pointer ${social.className}`}
-                      titleClassName={social.titleClassName}
-                    />
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 * index + 0.4, duration: 0.3 }}
+                    >
+                      <BadgeModal
+                        key={index}
+                        imgContent={social.imgContent}
+                        title={social.title}
+                        dialog={social.dialog}
+                        onClick={() => {
+                          if (isSocialConnected(social.type)) {
+                            setSelectedProvider(social.type);
+                            setIsConfirmDialogOpen(true);
+                          } else {
+                            handleSyncSocial(social.type);
+                          }
+                        }}
+                        className={`cursor-pointer shadow-md hover:shadow-lg ${social.className}`}
+                        titleClassName={social.titleClassName}
+                      />
+                    </motion.div>
                   ))}
                 </div>
                 <ConfirmDialog
@@ -281,29 +323,42 @@ const ProfilePage = () => {
                   title="Confirm Unsync"
                   description={`Are you sure you want to unsync your ${selectedProvider} account?`}
                 />
-              </div>
+              </motion.div>
 
-              {/* Connect to wallets */}
-              <div className="w-full p-4 grid grid-cols-1 gap-4 ">
-                <div className="flex flex-row items-center justify-start">
-                  <Image src={wallets_img} alt="icon" width={25} height={25} />
-                  <p className="text-gray-50 font-semibold text-md pl-3">Link to wallets</p>
+              {/* Wallets Section */}
+              <motion.div 
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5, duration: 0.5 }}
+                className="w-full p-4 grid grid-cols-1 gap-4 bg-gradient-to-br from-indigo-800/30 to-purple-800/30 rounded-xl border border-indigo-500/20 shadow-md"
+              >
+                <div className="flex flex-row items-center justify-start mb-2">
+                  <div className="bg-purple-600 p-2 rounded-full">
+                    <Image src={wallets_img} alt="icon" width={25} height={25} />
+                  </div>
+                  <p className="text-white font-bold text-lg pl-3">Link to Wallets</p>
                 </div>
 
-                <div className="flex justify-center">
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6, duration: 0.3 }}
+                  className="flex justify-center"
+                >
                   <ConnectWalletDialog
                     trigger={
                       <BadgeModal
-                        className={`cursor-pointer bg-[#59caa8]`}
-                        titleClassName={"text-gray-50 font-semibold text-md"}
+                        className={`cursor-pointer bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 transform transition-transform hover:scale-105 shadow-md hover:shadow-lg`}
+                        titleClassName={"text-white font-bold text-md"}
                         imgContent={wallets.imgContent}
                         title={`Connect with Wallet Extension`}
                       />
                     }
                   >
-                    <ConnectWallet refetch={refetch}/>
+                    <ConnectWallet/>
                   </ConnectWalletDialog>
-                </div>
+                </motion.div>
+                
                 <WalletButtons
                   wallets={walletsContents}
                   socials={socials}
@@ -311,7 +366,7 @@ const ProfilePage = () => {
                   setSelectedProvider={setSelectedProvider}
                   setIsConfirmDialogOpen={setIsConfirmDialogOpen}
                 />
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
