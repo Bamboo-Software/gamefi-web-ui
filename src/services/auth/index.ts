@@ -38,8 +38,10 @@ export interface ResendAccountActivationRequest {
 }
 
 export interface RegisterResponse {
-  message: string;
-  token: string;
+  data:{
+    message: string;
+    token: string;
+  }
   success:boolean
 }
 
