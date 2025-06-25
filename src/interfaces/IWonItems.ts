@@ -1,4 +1,4 @@
-import { CryptoCurrencyEnum } from "@/enums/games";
+import { CryptoCurrencyEnum } from '@/enums/blockchain';
 import { ApiResponse } from "./IApiResponse";
 
 export interface IWonItemsData {
