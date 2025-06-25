@@ -80,7 +80,7 @@ const RegisterForm = () => {
       }
       const response = await register(formData).unwrap();
       if (response.success) {
-        setToken(response.token);
+        setToken(response.data.token);
         setShowOtpDialog(true);
 
         toast.success("Please check your email for the verification code.");
