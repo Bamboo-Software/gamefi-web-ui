@@ -191,13 +191,13 @@ function App() {
     },
     allWallets: 'SHOW',
     enableWalletConnect: true,
-    themeVariables: {
-      '--w3m-accent': '#4f46e5', // Indigo-600
-      '--w3m-accent-color': '#f59e0b', // Amber-500
-      '--w3m-background-color': '#111827', // Gray-900
-      '--w3m-container-border-radius': '12px',
-      '--w3m-text-big-bold-font-weight': '700',
-    },
+    // themeVariables: {
+    //   '--w3m-accent': '#4f46e5', // Indigo-600
+    //   '--w3m-accent-color': '#f59e0b', // Amber-500
+    //   '--w3m-background-color': '#111827', // Gray-900
+    //   '--w3m-container-border-radius': '12px',
+    //   '--w3m-text-big-bold-font-weight': '700',
+    // },
     debug: true,
     siwx: new DefaultSIWX({
       verifiers: [
