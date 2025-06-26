@@ -410,6 +410,7 @@ const StakingComponent = () => {
     setLoading(false);
   };
   const supportedTokens = useMemo(() => {
+    console.log(SUPPORTED_TOKENS_BY_CHAIN[chainId]?.stake, ChainId);
     return chainId ? SUPPORTED_TOKENS_BY_CHAIN[chainId]?.stake ?? [] : [];
   }, [chainId]);
 
