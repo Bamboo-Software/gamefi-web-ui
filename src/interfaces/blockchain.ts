@@ -12,6 +12,17 @@ export interface EthereumBlockchainConfig {
   wethContractAddress: string;
   buyerContractAddress: string;
   buyerContractABI: any;
+  stakingContractAddress: string;
+  stakingContractABI: any;
 }
 
-export type BlockchainConfig = AvalancheBlockchainConfig | EthereumBlockchainConfig;
+export interface BSCBlockchainConfig {
+  wbnbContractAddress: string;
+  buyerContractAddress: string;
+  buyerContractABI: any;
+  stakingContractAddress: string;
+  stakingContractABI: any;
+}
+
+
+export type BlockchainConfig = AvalancheBlockchainConfig | EthereumBlockchainConfig | BSCBlockchainConfig;

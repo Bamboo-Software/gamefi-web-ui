@@ -22,9 +22,14 @@ import { blockChainConfig } from '@/constants/blockchain';
 import { stakeApi } from '@/services/stake';
 import { motion } from 'framer-motion';
 import { DataTable } from '@/components/data-table';
-import { AvalancheBlockchainConfig } from '@/interfaces/blockchain';
+import {
+  AvalancheBlockchainConfig,
+  BSCBlockchainConfig,
+  EthereumBlockchainConfig,
+} from '@/interfaces/blockchain';
 import { IStakeEntry } from '@/interfaces/stake';
 import { StakeEntryStatus } from '@/enums/stake';
+import { StakingBarChart } from './components/stakingBarChart';
 
 const StakingComponent = () => {
   const { useSubmitTxHashMutation, useSubmitWithdrawTxHashMutation } = stakeApi;
@@ -44,7 +49,7 @@ const StakingComponent = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const { address: userAddress } = useAppKitAccount();
-  const [userUSDBalance, setUserUSDBalance] = useState(0)
+  const [userUSDBalance, setUserUSDBalance] = useState(0);
   useEffect(() => {
     async function fetchLockTime() {
       try {
@@ -69,8 +74,9 @@ const StakingComponent = () => {
     if (chainId) fetchLockTime();
   }, [chainId]);
 
-  const { useGetAllNFTQuery } = stakeApi;
-  const { data: stakes } = useGetAllNFTQuery({
+  const { useGetAllStakeQuery, useGetLast7DaysStakeQuery } = stakeApi;
+  const { data: last7DaysStakeData, isLoading: isLoadingLast7DaysStake, isError: isErrorLast7DaysStake } = useGetLast7DaysStakeQuery()
+  const { data: stakes } = useGetAllStakeQuery({
     page: currentPage,
     limit: itemsPerPage,
   });
@@ -96,6 +102,11 @@ const StakingComponent = () => {
         case ChainId.Ethereum: {
           const isNative = isTokenNativeOnChain(token, chainId);
           return await stakeTokenETH(signer, token, newStakeId, isNative);
+        }
+
+        case ChainId.BSC: {
+          const isNative = isTokenNativeOnChain(token, chainId);
+          return await stakeTokenBSC(signer, token, newStakeId, isNative);
         }
 
         default:
@@ -180,14 +191,14 @@ const StakingComponent = () => {
     signer: ethers.providers.JsonRpcSigner,
     token: CryptoCurrencyEnum,
     stakeId: string,
-    isNative: boolean // Thêm tham số này để xác định native hay ERC20
+    isNative: boolean
   ) => {
     if (!walletProvider) return toast.error('Connect wallet!');
     setLoading(true);
     try {
       const config = getBlockchainConfigByChainId(
         chainId
-      ) as AvalancheBlockchainConfig;
+      ) as EthereumBlockchainConfig;
       const contract = new ethers.Contract(
         config.stakingContractAddress,
         config.stakingContractABI,
@@ -200,7 +211,10 @@ const StakingComponent = () => {
       let tokenAddress: string;
 
       if (isNative) {
-        const wethAddress = getTokenAddressByChainIdAndTokenName(chainId, token);
+        const wethAddress = getTokenAddressByChainIdAndTokenName(
+          chainId,
+          token
+        );
         tokenAddress = ethers.constants.AddressZero;
         symbol = 'WETH';
         amountParsed = ethers.utils.parseEther(amount);
@@ -268,9 +282,105 @@ const StakingComponent = () => {
     setLoading(false);
   };
 
+  const stakeTokenBSC = async (
+    signer: ethers.providers.JsonRpcSigner,
+    token: CryptoCurrencyEnum,
+    stakeId: string,
+    isNative: boolean
+  ) => {
+    if (!walletProvider) return toast.error('Connect wallet!');
+    setLoading(true);
+    try {
+      const config = getBlockchainConfigByChainId(
+        chainId
+      ) as BSCBlockchainConfig;
+      const contract = new ethers.Contract(
+        config.stakingContractAddress,
+        config.stakingContractABI,
+        signer
+      );
+
+      let tx;
+      let amountParsed: ethers.BigNumber;
+      let symbol: string;
+      let tokenAddress: string;
+
+      if (isNative) {
+        const wbnbAddress = getTokenAddressByChainIdAndTokenName(
+          chainId,
+          token
+        );
+        tokenAddress = ethers.constants.AddressZero;
+        symbol = 'WBNB';
+        amountParsed = ethers.utils.parseEther(amount);
+
+        // Lấy CCIP fee
+        const [ccipFee] = await contract.getCCIPFeeAndMessage(
+          stakeId,
+          amountParsed,
+          wbnbAddress,
+          symbol
+        );
+
+        // Gọi stakeToken, value = amount + ccipFee
+        tx = await contract.stakeToken(stakeId, amountParsed, tokenAddress, {
+          value: amountParsed.add(ccipFee),
+        });
+      } else {
+        // ERC20
+        tokenAddress = getTokenAddressByChainIdAndTokenName(chainId, token);
+        const erc20 = new ethers.Contract(
+          tokenAddress,
+          blockChainConfig.erc20Abi,
+          signer
+        );
+        const decimals = await erc20.decimals();
+        amountParsed = ethers.utils.parseUnits(amount, decimals);
+        symbol = await erc20.symbol();
+
+        // Lấy CCIP fee
+        const [ccipFee] = await contract.getCCIPFeeAndMessage(
+          stakeId,
+          amountParsed,
+          tokenAddress,
+          symbol
+        );
+
+        // Approve trước
+        const approveTx = await erc20.approve(
+          config.stakingContractAddress,
+          amountParsed
+        );
+        await approveTx.wait();
+
+        // Gọi stakeToken, value = ccipFee
+        tx = await contract.stakeToken(stakeId, amountParsed, tokenAddress, {
+          value: ccipFee,
+        });
+      }
+
+      await tx.wait();
+      const { hash } = tx;
+      const network = mapChainIdToBlockchainName(chainId);
+
+      await submitTxHash({
+        network,
+        txHash: hash,
+      });
+      toast.success(
+        isNative ? 'Staked native successfully!' : 'Staked ERC20 successfully!'
+      );
+    } catch (e) {
+      toast.error(isNative ? 'Stake native failed!' : 'Stake ERC20 failed!');
+      console.error(e);
+    }
+    setLoading(false);
+  };
+
   const withdrawByStakeId = async () => {
     if (!walletProvider) return toast.error('Connect wallet!');
-    if(chainId !== ChainId.Avalanche) return toast.error('Switch your network to Avalanche first!');
+    if (chainId !== ChainId.Avalanche)
+      return toast.error('Switch your network to Avalanche first!');
     setLoading(true);
     try {
       const config = getBlockchainConfigByChainId(
@@ -283,7 +393,7 @@ const StakingComponent = () => {
         config.stakingContractABI,
         signer
       );
-      const tx = await contract.withdrawByStakeId((stakeId));
+      const tx = await contract.withdrawByStakeId(stakeId);
       await tx.wait();
       const network = mapChainIdToBlockchainName(chainId);
       const { hash } = tx;
@@ -449,18 +559,21 @@ const StakingComponent = () => {
         config.stakingContractABI,
         provider
       );
-      const usdBalance = await stakingContract.getStakedBalanceInUSD(userAddress);
-      setUserUSDBalance( Number(usdBalance)/10** blockChainConfig.standardDecimals )
+      const usdBalance = await stakingContract.getStakedBalanceInUSD(
+        userAddress
+      );
+      setUserUSDBalance(
+        Number(usdBalance) / 10 ** blockChainConfig.standardDecimals
+      );
     } catch (error) {
-      setUserUSDBalance(0)
-      console.error("Failed to get user usd balance:", error);
+      setUserUSDBalance(0);
+      console.error('Failed to get user usd balance:', error);
     }
   }
 
-  useEffect(()=> {
-    if(userAddress && walletProvider) getUserStakesInfo()
-  }, [userAddress, walletProvider])
-
+  useEffect(() => {
+    if (userAddress && walletProvider) getUserStakesInfo();
+  }, [userAddress, walletProvider]);
 
   return (
     <motion.div
@@ -667,13 +780,21 @@ const StakingComponent = () => {
 
           {/* Stakes Table */}
           <div className='lg:col-span-2'>
-            <div className='bg-gradient-to-br from-indigo-900/40 to-purple-900/40 backdrop-blur-sm border border-indigo-500/30 rounded-xl p-6 h-full'>
-              <h2 className='text-xl font-bold text-white mb-4'>Your Stakes{userUSDBalance && (
-              `: $${userUSDBalance.toLocaleString(undefined, {
-                  maximumFractionDigits: 3,
-                  minimumFractionDigits: 0
-                })}`
-              )}</h2>
+            <StakingBarChart
+              data={last7DaysStakeData?.data}
+              isFailed={isErrorLast7DaysStake}
+              isLoading={isLoadingLast7DaysStake}
+            />
+            <div className='mt-4 bg-gradient-to-br from-indigo-900/40 to-purple-900/40 backdrop-blur-sm border border-indigo-500/30 rounded-xl p-6 h-full'>
+              <h2 className='text-xl font-bold text-white mb-4'>
+                Your Stakes
+                {userUSDBalance
+                  ? `: $${userUSDBalance.toLocaleString('en-US', {
+                      maximumFractionDigits: 3,
+                      minimumFractionDigits: 0,
+                    })}`
+                  : null}
+              </h2>
 
               {stakes && stakes?.data?.total > 0 && sortedStakes ? (
                 <DataTable
