@@ -34,6 +34,7 @@ import { SolanaVerifier } from "@/services/wallet/SolanaVerifier";
 import StakingComponent from './pages/staking/staking';
 import MarketplacePage from './pages/marketplace/MarketplacePage';
 import UserNFTPage from './pages/user-nft/UserNFTPage';
+import { appConfig } from './constants/app';
 
 const {
   ROOT,
@@ -152,6 +153,7 @@ const routes = createBrowserRouter([
 ]);
 
 function App() {
+  console.log("is production", appConfig.isProd);
   const { loginOrSyncSocial } = useAuthSocial();
   
   // Thêm CSS cho hiệu ứng chuyển trang
