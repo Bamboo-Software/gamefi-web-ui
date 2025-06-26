@@ -16,6 +16,8 @@ export interface Season {
   deletedAt?: string;
   collectionNFTId?: string;
   game?: Game;
+  nfts?:NFT[];
+  nftCount?:number
 }
 
 export interface CreateSeasonRequest {

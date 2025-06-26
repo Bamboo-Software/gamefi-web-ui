@@ -1,6 +1,8 @@
+import { appConfig } from '@/constants/app';
 import { blockChainConfig } from '@/constants/blockchain';
 import { BlockchainNameEnum, ChainId, CryptoCurrencyEnum } from '@/enums/blockchain';
 import { ethers } from 'ethers-ts';
+import { avalanche, avalancheFuji, bsc, bscTestnet, Chain, mainnet, sepolia } from 'viem/chains';
 
 export function getBlockchainConfigByChainId(chainId: ChainId) {
   switch (chainId) {
@@ -20,6 +22,15 @@ export function getBlockchainConfigByChainId(chainId: ChainId) {
         buyerContractABI: blockChainConfig.nftBuyerContractABIETH,
         stakingContractAddress: blockChainConfig.stakingContractAddressEthereum,
         stakingContractABI: blockChainConfig.stakingContractABIEthereum,
+      };
+
+    case ChainId.BSC:
+      return {
+        wbnbContractAddress: blockChainConfig.wbnbContractAddressBSC,
+        buyerContractAddress: blockChainConfig.nftBuyerContractAddressBSC,
+        buyerContractABI: blockChainConfig.nftBuyerContractABIBSC,
+        stakingContractAddress: blockChainConfig.stakingContractAddressBSC,
+        stakingContractABI: blockChainConfig.stakingContractABIBSC,
       };
     default:
       throw new Error('Unsupported chain');
@@ -49,6 +60,15 @@ export function getTokenAddressByChainIdAndTokenName(
         default:
           throw new Error(`Unsupported token ${tokenName} on Ethereum`);
     }
+    case ChainId.BSC:
+      switch (tokenName) {
+        case CryptoCurrencyEnum.BSC:
+          return blockChainConfig.wbnbContractAddressBSC;
+        case CryptoCurrencyEnum.USDT:
+          return blockChainConfig.usdtContractAddressBSC;
+        default:
+          throw new Error(`Unsupported token ${tokenName} on Ethereum`);
+    }
     default:
       throw new Error(`Unsupported chain ID ${chainId}`);
   }
@@ -62,6 +82,7 @@ export function isTokenNativeOnChain(
     [ChainId.Ethereum]: CryptoCurrencyEnum.ETH,
     [ChainId.Avalanche]: CryptoCurrencyEnum.AVALANCHE,
     [ChainId.Solana]: CryptoCurrencyEnum.SOL,
+    [ChainId.BSC]: CryptoCurrencyEnum.BSC,
   };
 
   return nativeTokensMap[chainId] === token;
@@ -69,6 +90,7 @@ export function isTokenNativeOnChain(
 export const EVM_CHAIN_IDS = new Set<number| string>([
   ChainId.Ethereum,
   ChainId.Avalanche,
+  ChainId.BSC,
 ]);
 
 export const SOLANA_CHAIN_IDS = new Set<number| string>([
@@ -91,6 +113,8 @@ export function mapChainIdToBlockchainName(chainId: ChainId): BlockchainNameEnum
       return BlockchainNameEnum.avalanche;
     case ChainId.Solana:
       return BlockchainNameEnum.solana;
+    case ChainId.BSC:
+      return BlockchainNameEnum.bsc;
     default:
       throw new Error(`Unsupported chainId: ${chainId}`);
   }
@@ -112,6 +136,10 @@ export const SUPPORTED_TOKENS_BY_CHAIN: Record<ChainId, {
     buy: [CryptoCurrencyEnum.SOL],
     stake: [CryptoCurrencyEnum.SOL],
   },
+  [ChainId.BSC]: {
+    buy: [CryptoCurrencyEnum.BSC, CryptoCurrencyEnum.USDT],
+    stake: [CryptoCurrencyEnum.BSC, CryptoCurrencyEnum.USDT],
+  },
 };
 
 
@@ -123,3 +151,22 @@ export function generateRandomStakeId(length = 12) {
   }
   return result;
 }
+
+export const blockchainExplorerMap: Record<BlockchainNameEnum, { chain: Chain| null; explorerUrl: string }> = {
+  [BlockchainNameEnum.ethereum]: {
+    chain: appConfig.isProd? mainnet: sepolia,
+    explorerUrl: (appConfig.isProd? mainnet: sepolia).blockExplorers?.default.url,
+  },
+  [BlockchainNameEnum.avalanche]: {
+    chain: (appConfig.isProd? avalanche: avalancheFuji),
+    explorerUrl: (appConfig.isProd? avalanche: avalancheFuji).blockExplorers?.default.url,
+  },
+  [BlockchainNameEnum.bsc]: {
+    chain: (appConfig.isProd? bsc: bscTestnet),
+    explorerUrl: (appConfig.isProd? bsc: bscTestnet).blockExplorers?.default.url,
+  },
+  [BlockchainNameEnum.solana]: {
+    chain: null, 
+    explorerUrl: 'https://explorer.solana.com',
+  },
+};

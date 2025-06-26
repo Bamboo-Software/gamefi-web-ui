@@ -7,6 +7,8 @@ import {
   polygon,
   avalancheFuji,
   sepolia,
+  bscTestnet,
+  bsc,
 } from "@reown/appkit/networks";
 import type { AppKitNetwork } from "@reown/appkit/networks";
 import { SolanaAdapter } from "@reown/appkit-adapter-solana/react";
@@ -35,12 +37,14 @@ export const metadata = {
 // for custom networks visit -> https://docs.reown.com/appkit/react/core/custom-networks
 export const networks = [
   mainnet,
+  bsc,
   arbitrum,
   optimism,
   polygon,
   solana,
   avalancheFuji,
-  sepolia
+  sepolia,
+  bscTestnet
 ] as [AppKitNetwork, ...AppKitNetwork[]];
 
 //Set up the Wagmi Adapter (Config)

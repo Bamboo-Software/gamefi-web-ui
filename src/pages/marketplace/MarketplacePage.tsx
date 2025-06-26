@@ -4,12 +4,11 @@ import bg_games from "@/assets/images/games/bg-games.png?url"
 import Image from "@/components/image";
 import {useMemo, useState } from "react";
 import LoadingPage from "@/pages/LoadingPage";
-import { useNavigate } from "react-router-dom";
 import { seasonApi } from '@/services/seasons';
 import PaginationTable from '@/components/pagination-table';
+import BuyNFTComponent from './components/BuyNFT';
 
 const MarketplacePage = () => {
-  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const {useGetAllSeasonQuery} =  seasonApi
@@ -17,6 +16,7 @@ const MarketplacePage = () => {
     data: seasonData,
     isLoading,
     error,
+    refetch
   } = useGetAllSeasonQuery({
     page: currentPage,
     limit: itemsPerPage,
@@ -57,7 +57,6 @@ const MarketplacePage = () => {
         <div className="w-full relative rounded-2xl gap-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center items-stretch">
           {seasonItems.map((season, index) => (
             <motion.div
-              onClick={()=> navigate(`/${season._id}/nfts`)}
               key={index}
               className={`relative p-4 rounded-xl flex flex-col h-auto min-h-[200px] bg-gradient-to-br from-indigo-900/80 to-purple-900/80 backdrop-blur-sm border border-indigo-500/30 hover:border-indigo-400 cursor-pointer overflow-hidden group`}
               whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(79, 70, 229, 0.4)" }}
@@ -88,19 +87,32 @@ const MarketplacePage = () => {
                     </div>
                   </div>
                 </div>
+
               </div>
               
-              {/* View collection button */}
-              <div className="mt-auto pt-4 flex justify-end">
+              <div className='pt-4 flex justify-center'>
                 <motion.div 
-                  className="px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-medium flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  className=" w-fit px-3 py-1 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-medium flex items-center gap-1 transition-opacity duration-300"
                   whileHover={{ scale: 1.05 }}
                 >
-                  View Collection
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
+                  <span className='text-xl text-gray-300'> {season.nftCount} NFT left </span> 
                 </motion.div>
+              </div>
+
+              {/* Buy Buttons */}
+              <div className="mt-auto pt-4 flex justify-center">
+                 {!season.nftCount || !season?.nfts?.[0] || !season.collectionNFTId ? (
+                  <div className="px-4 py-2 rounded-lg bg-gray-800/80 text-gray-400 font-medium inline-flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    Sold Out
+                  </div>
+                ) : (
+                  <div className=" p-3 rounded-lg">
+                    <BuyNFTComponent refetch={refetch} collectionNFTId={season.collectionNFTId} nft={season.nfts[0]}/>
+                  </div>
+                )}
               </div>
             </motion.div>
           ))}

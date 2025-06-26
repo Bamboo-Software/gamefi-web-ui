@@ -33,7 +33,6 @@ import { EIP155Verifier } from "@/services/wallet/EIP155Verifier";
 import { SolanaVerifier } from "@/services/wallet/SolanaVerifier";
 import StakingComponent from './pages/staking/staking';
 import MarketplacePage from './pages/marketplace/MarketplacePage';
-import NFTPage from './pages/nft/NFTPage';
 import UserNFTPage from './pages/user-nft/UserNFTPage';
 
 const {
@@ -46,7 +45,6 @@ const {
   GAMES_MINESWEEPER,
   MARKETPLACE,
   STAKING,
-  NFT,
   USER_NFT
 } = routesPath;
 
@@ -133,7 +131,6 @@ const routes = createBrowserRouter([
       { path: GAMES_MINESWEEPER, element: <MinesweeperGame /> },
       { path: MARKETPLACE, element: <MarketplacePage /> },
       { path: STAKING, element: <StakingComponent /> },
-      { path: NFT, element: <NFTPage /> },
       { path: USER_NFT, element: <UserNFTPage /> },
     ],
   },

@@ -22,3 +22,8 @@ export interface IStakeEntry {
   symbol?: string,
   status: StakeEntryStatus
 }
+
+export interface ILast7DaysStake{
+  date: string;
+  averageStake: number
+}

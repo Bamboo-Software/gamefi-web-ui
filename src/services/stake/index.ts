@@ -5,7 +5,7 @@ import { baseQueryWithReauth } from "@/utils/baseQuery";
 import { InvalidatesTagsEnum } from '@/constants/invalidates-tags';
 import { SubmitTxHashRequest } from '@/interfaces/nfts';
 import { ApiResponse, PaginatedResponse } from '@/interfaces/IApiResponse';
-import { IStakeEntry } from '@/interfaces/stake';
+import { ILast7DaysStake, IStakeEntry } from '@/interfaces/stake';
 
 const reducerPath = "stakingApi";
 const endpoint = "staking";
@@ -31,7 +31,7 @@ export const stakeApi = createApi({
       }),
       invalidatesTags: [InvalidatesTagsEnum.STAKE],
     }),
-    getAllNFT: builder.query<
+    getAllStake: builder.query<
       ApiResponse<PaginatedResponse<IStakeEntry[]>>,
       {
         page?: number;
@@ -45,7 +45,7 @@ export const stakeApi = createApi({
     >({
       query: ({ page, limit, offset, q, orderField, orderDirection,
         //  active 
-        }) => ({
+      }) => ({
         url: endpoint,
         method: "GET",
         params: {
@@ -57,6 +57,16 @@ export const stakeApi = createApi({
           orderDirection,
           // active,
         },
+      }),
+      providesTags: [InvalidatesTagsEnum.STAKE],
+    }),
+
+    getLast7DaysStake: builder.query<
+      ApiResponse<ILast7DaysStake[]>,void >({
+      query: () => ({
+        url: `${endpoint}/find-last-7days-stake`,
+        method: "GET",
+
       }),
       providesTags: [InvalidatesTagsEnum.STAKE],
     }),

@@ -16,7 +16,7 @@ import { FaGamepad } from "react-icons/fa6";
 import { FaTrophy } from "react-icons/fa";
 import GameDialog from "./components/GameDialog";
 import LeaderboardDialog from "./ourgame/leaderboard";
-import { useGetGameListQuery, useGetGamesPeriodQuery, usePlayGameMutation } from "@/services/game";
+import { useGetGameListQuery,  usePlayGameMutation } from "@/services/game";
 import { SettingKeyEnum } from "@/enums/setting";
 import { useGetUserSettingQuery } from "@/services/user";
 import { SettingValueType } from "@/interfaces/ISetting";
@@ -56,7 +56,6 @@ const GamesPage = () => {
   const anotherGamePointRequired = getSettingValue(SettingKeyEnum.PLAY_GAME_ENTRY_FEE).toLocaleString();
 
   const { data, isLoading, isError } = useGetGameListQuery();
-  const { data: allGamesPeriod } = useGetGamesPeriodQuery();
   const [playGame] = usePlayGameMutation();
   if (isLoading) return <LoadingPage />;
   if (isError) return <div>Error getting game</div>;
@@ -99,6 +98,7 @@ const GamesPage = () => {
 
   const baseGames = [
     {
+      ...(data?.data?.[0] || {}),
       img: wheel,
       gameId: data?.data?.[0]?.id,
       title: GameEnum.LOTTERY_SPINNER,
@@ -112,6 +112,7 @@ const GamesPage = () => {
       active: true,
     },
     {
+      ...(data?.data?.[1] || {}),
       img: starship,
       gameId: data?.data?.[1]?.id,
       title: GameEnum.FLAPPY_JFOX,
@@ -128,6 +129,7 @@ const GamesPage = () => {
       prizeTable: awardsTable(data?.data?.[1]?.prizes)
     },
     {
+      ...(data?.data?.[2] || {}),
       img: jupiter_fox,
       gameId: data?.data?.[2]?.id,
       title: GameEnum.MINESWEEPER,
@@ -144,6 +146,7 @@ const GamesPage = () => {
       prizeTable: awardsTable(data?.data?.[2]?.prizes)
     },
     {
+      ...(data?.data?.[3] || {}),
       img: sudoku,
       gameId: data?.data?.[3]?.id,
       title: GameEnum.SUDOKU,
@@ -158,16 +161,7 @@ const GamesPage = () => {
     },
   ];
 
-  const games: any[] = baseGames.map((game) => {
-    const matchingPeriod = allGamesPeriod?.data.find((periodGame) => periodGame._id === game.gameId);
 
-    return {
-      ...game,
-      period: matchingPeriod?.period,
-      startDate: matchingPeriod?.startDate,
-      endDate: matchingPeriod?.endDate,
-    };
-  });
 
   const handlePlayGame = async (gameId: string) => {
     try {
@@ -246,7 +240,7 @@ const GamesPage = () => {
         
         {/* Games Grid */}
         <div className="w-full relative rounded-2xl gap-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 justify-center items-stretch">
-          {games.map((game, index) => (
+          {baseGames.map((game, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
@@ -306,11 +300,12 @@ const GamesPage = () => {
                           <span className="text-xs font-medium text-white">{game.spent}</span>
                           <Image src={coin} height={16} width={16} loading={"lazy"} alt="coin" className="animate-pulse" />
                         </div>
+                       
                         
-                        {game.endDate && new Date(game.endDate) > new Date() && (
+                        {game?.seasons?.[0]?.endDate && new Date(game?.seasons?.[0]?.endDate) > new Date() && (
                           <div className="px-3 py-1.5 text-xs text-gray-300 flex items-center space-x-1 rounded-full bg-gradient-to-r from-gray-800/80 to-gray-700/80 shadow-md border border-gray-600/30">
                             <span className="text-amber-400 mr-1">Kết thúc:</span>
-                            <CountdownTimer endDate={game.endDate} />
+                            <CountdownTimer endDate={game.seasons[0].endDate} />
                           </div>
                         )}
                       </div>
@@ -324,9 +319,9 @@ const GamesPage = () => {
                               id={game.gameId || ""} 
                               title={`${game.title} Leaderboard`} 
                               endDate={game.endDate} 
+                              seasonName= {game?.seasons[0]?.name}
                             />
                           )}
-                          
                           <GameDialog
                             title={<p className="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">{game.title}</p>}
                             dialogClassName={`border-2 border-${game.color} w-[90%] bg-gradient-to-b from-indigo-900/95 via-indigo-800/95 to-purple-900/95 rounded-xl shadow-2xl backdrop-blur-sm`}
@@ -340,7 +335,9 @@ const GamesPage = () => {
                                 </div>
                                 <div className="flex flex-row justify-center items-center space-x-2 mt-6">
                                   {game.title !== GameEnum.LOTTERY_SPINNER && (
-                                    <LeaderboardDialog id={game.gameId || ""} title={`${game.title} Leaderboard`} endDate={game.endDate} />
+                                    <LeaderboardDialog id={game.gameId || ""} title={`${game.title} Leaderboard`} endDate={game.endDate} 
+                                      seasonName= {game?.seasons[0]?.name}
+                                    />
                                   )}
                                   <Button
                                     onClick={() => {

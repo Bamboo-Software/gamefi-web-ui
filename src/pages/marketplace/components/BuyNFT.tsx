@@ -25,6 +25,7 @@ import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import {
   AvalancheBlockchainConfig,
+  BSCBlockchainConfig,
   EthereumBlockchainConfig,
 } from '@/interfaces/blockchain';
 
@@ -112,7 +113,7 @@ const tokenDisplayNames: Partial<Record<CryptoCurrencyEnum, string>> = {
   [CryptoCurrencyEnum.AVALANCHE]: 'Buy with Avalanche',
 };
 
-function BuyNFTComponent({ nft }: { nft: NFT }) {
+function BuyNFTComponent({ refetch, collectionNFTId, nft }: {refetch: ()=> void, collectionNFTId: string, nft: NFT }) {
   const [isLoading, setIsLoading] = useState(false);
   const { walletProvider } = useAppKitProvider('eip155');
   const networkState = useAppKitNetwork();
@@ -144,6 +145,9 @@ function BuyNFTComponent({ nft }: { nft: NFT }) {
           case ChainId.Ethereum: {
             return await buyNFTWithTokenETH(signer, tokenName);
           }
+          case ChainId.BSC: {
+            return await buyNFTWithTokenBSC(signer, tokenName);
+          }
           default:
             toast.error('Network not supported yet');
             break;
@@ -157,6 +161,7 @@ function BuyNFTComponent({ nft }: { nft: NFT }) {
       setIsLoading(false);
     } finally {
       setIsLoading(false);
+      refetch()
     }
   };
 
@@ -188,7 +193,6 @@ function BuyNFTComponent({ nft }: { nft: NFT }) {
         signer
       );
 
-      const collectionId = nft.season?.collectionNFTId;
       const tokenId = nft._id;
 
       const usdPrice = await nftContract.getTokenPrice(tokenId);
@@ -202,7 +206,7 @@ function BuyNFTComponent({ nft }: { nft: NFT }) {
           usdPrice
         );
         tx = await buyerContract.buyNFT(
-          collectionId,
+          collectionNFTId,
           tokenId,
           ethers.constants.AddressZero, // address(0) for native
           0,
@@ -222,14 +226,17 @@ function BuyNFTComponent({ nft }: { nft: NFT }) {
           tokenAddress,
           usdPrice
         );
+        console.log({requiredAmount:requiredAmount.toString() , usdPrice:usdPrice.toString()});
         const approveTx = await tokenContract.approve(
           config.buyerContractAddress,
           requiredAmount
         );
         await approveTx.wait();
 
+       
+
         tx = await buyerContract.buyNFT(
-          collectionId,
+          collectionNFTId,
           tokenId,
           tokenAddress,
           requiredAmount
@@ -273,12 +280,11 @@ function BuyNFTComponent({ nft }: { nft: NFT }) {
         signer
       );
 
-      const collectionId = nft.season?.collectionNFTId;
       const tokenId = nft._id;
 
       const [requiredAmount, ccipFee] =
         await buyerContract.getCCIPFeeAndMessage(
-          collectionId,
+          collectionNFTId,
           tokenId,
           isNative,
           isNative ? ethers.constants.AddressZero : tokenAddress
@@ -290,7 +296,7 @@ function BuyNFTComponent({ nft }: { nft: NFT }) {
       if (isNative) {
         const totalValue = requiredAmount.add(ccipFee);
         tx = await buyerContract.buyNFTCrossChain(
-          collectionId,
+          collectionNFTId,
           tokenId,
           true,
           ethers.constants.AddressZero,
@@ -325,7 +331,103 @@ function BuyNFTComponent({ nft }: { nft: NFT }) {
         }
 
         tx = await buyerContract.buyNFTCrossChain(
-          collectionId,
+          collectionNFTId,
+          tokenId,
+          false,
+          tokenAddress,
+          { value: ccipFee }
+        );
+        await tx.wait();
+        hash = tx.hash;
+        toast.success('NFT purchased successfully with token!');
+      }
+
+      const network = mapChainIdToBlockchainName(chainId);
+
+      await submitTxHash({
+        txHash: hash,
+        network,
+      });
+    } catch (err) {
+      console.error('Error buying NFT:', err);
+      toast.error('Failed to buy NFT!');
+    }
+  };
+
+  const buyNFTWithTokenBSC = async (
+    signer: ethers.providers.JsonRpcSigner,
+    tokenName: CryptoCurrencyEnum
+  ) => {
+    try {
+      const isNative = isTokenNativeOnChain(tokenName, chainId);
+
+      const config = getBlockchainConfigByChainId(
+        chainId
+      ) as BSCBlockchainConfig;
+
+      const tokenAddress = getTokenAddressByChainIdAndTokenName(
+        chainId,
+        tokenName
+      );
+
+      const buyerContract = new ethers.Contract(
+        config.buyerContractAddress,
+        config.buyerContractABI,
+        signer
+      );
+
+      const tokenId = nft._id;
+
+      const [requiredAmount, ccipFee] =
+        await buyerContract.getCCIPFeeAndMessage(
+          collectionNFTId,
+          tokenId,
+          isNative,
+          isNative ? ethers.constants.AddressZero : tokenAddress
+        );
+
+      let tx;
+      let hash: string;
+
+      if (isNative) {
+        const totalValue = requiredAmount.add(ccipFee);
+        tx = await buyerContract.buyNFTCrossChain(
+          collectionNFTId,
+          tokenId,
+          true,
+          ethers.constants.AddressZero,
+          { value: totalValue }
+        );
+        await tx.wait();
+        hash = tx.hash;
+        toast.success('NFT purchased successfully with ETH!');
+      } else {
+        const tokenContract = new ethers.Contract(
+          tokenAddress,
+          blockChainConfig.erc20Abi,
+          signer
+        );
+
+        const balance = await tokenContract.balanceOf(userAddress);
+        if (balance.lt(requiredAmount)) {
+          toast.error('Not enough token balance');
+          return;
+        }
+
+        const allowance = await tokenContract.allowance(
+          userAddress,
+          config.buyerContractAddress
+        );
+        if (allowance.lt(requiredAmount)) {
+          const approveTx = await tokenContract.approve(
+            config.buyerContractAddress,
+            requiredAmount
+          );
+          await approveTx.wait();
+        }
+
+        tx = await buyerContract.buyNFTCrossChain(
+          collectionNFTId,
           tokenId,
           false,
           tokenAddress,
