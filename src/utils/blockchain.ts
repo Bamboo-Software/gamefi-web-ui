@@ -129,16 +129,16 @@ export const SUPPORTED_TOKENS_BY_CHAIN: Record<ChainId, {
     stake: [CryptoCurrencyEnum.LINK, CryptoCurrencyEnum.AVALANCHE],
   },
   [ChainId.Ethereum]: {
-    buy: [ CryptoCurrencyEnum.ETH, CryptoCurrencyEnum.CCIP],
-    stake: [CryptoCurrencyEnum.ETH, CryptoCurrencyEnum.CCIP],
+    buy: [ CryptoCurrencyEnum.CCIP],
+    stake: [CryptoCurrencyEnum.CCIP],
   },
   [ChainId.Solana]: {
     buy: [CryptoCurrencyEnum.SOL],
     stake: [CryptoCurrencyEnum.SOL],
   },
   [ChainId.BSC]: {
-    buy: [CryptoCurrencyEnum.BSC, CryptoCurrencyEnum.CCIP],
-    stake: [CryptoCurrencyEnum.BSC, CryptoCurrencyEnum.CCIP],
+    buy: [ CryptoCurrencyEnum.CCIP],
+    stake: [CryptoCurrencyEnum.CCIP],
   },
 };
 
