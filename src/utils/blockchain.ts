@@ -44,8 +44,8 @@ export function getTokenAddressByChainIdAndTokenName(
   switch (chainId) {
     case ChainId.Avalanche:
       switch (tokenName) {
-        case CryptoCurrencyEnum.USDT:
-          return blockChainConfig.usdtContractAddressAvalanche;
+        case CryptoCurrencyEnum.LINK:
+          return blockChainConfig.linkContractAddressAvalanche;
         case CryptoCurrencyEnum.AVALANCHE:
           return ethers.constants.AddressZero;
         default:
@@ -55,8 +55,8 @@ export function getTokenAddressByChainIdAndTokenName(
       switch (tokenName) {
         case CryptoCurrencyEnum.ETH:
           return blockChainConfig.wethContractAddressEthereum;
-        case CryptoCurrencyEnum.USDT:
-          return blockChainConfig.usdtContractAddressEthereum;
+        case CryptoCurrencyEnum.CCIP:
+          return blockChainConfig.ccipBnMContractAddressEthereum;
         default:
           throw new Error(`Unsupported token ${tokenName} on Ethereum`);
     }
@@ -64,8 +64,8 @@ export function getTokenAddressByChainIdAndTokenName(
       switch (tokenName) {
         case CryptoCurrencyEnum.BSC:
           return blockChainConfig.wbnbContractAddressBSC;
-        case CryptoCurrencyEnum.USDT:
-          return blockChainConfig.usdtContractAddressBSC;
+        case CryptoCurrencyEnum.CCIP:
+          return blockChainConfig.ccipBnMContractAddressBSC;
         default:
           throw new Error(`Unsupported token ${tokenName} on Ethereum`);
     }
@@ -125,20 +125,20 @@ export const SUPPORTED_TOKENS_BY_CHAIN: Record<ChainId, {
   stake: CryptoCurrencyEnum[]
 }> = {
   [ChainId.Avalanche]: {
-    buy: [CryptoCurrencyEnum.USDT, CryptoCurrencyEnum.AVALANCHE],
-    stake: [CryptoCurrencyEnum.USDT, CryptoCurrencyEnum.AVALANCHE],
+    buy: [CryptoCurrencyEnum.LINK, CryptoCurrencyEnum.AVALANCHE],
+    stake: [CryptoCurrencyEnum.LINK, CryptoCurrencyEnum.AVALANCHE],
   },
   [ChainId.Ethereum]: {
-    buy: [ CryptoCurrencyEnum.ETH, CryptoCurrencyEnum.USDT],
-    stake: [CryptoCurrencyEnum.ETH, CryptoCurrencyEnum.USDT],
+    buy: [ CryptoCurrencyEnum.ETH, CryptoCurrencyEnum.CCIP],
+    stake: [CryptoCurrencyEnum.ETH, CryptoCurrencyEnum.CCIP],
   },
   [ChainId.Solana]: {
     buy: [CryptoCurrencyEnum.SOL],
     stake: [CryptoCurrencyEnum.SOL],
   },
   [ChainId.BSC]: {
-    buy: [CryptoCurrencyEnum.BSC, CryptoCurrencyEnum.USDT],
-    stake: [CryptoCurrencyEnum.BSC, CryptoCurrencyEnum.USDT],
+    buy: [CryptoCurrencyEnum.BSC, CryptoCurrencyEnum.CCIP],
+    stake: [CryptoCurrencyEnum.BSC, CryptoCurrencyEnum.CCIP],
   },
 };
 
