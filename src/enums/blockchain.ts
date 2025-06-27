@@ -17,6 +17,8 @@ export enum BlockchainNameEnum {
 export enum CryptoCurrencyEnum {
   ETH = "ETH",
   SOL = "SOL",
+  CCIP = "CCIP-BnM",
+  LINK = "LINK",
   USDT = "USDT",
   AVALANCHE = "AVALANCHE",
   BSC = "BSC",

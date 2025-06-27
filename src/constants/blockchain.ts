@@ -2498,7 +2498,7 @@ export const blockChainConfig = {
 
 
   ],
-  usdtContractAddressAvalanche: import.meta.env.VITE_AVALANCHE_USDT_CONTRACT_ADDRESS,
+  linkContractAddressAvalanche: import.meta.env.VITE_AVALANCHE_LINK_CONTRACT_ADDRESS,
 
   // ETH
   nftBuyerContractAddressETH: import.meta.env.VITE_ETHEREUM_BUY_NFT_CONTRACT_ADDRESS || '',
@@ -3324,7 +3324,7 @@ export const blockChainConfig = {
     }
   ],
   wethContractAddressEthereum: import.meta.env.VITE_ETHEREUM_WETH_CONTRACT_ADDRESS,
-  usdtContractAddressEthereum: import.meta.env.VITE_ETHEREUM_USDT_CONTRACT_ADDRESS,
+  ccipBnMContractAddressEthereum: import.meta.env.VITE_ETHEREUM_CCIP_BNM_CONTRACT_ADDRESS,
 
   // BSC
   nftBuyerContractAddressBSC: import.meta.env.VITE_BSC_BUY_NFT_CONTRACT_ADDRESS || '',
@@ -4150,7 +4150,7 @@ export const blockChainConfig = {
     }
   ],
   wbnbContractAddressBSC: import.meta.env.VITE_BSC_WBNB_CONTRACT_ADDRESS,
-  usdtContractAddressBSC: import.meta.env.VITE_BSC_USDT_CONTRACT_ADDRESS,
+  ccipBnMContractAddressBSC: import.meta.env.VITE_BSC_CCIP_BNM_CONTRACT_ADDRESS,
 
   avalancheRPCUrl: import.meta.env.VITE_AVALANCHE_RPC_URL,
   standardDecimals:import.meta.env.VITE_STANDARD_DECIMALS ||  18,
