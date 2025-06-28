@@ -171,7 +171,9 @@ const StakingComponent = () => {
       await tx.wait();
       const { hash } = tx;
       const network = mapChainIdToBlockchainName(chainId);
-
+      toast.success(
+        isNative ? 'Staked native successfully!' : 'Staked ERC20 successfully!'
+      );
       await submitTxHash({
         network,
         txHash: hash,
