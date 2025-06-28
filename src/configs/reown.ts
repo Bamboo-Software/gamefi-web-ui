@@ -26,8 +26,8 @@ if (!projectId) {
 }
 
 export const metadata = {
-  name: "Lottery Jfox",
-  description: "Lottery Jfox",
+  name: "FlappyFox",
+  description: "FlappyFox",
   url: siteURL, // origin must match your domain & subdomain
   icons: [
     "https://s3-sgp2.bamboosoft.io/igc/2025/03/04/1741076163909-Jfox.png",

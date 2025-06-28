@@ -38,7 +38,7 @@ const PageLayout = () => {
     {
       title: (
         <div className="text-lg font-bold">
-          NFT <span className="text-amber-400">JuniperFOX</span>
+          NFT <span className="text-amber-400">FlappyFox</span>
         </div>
       ),
       path: ROOT,
@@ -107,7 +107,7 @@ const PageLayout = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <p>© {new Date().getFullYear()} JuniperFOX NFT Marketplace. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} FlappyFox NFT Marketplace. All rights reserved.</p>
           <div className="flex justify-center gap-4 mt-2">
             <motion.a 
               href="#" 

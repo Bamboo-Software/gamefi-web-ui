@@ -278,6 +278,7 @@ const ProfilePage = () => {
             <div className="flex flex-col w-full gap-6 p-6">
               {/* Social Links Section */}
               <motion.div 
+                style={{display: 'none'}}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3, duration: 0.5 }}

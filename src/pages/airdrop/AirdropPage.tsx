@@ -187,7 +187,7 @@ const ProjectIntroPage = () => {
                         }}
                         transition={{ duration: 2, repeat: Infinity }}
                       >
-                        JuniperFOX
+                        FlappyFOX
                       </motion.span>
                     </span>
                     <br />
@@ -279,7 +279,7 @@ const ProjectIntroPage = () => {
                 
                 <motion.img 
                   src={projectLogo} 
-                  alt="JuniperFOX NFT" 
+                  alt="FlappyFOX NFT" 
                   className="w-80 h-80 object-contain relative z-10"
                   animate={{ 
                     y: [0, -15, 0],
@@ -412,7 +412,7 @@ const ProjectIntroPage = () => {
                     WebkitTextFillColor: "transparent"
                   }}
                 >
-                  About JuniperFOX
+                  About FlappyFox
                 </span>
               </motion.h2>
               <motion.p 
@@ -422,7 +422,7 @@ const ProjectIntroPage = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.1 }}
               >
-                JuniperFOX is a next-generation NFT marketplace built on blockchain technology, offering a secure, transparent, and user-friendly platform for digital asset trading.
+                FlappyFox is a next-generation NFT marketplace built on blockchain technology, offering a secure, transparent, and user-friendly platform for digital asset trading.
               </motion.p>
               <motion.p 
                 className="text-gray-100 mb-4"
@@ -440,7 +440,7 @@ const ProjectIntroPage = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.3 }}
               >
-                With advanced features, low fees, and a commitment to sustainability, JuniperFOX is setting new standards in the NFT space.
+                With advanced features, low fees, and a commitment to sustainability, FlappyFOX is setting new standards in the NFT space.
               </motion.p>
             </div>
           </div>

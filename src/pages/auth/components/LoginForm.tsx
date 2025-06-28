@@ -169,6 +169,7 @@ const LoginForm = () => {
                         <FormField
                             control={loginForm.control}
                             name="email"
+                            disabled
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel className="text-gray-200">Email</FormLabel>
@@ -187,6 +188,7 @@ const LoginForm = () => {
                         <FormField
                             control={loginForm.control}
                             name="password"
+                            disabled
                             render={({ field }) => {
                                 return (
                                     <FormItem>
@@ -222,8 +224,8 @@ const LoginForm = () => {
                                 );
                             }}
                         />
-                        <Button type="submit" className="w-full text-gray-200 bg-[#E77C1B] hover:bg-[#cca785] cursor-pointer border-2 h-10 text-sm border-[#FFB571]">
-                            {isLoginLoading ? <LoadingSpinner /> : "Sign In"}
+                        <Button disabled type="submit" className="w-full text-gray-200 bg-[#E77C1B] hover:bg-[#cca785] cursor-pointer border-2 h-10 text-sm border-[#FFB571]">
+                            {isLoginLoading ? <LoadingSpinner /> : "Sign In"} (Coming soon)
                         </Button>
                     </form>
                 </Form>
@@ -241,13 +243,14 @@ const LoginForm = () => {
                 <div className="grid grid-cols-2 gap-4">
                     {loginTypes.map((loginType) => (
                         <Button
+                            disabled
                             key={loginType.key}
                             variant="outline"
                             className="border-gray-600 bg-[#222936] text-gray-200 cursor-pointer"
                             onClick={() => loginType.type == "social" ? handleSocialLogin(loginType.key) : handleWalletLogin(loginType.key)}
                         >
                             <img className="size-6" src={loginType.icon} alt={loginType.name} srcSet="" />
-                            {loginType.name}
+                            {loginType.name} (Coming soon)
                         </Button>
                     ))}
                 </div>
